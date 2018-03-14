@@ -18,8 +18,8 @@ function processThisYear(year, thisYearsContent) {
 function processThisLine(year, name, gender, population) {
   if (!database[name]) database[name] = {}; // if this name hasn't appeared yet, create it
   database[name].gender = gender;
-  database[name][year] = population;
+  database[name][year] = Number(population);
 }
 
-console.log('database: ', JSON.stringify(database, null, 1));
+fs.writeFileSync('../mockdata.json', JSON.stringify(database, null, 1));
 
