@@ -1,4 +1,4 @@
-var data = require('../db/test.json'); //get data out of the json file as database
+var data = require('../db/mockdata.json');
 module.exports = function(app) {
-  app.get('/api/test', (req, res) => res.json(data));
+  app.get('/api/test', (req, res) => res.send(data));
 };
