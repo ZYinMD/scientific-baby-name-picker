@@ -1,0 +1,29 @@
+{
+  "name": "scientific-baby-name-picker",
+  "version": "1.0.0",
+  "description": "A web app that lets you filter all American people's given names by popularity and trends",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZYinMD/scientific-baby-name-picker.git"
+  },
+  "keywords": [
+    "baby",
+    "name",
+    "parenting"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZYinMD/scientific-baby-name-picker/issues"
+  },
+  "homepage": "https://github.com/ZYinMD/scientific-baby-name-picker#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3"
+  }
+}
