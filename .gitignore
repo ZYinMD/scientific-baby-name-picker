@@ -1,4 +1,5 @@
 node_modules
 wiki
 .DS_Store
-real-data
+full-data
+full-data.json
