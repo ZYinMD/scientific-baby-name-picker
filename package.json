@@ -24,6 +24,7 @@
   "homepage": "https://github.com/ZYinMD/scientific-baby-name-picker#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "dotenv": "^5.0.1",
     "express": "^4.16.3"
   }
 }
