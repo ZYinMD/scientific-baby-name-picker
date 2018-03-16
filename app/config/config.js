@@ -1,9 +1,9 @@
-
-var config = {
+module.exports = {
   development: {
     database: 'baby_name_picker',
     username: 'root',
-    password: process.env.LOCALHOST_MYSQL_SERVER_ROOT_PASSWORD||null, // If you need to change your localhost mysql server password, don't change it here, it'll get pushed. Edit the .env in root
+    // If you need to set your localhost mysql server password, either change the null part, or create your own .env file.
+    password: process.env.LOCALHOST_MYSQL_SERVER_ROOT_PASSWORD||null,
     settings: {
       host: 'localhost',
       dialect: 'mysql',
@@ -31,4 +31,3 @@ var config = {
     }
   }
 };
-require('fs').writeFileSync('config.json', JSON.stringify(config, null, 2));
