@@ -1,3 +1,6 @@
+// this file contains settings for sequelize to connect to the database
+
+require('dotenv').config();
 module.exports = {
   development: {
     database: 'baby_name_picker',
