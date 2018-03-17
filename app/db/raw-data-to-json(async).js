@@ -1,5 +1,12 @@
-const dataInput = './full-data/'; // a folder name
-const dataOutput = '../full-data-async.json'; // a file
+/*
+Please ignore this file
+This file was originally written to test if reading all the raw data asynchronously was faster than synchronously.
+The result is it's not. My guess is the file reading was single-threaded. At least in Windows.
+I stopped updating this file since this file basically did the same thing as its counterpart, and the 100+ promises were iffy.
+What you see is some old functionalities.
+*/
+const dataInput = './raw-data/full-data/'; // takes a folder
+const dataOutput = './full-data.json'; // output to a json file
 const fs = require('fs');
 var database = {}; // this'll be where all the data are stored
 var [namesTally, totalYears] = [0, 0];
@@ -19,14 +26,13 @@ for (let i of fileList) {
       }
     });
   });
-  promiseList.push(contentOfThisFile)
+  promiseList.push(contentOfThisFile);
 }
 Promise.all(promiseList).then(() => {
   var totalNames = Object.keys(database).length;
   console.log(`On average, ${Math.round(namesTally / totalYears)} names were used each year, while ${totalNames} name were ever used over the ${totalYears} years`);
   console.timeEnd('Time taken to read all data'); //timer ends, log out the time taken
   console.time('Time taken to output to file'); //start a timer
-  fs.writeFileSync(dataOutput, JSON.stringify(database, null, 1)); //final output
   console.timeEnd('Time taken to output to file'); //timer ends, log out the time taken
 }).catch((err) => {
   console.log('something went wrong: ', err);

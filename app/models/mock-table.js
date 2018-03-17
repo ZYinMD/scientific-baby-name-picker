@@ -11,9 +11,9 @@ var columns = {
     allowNull: false
   }
 };
-for (let i = 1880; i < 2017; i++) {
+for (let i = 2012; i < 2017; i++) {
   columns[String(i)] = Sequelize.MEDIUMINT;
 }
-const NameByYear = sequelize.define('name_by_year', columns, {timestamps: false});
-NameByYear.sync();
-module.exports = NameByYear;
+const MockTable = sequelize.define('mock_table', columns, {timestamps: false, logging: true, benchmark: true});
+MockTable.sync({force: false});
+module.exports = MockTable;
