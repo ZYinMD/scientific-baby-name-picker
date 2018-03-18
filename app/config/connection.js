@@ -13,7 +13,6 @@ connection.connect(function(err) {
 module.exports = connection;
 
 // The code below is no longer used. It was once used for npm sequelize. But I've switched npm mysql instead.
-
 /*
 const Sequelize = require("sequelize");
 const config = require('../config/config.js')[enviroment];

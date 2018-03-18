@@ -10,10 +10,11 @@ module.exports = {
   },
   production: {
     host: 'example.org',
-    user: 'bob',
+    user: 'you',
     password: 'secret'
   }
 }
+
 // The code below is no longer used. It was once used for npm sequelize. But I've switched npm mysql instead.
 /*
 module.exports = {
