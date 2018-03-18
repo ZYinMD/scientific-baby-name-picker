@@ -1,4 +1,0 @@
---Run schema.sql first
---Then use mysql workbench to import the "full-data.csv":
---Right click on mock-table table, select "table data import wizard"
---choose the name_by_year.csv from this folder, import as a new table
