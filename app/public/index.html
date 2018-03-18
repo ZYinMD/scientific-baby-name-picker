@@ -32,10 +32,10 @@
   <div class="container" style="margin: 2em auto">
     <p>This demo can now take pure SQL queries. For instance, try: </p>
     <ul>
-      <li>SELECT name, `1990` FROM baby_name_picker.name_by_year WHERE `1990` > 1000 AND gender = 'F' ORDER BY `1990` DESC</li>
-      <li>SELECT name FROM baby_name_picker.name_by_year WHERE is_unisex = true</li>
-      <li>SELECT name, peak_year FROM baby_name_picker.name_by_year WHERE peak_year < 1970 AND peak_year > 1930</li>
-      <li>SELECT name, sum FROM baby_name_picker.name_by_year WHERE sum > 999999 ORDER BY sum DESC</li>
+      <li>SELECT name, `1990` FROM name_by_year WHERE `1990` > 1000 AND gender = 'F' ORDER BY `1990` DESC</li>
+      <li>SELECT name FROM name_by_year WHERE is_unisex = true</li>
+      <li>SELECT name, peak_year FROM name_by_year WHERE peak_year < 1970 AND peak_year > 1930</li>
+      <li>SELECT name, sum FROM name_by_year WHERE sum > 999999 ORDER BY sum DESC</li>
     </ul>
     <form id="test-query">
       <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>

@@ -7,7 +7,7 @@ Since the data is very big, seeding the table with npm sequelize and npm mysql b
 // settings: where's the data coming from, which table is it going to
 const dataInput = './raw-data/full-data/'; // takes a folder
 const fileOutput = './name_by_year.csv'; //takes a file name
-const yearRange = [1880, 2016] // what year's data did your provide? This should correspond with the value of dataInput
+const yearRange = [1880, 2016]; // what year's data did your provide? This should correspond with the value of dataInput
 
 const fs = require('fs');
 var dataStorage = {}; // this'll be where all the data are stored before seeding to sequelizeModel
@@ -59,8 +59,8 @@ function processThisLine(year, name, gender, population) { // this function proc
 function reformData() { //this function adds a few properties to every name
   for (let nameGender in dataStorage) {
     //first, if a name was used by less than 500 people ever, delete it:
-    let arrayOfKeys = Object.keys(dataStorage[nameGender]) // an array of years chronologically
-    let arrayOfValues = Object.values(dataStorage[nameGender]) //an array of population of each year chronologically, will use many times
+    let arrayOfKeys = Object.keys(dataStorage[nameGender]); // an array of years chronologically
+    let arrayOfValues = Object.values(dataStorage[nameGender]); //an array of population of each year chronologically, will use many times
     let sum = arrayOfValues.reduce((accumulator, i) => accumulator + i); //calculate the sum of this name of all time
     if (sum < 500) {
       delete dataStorage[nameGender];
@@ -86,8 +86,8 @@ function isUnisex() { //this function determines if a name is unisex
     if (gender == 'M') { // if current iteration is a male name
       let femaleName = nameGender.slice(0, -2) + ';F';
       if (dataStorage[femaleName]) { //if the female counterpart exists
-        let femaleSum = dataStorage[femaleName].sum
-        let maleSum = dataStorage[nameGender].sum
+        let femaleSum = dataStorage[femaleName].sum;
+        let maleSum = dataStorage[nameGender].sum;
         if (femaleSum < maleSum * 5 && femaleSum > maleSum / 5) { //if the female counterpart is in the range of male / 5 and male * 5, then yes
           dataStorage[nameGender].is_unisex = 1;
           dataStorage[femaleName].is_unisex = 1;
@@ -100,9 +100,9 @@ function isUnisex() { //this function determines if a name is unisex
 function writeToCSV() {
   var csvString = '';
   //first construct line 1, which is the schema:
-  csvString += `"id";"name";"gender";"is_unisex";"sum";"peak_year";`
+  csvString += `"id";"name";"gender";"is_unisex";"sum";"peak_year";`;
   for (let i = yearRange[0]; i <= yearRange[1]; i++) { //years (columns) of first line
-    csvString += `"${i}";`
+    csvString += `"${i}";`;
   }
   csvString = csvString.slice(0, -1); //remove the last semicolon after the last year
   csvString += `\n`;

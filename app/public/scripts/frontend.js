@@ -2,7 +2,7 @@ $('#test-query').on('submit', (e) => {
   e.preventDefault();
   var query = ($('#test-query__input').val().trim());
   $.get('/api', {query: query}, populateResult);
-})
+});
 
 function populateResult(res) {
   var display = '';
@@ -11,7 +11,7 @@ function populateResult(res) {
   }
 
 
-  $('#mockup').empty().append($('<pre>'))
+  $('#mockup').empty().append($('<pre>'));
 
   $('pre').text(display);
 }
