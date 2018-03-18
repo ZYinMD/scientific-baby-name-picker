@@ -1,6 +1,4 @@
 node_modules
 wiki
 .DS_Store
-full-data
-full-data.json
 .env
