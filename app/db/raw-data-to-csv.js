@@ -5,7 +5,7 @@ Since the data is very big, seeding the table with npm sequelize and npm mysql b
 */
 
 // settings: where's the data coming from, which table is it going to
-const dataInput = './raw-data/full-data/'; // takes a folder
+const dataInput = './raw-data/'; // takes a folder
 const fileOutput = './name_by_year.csv'; //takes a file name
 const yearRange = [1880, 2016]; // what year's data did your provide? This should correspond with the value of dataInput
 
