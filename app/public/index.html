@@ -34,80 +34,67 @@
     <ul>
       <li>SELECT name, `1990` FROM name_by_year WHERE `1990` > 1000 AND gender = 'F' ORDER BY `1990` DESC</li>
       <li>SELECT name FROM name_by_year WHERE is_unisex = true</li>
-      <li>SELECT name, peak_year FROM name_by_year WHERE peak_year < 1970 AND peak_year > 1930</li>
+      <li>SELECT name, peak_year FROM name_by_year WHERE peak_year
+        < 1970 AND peak_year> 1930</li>
       <li>SELECT name, sum FROM name_by_year WHERE sum > 999999 ORDER BY sum DESC</li>
     </ul>
     <form id="test-query">
       <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
     </form>
     <p></p>
-    <p>Below is just the mockup created in Wednesday's class. Please ignore.</p>
   </div>
 
-  <div class="container" id="mockup">
-
-    <div class="jumbotron">
-      <h1 class="display-4">Scientific Baby Name Picker</h1>
-      <hr class="my-4">
-      <p class="lead">This is a database of all American people's given names. Add filters to find the names you like.</p>
-      <p>
-
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-          Add a Filter
-        </button>
-      </p>
-      <div class="collapse" id="collapseExample">
-        <div class="card card-body">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </div>
-      </div>
-      <p>Current filter 1: Exclude boy names and unisex names.</p>
-      <p>Current filter 2: Include only names that were used by more than 1000 poeple from 1950 to 2016</p>
-      <p>Current filter 3: Exclude names that were more popular than 3 per 1000 new born from 2005 to 2016</p>
-      <p>Current filter 4: Exclude names that was super popular in a certain time but less popular in other times</p>
-      <p class="lead">3865 names found...</p>
-    </div>
+  <div class="container" id="filter">
+    <button class="btn btn-warning" type="button">Add a filter</button>
+    <hr>
     <div class="row">
-      <div class="col">
-        <p>Sophia</p>
-        <p>Emma</p>
-        <p>Isabella</p>
-        <p>Olivia</p>
-        <p>Ava</p>
-        <p>Emily</p>
-        <p>Abigail</p>
-        <p>Mia</p>
-        <p>Madison</p>
-        <p>Elizabeth</p>
+      <div class="col filter-col filter-col filter-col--a">
+        <p><input class="filter-row" type="radio">filter by gender:</p>
+        <p><input class="filter-row" type="radio">filter by how common:</p>
+        <p><input class="filter-row" type="radio">filter by total birth:</p>
+        <p><input class="filter-row" type="radio">filter by peak and trough:</p>
+        <p><input class="filter-row" type="radio">filter top popularity:</p>
+        <p><input class="filter-row" type="radio">filter by trending:</p>
       </div>
-      <div class="col">
-        <p>Jacob</p>
-        <p>Mason</p>
-        <p>Ethan</p>
-        <p>Noah</p>
-        <p>William</p>
-        <p>Liam</p>
-        <p>Michael</p>
-        <p>Jayden</p>
-        <p>Alexander</p>
-        <p>Aiden</p>
+      <div class="col filter-col filter-col--b">
+        <p><input class="filter-row" type="radio">exclude:</p>
+        <p><input class="filter-row" type="radio">include only:</p>
+      </div>
+      <div class="col filter-col filter-col--c">
+        <p><input class="filter-row filter-row--gender" type="checkbox">female names</p>
+        <p><input class="filter-row filter-row--gender" type="checkbox">male names</p>
+        <p><input class="filter-row filter-row--gender" type="checkbox">unisex names</p>
+        <p class="filter-row filter-row--total">names that were used by</p>
+        <p class="filter-row filter-row--common">names that were</p>
+        <p class="filter-row filter-row--peak">names that had a </p>
+        <p class="filter-row filter-row--popular">top { } most popular names</p>
+        <p class="filter-row filter-row--trending">names that are clearly</p>
+      </div>
+      <div class="col filter-col filter-col--d">
+        <p class="filter-row filter-row--total">more than</p>
+        <p class="filter-row filter-row--total">less than</p>
+        <p class="filter-row filter-row--common">more common than</p>
+        <p class="filter-row filter-row--common">less common than</p>
+        <p class="filter-row filter-row--peak">peak</p>
+        <p class="filter-row filter-row--peak">trough</p>
+        <p class="filter-row filter-row--popular">in year range { } - { }</p>
+        <p class="filter-row filter-row--trending">trending up</p>
+        <p class="filter-row filter-row--trending">trending down</p>
+      </div>
+      <div class="col filter-col filter-col--e">
+        <p class="filter-row filter-row--total">{ }</p>
+        <p class="filter-row filter-row--common">{ }</p>
+        <p class="filter-row filter-row--peak">in year range { } - { }</p>
+        <p class="filter-row filter-row--popular">in year range { } - { }</p>
+        <p class="filter-row filter-row--trending">in the last 10 years</p>
+      </div>
+      <div class="col filter-col filter-col--f">
+        <p class="filter-row filter-row--total">people in total in year range { } - { }</p>
+        <p class="filter-row filter-row--common">per high school in year range { } - { }</p>
       </div>
     </div>
-    <nav aria-label="...">
-      <ul class="pagination">
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1">Previous</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item active">
-          <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">Next</a>
-        </li>
-      </ul>
-    </nav>
   </div>
+
 
 </body>
 
