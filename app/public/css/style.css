@@ -1,11 +1,16 @@
+#filter {
+  display: flex;
+  align-items: center;
+}
 
+.filter-col {
+  display: flex;
+  flex-direction: column;
+}
 
-
-
-
-
-
-
+ol {
+  list-style: none;
+}
 
 .hidden {
   display: none !important;

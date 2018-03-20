@@ -28,8 +28,12 @@
 
 </head>
 
-<body>
-  <div class="container" style="margin: 2em auto">
+<body class="container">
+  <header style="margin: 2em auto">
+  <form id="test-query">
+    <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
+  </form>
+    <br>
     <p>This demo can now take pure SQL queries. For instance, try: </p>
     <ul>
       <li>SELECT name, `1990` FROM name_by_year WHERE `1990` > 1000 AND gender = 'F' ORDER BY `1990` DESC</li>
@@ -38,63 +42,58 @@
         < 1970 AND peak_year> 1930</li>
       <li>SELECT name, sum FROM name_by_year WHERE sum > 999999 ORDER BY sum DESC</li>
     </ul>
-    <form id="test-query">
-      <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
-    </form>
-    <p></p>
-  </div>
+  </header>
 
+  <button class="btn btn-warning" type="button">Add a filter</button>
   <div class="container" id="filter">
-    <button class="btn btn-warning" type="button">Add a filter</button>
     <hr>
-    <div class="row">
-      <div class="col filter-col filter-col filter-col--a">
-        <p class="filter-row filter-row--gender"><input name="filter-type" id="a-gender" type="radio">filter by gender:</p>
-        <p class="filter-row filter-row--total"><input name="filter-type" type="radio">filter by total birth:</p>
-        <p class="filter-row filter-row--common"><input name="filter-type" type="radio">filter by how common:</p>
-        <p class="filter-row filter-row--peak"><input name="filter-type" type="radio">filter by peak and trough:</p>
-        <p class="filter-row filter-row--popular"><input name="filter-type" type="radio">filter top popularity:</p>
-        <p class="filter-row filter-row--trending"><input name="filter-type" type="radio">filter by trending:</p>
-      </div>
-      <div class="col filter-col filter-col--b">
-        <p class="filter-row"><input type="radio">exclude:</p>
-        <p class="filter-row"><input type="radio">include only:</p>
-      </div>
-      <div class="col filter-col filter-col--c  ">
-        <p class="filter-row filter-row--gender"><input type="checkbox">female names</p>
-        <p class="filter-row filter-row--gender"><input type="checkbox">male names</p>
-        <p class="filter-row filter-row--gender"><input type="checkbox">unisex names</p>
-        <p class="filter-row filter-row--total">names that were used by</p>
-        <p class="filter-row filter-row--common">names that were</p>
-        <p class="filter-row filter-row--peak">names that had a </p>
-        <p class="filter-row filter-row--popular">top { } most popular names</p>
-        <p class="filter-row filter-row--trending">names that are clearly</p>
-      </div>
-      <div class="col filter-col filter-col--d">
-        <p class="filter-row filter-row--total"><input type="radio">more than</p>
-        <p class="filter-row filter-row--total"><input type="radio">less than</p>
-        <p class="filter-row filter-row--common"><input type="radio">more common than</p>
-        <p class="filter-row filter-row--common"><input type="radio">less common than</p>
-        <p class="filter-row filter-row--peak"><input type="radio">peak</p>
-        <p class="filter-row filter-row--peak"><input type="radio">trough</p>
-        <p class="filter-row filter-row--popular">in year range { } - { }</p>
-        <p class="filter-row filter-row--trending"><input type="radio">trending up</p>
-        <p class="filter-row filter-row--trending"><input type="radio">trending down</p>
-      </div>
-      <div class="col filter-col filter-col--e">
-        <p class="filter-row filter-row--total">{ }</p>
-        <p class="filter-row filter-row--common">{ }</p>
-        <p class="filter-row filter-row--peak">in year range { } - { }</p>
-        <p class="filter-row filter-row--popular">in year range { } - { }</p>
-        <p class="filter-row filter-row--trending">in the last 10 years</p>
-      </div>
-      <div class="col filter-col filter-col--f">
-        <p class="filter-row filter-row--total">people in total in year range { } - { }</p>
-        <p class="filter-row filter-row--common">per high school in year range { } - { }</p>
-      </div>
-    </div>
   </div>
-
+  <div id="filter">
+    <ol class="filter-col filter-col filter-col--a">
+      <li class="filter-row filter-row--gender"><input name="filter-type" id="a-gender" type="radio">filter by gender:</li>
+      <li class="filter-row filter-row--total"><input name="filter-type" type="radio">filter by total birth:</li>
+      <li class="filter-row filter-row--common"><input name="filter-type" type="radio">filter by how common:</li>
+      <li class="filter-row filter-row--peak"><input name="filter-type" type="radio">filter by peak and trough:</li>
+      <li class="filter-row filter-row--popular"><input name="filter-type" type="radio">filter top popularity:</li>
+      <li class="filter-row filter-row--trending"><input name="filter-type" type="radio">filter by trending:</li>
+    </ol>
+    <ol class="filter-col filter-col--b">
+      <li class="filter-row"><input type="radio">exclude:</li>
+      <li class="filter-row"><input type="radio">include only:</li>
+    </ol>
+    <ol class="filter-col filter-col--c  ">
+      <li class="filter-row filter-row--gender"><input type="checkbox">female names</li>
+      <li class="filter-row filter-row--gender"><input type="checkbox">male names</li>
+      <li class="filter-row filter-row--gender"><input type="checkbox">unisex names</li>
+      <li class="filter-row filter-row--total">names that were used by</li>
+      <li class="filter-row filter-row--common">names that were</li>
+      <li class="filter-row filter-row--peak">names that had a </li>
+      <li class="filter-row filter-row--popular">top { } most popular names</li>
+      <li class="filter-row filter-row--trending">names that are clearly</li>
+    </ol>
+    <ol class="filter-col filter-col--d">
+      <li class="filter-row filter-row--total"><input type="radio">more than</li>
+      <li class="filter-row filter-row--total"><input type="radio">less than</li>
+      <li class="filter-row filter-row--common"><input type="radio">more common than</li>
+      <li class="filter-row filter-row--common"><input type="radio">less common than</li>
+      <li class="filter-row filter-row--peak"><input type="radio">peak</li>
+      <li class="filter-row filter-row--peak"><input type="radio">trough</li>
+      <li class="filter-row filter-row--popular">in year range { } - { }</li>
+      <li class="filter-row filter-row--trending"><input type="radio">trending up</li>
+      <li class="filter-row filter-row--trending"><input type="radio">trending down</li>
+    </ol>
+    <ol class="filter-col filter-col--e">
+      <li class="filter-row filter-row--total">{ }</li>
+      <li class="filter-row filter-row--common">{ }</li>
+      <li class="filter-row filter-row--peak">in year range { } - { }</li>
+      <li class="filter-row filter-row--popular">in year range { } - { }</li>
+      <li class="filter-row filter-row--trending">in the last 10 years</li>
+    </ol>
+    <ol class="filter-col filter-col--f">
+      <li class="filter-row filter-row--total">people in total in year range { } - { }</li>
+      <li class="filter-row filter-row--common">per high school in year range { } - { }</li>
+    </ol>
+  </div>
   <div class="container" id="name-list"></div>
 
 

@@ -9,15 +9,15 @@ $('#test-query').on('submit', (event) => {
 
 
   // filter behavior:
-  $('.filter-row:not(.filter-col--a p)').toggleClass('hidden', true); //hide everything except first column
+  $('.filter-row:not(.filter-col--a li)').toggleClass('hidden', true); //hide everything except first column
   $('.filter-col--a').on('change', 'input', (event) => { // when any filter is chosen, unhide its row
     unhide(event.target.parentNode.classList[1]);
   });
 }
 
 function unhide(row) {
-  $('.filter-row:not(.filter-col--a p)').toggleClass('hidden', true); //hide everything except first column
-  $('.filter-col--b p').toggleClass('hidden', false); //unhide column b
+  $('.filter-row:not(.filter-col--a li)').toggleClass('hidden', true); //hide everything except first column
+  $('.filter-col--b li').toggleClass('hidden', false); //unhide column b
   $('.' + row).toggleClass('hidden', false); // unhide the selected row
 
 }
