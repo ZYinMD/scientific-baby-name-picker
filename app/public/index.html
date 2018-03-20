@@ -49,21 +49,21 @@
     <hr>
     <div class="row">
       <div class="col filter-col filter-col filter-col--a">
-        <p><input class="filter-row" type="radio">filter by gender:</p>
-        <p><input class="filter-row" type="radio">filter by how common:</p>
-        <p><input class="filter-row" type="radio">filter by total birth:</p>
-        <p><input class="filter-row" type="radio">filter by peak and trough:</p>
-        <p><input class="filter-row" type="radio">filter top popularity:</p>
-        <p><input class="filter-row" type="radio">filter by trending:</p>
+        <p class="filter-row filter-row--gender"><input name="filter-type" id="a-gender" type="radio">filter by gender:</p>
+        <p class="filter-row filter-row--total"><input name="filter-type" type="radio">filter by total birth:</p>
+        <p class="filter-row filter-row--common"><input name="filter-type" type="radio">filter by how common:</p>
+        <p class="filter-row filter-row--peak"><input name="filter-type" type="radio">filter by peak and trough:</p>
+        <p class="filter-row filter-row--popular"><input name="filter-type" type="radio">filter top popularity:</p>
+        <p class="filter-row filter-row--trending"><input name="filter-type" type="radio">filter by trending:</p>
       </div>
       <div class="col filter-col filter-col--b">
-        <p><input class="filter-row" type="radio">exclude:</p>
-        <p><input class="filter-row" type="radio">include only:</p>
+        <p class="filter-row"><input type="radio">exclude:</p>
+        <p class="filter-row"><input type="radio">include only:</p>
       </div>
-      <div class="col filter-col filter-col--c">
-        <p><input class="filter-row filter-row--gender" type="checkbox">female names</p>
-        <p><input class="filter-row filter-row--gender" type="checkbox">male names</p>
-        <p><input class="filter-row filter-row--gender" type="checkbox">unisex names</p>
+      <div class="col filter-col filter-col--c  ">
+        <p class="filter-row filter-row--gender"><input type="checkbox">female names</p>
+        <p class="filter-row filter-row--gender"><input type="checkbox">male names</p>
+        <p class="filter-row filter-row--gender"><input type="checkbox">unisex names</p>
         <p class="filter-row filter-row--total">names that were used by</p>
         <p class="filter-row filter-row--common">names that were</p>
         <p class="filter-row filter-row--peak">names that had a </p>
@@ -71,15 +71,15 @@
         <p class="filter-row filter-row--trending">names that are clearly</p>
       </div>
       <div class="col filter-col filter-col--d">
-        <p class="filter-row filter-row--total">more than</p>
-        <p class="filter-row filter-row--total">less than</p>
-        <p class="filter-row filter-row--common">more common than</p>
-        <p class="filter-row filter-row--common">less common than</p>
-        <p class="filter-row filter-row--peak">peak</p>
-        <p class="filter-row filter-row--peak">trough</p>
+        <p class="filter-row filter-row--total"><input type="radio">more than</p>
+        <p class="filter-row filter-row--total"><input type="radio">less than</p>
+        <p class="filter-row filter-row--common"><input type="radio">more common than</p>
+        <p class="filter-row filter-row--common"><input type="radio">less common than</p>
+        <p class="filter-row filter-row--peak"><input type="radio">peak</p>
+        <p class="filter-row filter-row--peak"><input type="radio">trough</p>
         <p class="filter-row filter-row--popular">in year range { } - { }</p>
-        <p class="filter-row filter-row--trending">trending up</p>
-        <p class="filter-row filter-row--trending">trending down</p>
+        <p class="filter-row filter-row--trending"><input type="radio">trending up</p>
+        <p class="filter-row filter-row--trending"><input type="radio">trending down</p>
       </div>
       <div class="col filter-col filter-col--e">
         <p class="filter-row filter-row--total">{ }</p>
@@ -94,6 +94,8 @@
       </div>
     </div>
   </div>
+
+  <div class="container" id="name-list"></div>
 
 
 </body>
