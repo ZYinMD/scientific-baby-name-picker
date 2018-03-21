@@ -10,6 +10,7 @@
 
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="a tool for new parents to help picking baby names by searching and filtering all given names used in the US from 1880 to 2017">
 
   <!-- defer means start downloading now, and run after page finishes loading, in the order added -->
   <script defer src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
@@ -21,21 +22,24 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="container">
-  <header style="margin: 2em auto">
-  <form id="test-query">
-    <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
-  </form>
-    <br>
-    <p>This demo can now take pure SQL queries. For instance, try: </p>
-    <ul>
-      <li>SELECT name, `1990` FROM name_by_year WHERE `1990` > 1000 AND gender = 'F' ORDER BY `1990` DESC</li>
-      <li>SELECT name FROM name_by_year WHERE is_unisex = true</li>
-      <li>SELECT name, peak_year FROM name_by_year WHERE peak_year
-        < 1970 AND peak_year> 1930</li>
-      <li>SELECT name, sum FROM name_by_year WHERE sum > 999999 ORDER BY sum DESC</li>
-    </ul>
+<body">
+  <header>
+    <img id="logo" src="imgs/logo.png" alt="">
+    <div class="masthead">
+      <h1>Scientific Baby Name Picker</h1>
+      <h2>Use statistics to pick the best name for your baby</h2>
+    </div>
   </header>
+  <section class="boards">
+    <h3>This is a database containing demographics of first names used in the US.</h3>
+    <p>Over the course of 1880-2016, a total of 106695 names were ever used by American people, one of which is going to be used by your child for a lifetime. How do you find the very best one?</p>
+  </section>
+  <section class="boards">
+    <h3>Current Filters:</h3>
+    <ol>
+      <li>Filter 1</li>
+    </ol>
+  </section>
 
   <button class="btn btn-warning" type="button">Add a filter</button>
   <div class="container" id="filter">
@@ -89,6 +93,21 @@
   </div>
   <div class="container" id="name-list"></div>
 
+
+  <header style="margin: 2em auto">
+  <form id="test-query">
+    <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
+  </form>
+    <br>
+    <p>This demo can now take pure SQL queries. For instance, try: </p>
+    <ul>
+      <li>SELECT name, `1990` FROM name_by_year WHERE `1990` > 1000 AND gender = 'F' ORDER BY `1990` DESC</li>
+      <li>SELECT name FROM name_by_year WHERE is_unisex = true</li>
+      <li>SELECT name, peak_year FROM name_by_year WHERE peak_year
+        < 1970 AND peak_year> 1930</li>
+      <li>SELECT name, sum FROM name_by_year WHERE sum > 999999 ORDER BY sum DESC</li>
+    </ul>
+  </header>
 
 </body>
 

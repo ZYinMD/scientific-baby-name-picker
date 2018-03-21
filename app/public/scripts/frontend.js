@@ -9,7 +9,6 @@ $('#test-query').on('submit', (event) => {
 
 
   // filter behavior:
-  // $('.filter-row:not(.filter-col--a li)').toggleClass('hidden', true); //hide everything except first column
   $('.filter-row:not(.filter-col--a li)').hide(); //hide everything except first column
   $('.filter-col--a').on('change', 'input', (event) => { // when any filter is chosen, unhide its row
     unhide(event.target.parentNode.classList[1]);
@@ -17,11 +16,8 @@ $('#test-query').on('submit', (event) => {
 }
 
 function unhide(row) {
-  // $('.filter-row:not(.filter-col--a li)').toggleClass('hidden', true); //hide everything except first column
   $('.filter-row:not(.filter-col--a li)').hide(); //hide everything except first column
-  // $('.filter-col--b li').toggleClass('hidden', false); //unhide column b
   $('.filter-col--b li').show(); //unhide column b
-  // $('.' + row).toggleClass('hidden', false); // unhide the selected row
   $('.' + row).show(); // unhide the selected row
 
 }
