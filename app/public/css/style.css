@@ -48,11 +48,11 @@ body {
   margin: 0.8rem 0.7rem;
   font-weight: 100;
   color: Salmon;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
 }
 
-.boards p {
-  font-size: 1.08rem;
+.boards li, .boards p {
+  font-size: 1.2rem;
   margin: 0.7rem;
 }
 
@@ -66,6 +66,12 @@ body {
   flex-direction: column;
 }
 
-ol {
+ol, ul{
   list-style: none;
 }
+
+/*to hide the checkboxes and radio buttons*/
+input {
+  visibility: hidden;
+}
+

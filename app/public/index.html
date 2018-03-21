@@ -31,16 +31,49 @@
     </div>
   </header>
   <section class="boards">
-    <h3>This is a database containing demographics of first names used in the US.</h3>
+    <h3>This is a database containing demographics of all given names used in the US.</h3>
     <p>Over the course of 1880-2016, a total of 106695 names were ever used by American people, one of which is going to be used by your child for a lifetime. How do you find the very best one?</p>
   </section>
   <section class="boards">
     <h3>Current Filters:</h3>
-    <ol>
-      <li>Filter 1</li>
+    <ol class="filters">
+      <li>
+        <input type="checkbox" id="filter1"">
+        <span></span><label for="filter1"> Filter 1</label>
+      </li>
+      <li>
+        <input type="checkbox" id="filter2"">
+        <span></span><label for="filter2"> Filter 2</label>
+      </li>
     </ol>
   </section>
+  <style>
+    .filters li {
+      font-size: 1.2rem;
+    }
 
+    input ~ span {
+      display: inline-block;
+      position: relative;
+      border-radius: 15%;
+      border: 2px solid grey;
+      width: 0.54em;
+      height: 0.54em;
+    }
+
+    input:checked ~ span::before {
+      content: 'a';
+      position: absolute;
+      display: inline-block;
+      border-radius: 20%;
+      border: 2px solid grey;
+      width: 0.24em;
+      height: 0.24em;
+
+      /*border-radius: 100%;*/
+      transition: background 0.25s linear;
+    }
+  </style>
   <button class="btn btn-warning" type="button">Add a filter</button>
   <div class="container" id="filter">
     <hr>
