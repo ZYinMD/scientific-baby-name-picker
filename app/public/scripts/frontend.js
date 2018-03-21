@@ -11,7 +11,7 @@ $('#test-query').on('submit', (event) => {
   // filter behavior:
   $('.filter-row:not(.filter-col--a li)').hide(); //hide everything except first column
   $('.filter-col--a').on('change', 'input', (event) => { // when any filter is chosen, unhide its row
-    unhide(event.target.parentNode.classList[1]);
+    unhide(event.target.parentNode.parentNode.classList[1]);
   });
 }
 

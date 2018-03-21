@@ -2,27 +2,20 @@
 <html lang="en">
 
 <head>
-  <!-- Put this line first, so the title can be rendered correctly -->
   <meta charset="utf-8">
-
-  <!-- Title -->
   <title>Scientific Baby Name Picker</title>
-
-  <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="a tool for new parents to help picking baby names by searching and filtering all given names used in the US from 1880 to 2017">
-
-  <!-- defer means start downloading now, and run after page finishes loading, in the order added -->
-  <script defer src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-
-  <!-- My own script -->
-  <script defer src="scripts/frontend.js"></script>
-
-  <!-- My own stylesheet -->
+  <!-- css, materialize and my own -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <!-- deferred scripts, materialize and jquery and my own -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script defer src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script defer src="scripts/frontend.js"></script>
 </head>
 
-<body">
+<body>
   <header>
     <img id="logo" src="imgs/logo.png" alt="">
     <div class="masthead">
@@ -30,23 +23,24 @@
       <h2>Use statistics to pick the best name for your baby</h2>
     </div>
   </header>
+  <div class="card">
+    <div class="card-content">
+      <h3 class="theme card-title">This is a database containing demographics of all given names used in the US.</h3>
+      <p>Over the course of 1880-2016, a total of 106695 names were ever used by American people, one of which is going to be used by your child for a lifetime. How do you find the very best one?</p>
+    </div>
+    <div class="card-action">
+      <a>Add a filter</a>
+    </div>
+  </div>
   <section class="boards">
     <h3>This is a database containing demographics of all given names used in the US.</h3>
     <p>Over the course of 1880-2016, a total of 106695 names were ever used by American people, one of which is going to be used by your child for a lifetime. How do you find the very best one?</p>
   </section>
   <section class="boards">
     <h3>Current Filters:</h3>
-    <ol class="filters">
-      <li>
-        <input type="checkbox" id="filter1"">
-        <span></span><label for="filter1"> Filter 1</label>
-      </li>
-      <li>
-        <input type="checkbox" id="filter2"">
-        <span></span><label for="filter2"> Filter 2</label>
-      </li>
-    </ol>
+
   </section>
+  <!--
   <style>
     .filters li {
       font-size: 1.2rem;
@@ -74,27 +68,65 @@
       transition: background 0.25s linear;
     }
   </style>
+   -->
+
   <button class="btn btn-warning" type="button">Add a filter</button>
   <div class="container" id="filter">
     <hr>
   </div>
+
   <div id="filter">
-    <ol class="filter-col filter-col filter-col--a">
-      <li class="filter-row filter-row--gender"><input name="filter-type" id="a-gender" type="radio">filter by gender:</li>
-      <li class="filter-row filter-row--total"><input name="filter-type" type="radio">filter by total birth:</li>
-      <li class="filter-row filter-row--common"><input name="filter-type" type="radio">filter by how common:</li>
-      <li class="filter-row filter-row--peak"><input name="filter-type" type="radio">filter by peak and trough:</li>
-      <li class="filter-row filter-row--popular"><input name="filter-type" type="radio">filter top popularity:</li>
-      <li class="filter-row filter-row--trending"><input name="filter-type" type="radio">filter by trending:</li>
+    <ol class="filter-col filter-col--a">
+      <li class="filter-row filter-row--gender">
+        <label for="a-gender">
+          <input class="with-gap" name="filter-type" id="a-gender" type="radio">
+          <span>filter by gender:</span>
+        </label>
+      </li>
+      <li class="filter-row filter-row--total">
+        <label for="a-total">
+          <input class="with-gap" name="filter-type" id="a-total" type="radio">
+          <span>filter by total birth:</span>
+        </label>
+      </li>
+      <li class="filter-row filter-row--common">
+        <label for="a-common">
+          <input class="with-gap" name="filter-type" id="a-common" type="radio">
+          <span>filter by how common:</span>
+        </label>
+      </li>
+      <li class="filter-row filter-row--peak">
+        <label for="a-peak">
+          <input class="with-gap" name="filter-type" id="a-peak" type="radio">
+          <span>filter by peak and trough:</span>
+        </label>
+      </li>
+      <li class="filter-row filter-row--popular">
+        <label for="a-popular">
+          <input class="with-gap" name="filter-type" id="a-popular" type="radio">
+          <span>filter top popularity:</span>
+        </label>
+      </li>
+      <li class="filter-row filter-row--trending">
+        <label for="a-trending">
+          <input class="with-gap" name="filter-type" id="a-trending" type="radio">
+          <span>filter by trending:</span>
+        </label>
+      </li>
     </ol>
     <ol class="filter-col filter-col--b">
-      <li class="filter-row"><input type="radio">exclude:</li>
-      <li class="filter-row"><input type="radio">include only:</li>
+      <li class="filter-row">
+        <input type="radio">exclude:</li>
+      <li class="filter-row">
+        <input type="radio">include only:</li>
     </ol>
     <ol class="filter-col filter-col--c  ">
-      <li class="filter-row filter-row--gender"><input type="checkbox">female names</li>
-      <li class="filter-row filter-row--gender"><input type="checkbox">male names</li>
-      <li class="filter-row filter-row--gender"><input type="checkbox">unisex names</li>
+      <li class="filter-row filter-row--gender">
+        <input type="checkbox">female names</li>
+      <li class="filter-row filter-row--gender">
+        <input type="checkbox">male names</li>
+      <li class="filter-row filter-row--gender">
+        <input type="checkbox">unisex names</li>
       <li class="filter-row filter-row--total">names that were used by</li>
       <li class="filter-row filter-row--common">names that were</li>
       <li class="filter-row filter-row--peak">names that had a </li>
@@ -102,15 +134,23 @@
       <li class="filter-row filter-row--trending">names that are clearly</li>
     </ol>
     <ol class="filter-col filter-col--d">
-      <li class="filter-row filter-row--total"><input type="radio">more than</li>
-      <li class="filter-row filter-row--total"><input type="radio">less than</li>
-      <li class="filter-row filter-row--common"><input type="radio">more common than</li>
-      <li class="filter-row filter-row--common"><input type="radio">less common than</li>
-      <li class="filter-row filter-row--peak"><input type="radio">peak</li>
-      <li class="filter-row filter-row--peak"><input type="radio">trough</li>
+      <li class="filter-row filter-row--total">
+        <input type="radio">more than</li>
+      <li class="filter-row filter-row--total">
+        <input type="radio">less than</li>
+      <li class="filter-row filter-row--common">
+        <input type="radio">more common than</li>
+      <li class="filter-row filter-row--common">
+        <input type="radio">less common than</li>
+      <li class="filter-row filter-row--peak">
+        <input type="radio">peak</li>
+      <li class="filter-row filter-row--peak">
+        <input type="radio">trough</li>
       <li class="filter-row filter-row--popular">in year range { } - { }</li>
-      <li class="filter-row filter-row--trending"><input type="radio">trending up</li>
-      <li class="filter-row filter-row--trending"><input type="radio">trending down</li>
+      <li class="filter-row filter-row--trending">
+        <input type="radio">trending up</li>
+      <li class="filter-row filter-row--trending">
+        <input type="radio">trending down</li>
     </ol>
     <ol class="filter-col filter-col--e">
       <li class="filter-row filter-row--total">{ }</li>
@@ -126,11 +166,10 @@
   </div>
   <div class="container" id="name-list"></div>
 
-
   <header style="margin: 2em auto">
-  <form id="test-query">
-    <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
-  </form>
+    <form id="test-query">
+      <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
+    </form>
     <br>
     <p>This demo can now take pure SQL queries. For instance, try: </p>
     <ul>
