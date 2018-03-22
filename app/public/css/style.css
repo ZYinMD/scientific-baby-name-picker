@@ -22,6 +22,9 @@ ol, ul{
   background-color: #fafafa;
 }
 
+.white {
+  background-color: white;
+}
 .theme2,
 input[type=range]+.thumb .value,
 #filter-console input:checked + span {

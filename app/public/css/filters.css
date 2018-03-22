@@ -81,3 +81,12 @@
   height: 12rem;
   margin-left: 3rem;
 }
+
+#filter-apply {
+  text-align: center;
+  margin: -1rem 0 1rem 0;
+}
+#filter-apply a {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
