@@ -2,34 +2,236 @@
 <html lang="en">
 
 <head>
-  <!-- Put this line first, so the title can be rendered correctly -->
   <meta charset="utf-8">
-
-  <!-- Title -->
   <title>Scientific Baby Name Picker</title>
-
-  <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap scripts: jQuery first, then Popper.js, then Bootstrap JS -->
-  <!-- defer means start downloading now, and run after page finishes loading, in the order added -->
-  <script defer src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-  <!-- My own script -->
-  <script defer src="scripts/frontend.js"></script>
-
-  <!-- Bootstrap stylesheet -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-  <!-- My own stylesheet -->
+  <meta name="description" content="a tool for new parents to help picking baby names by searching and filtering all given names used in the US from 1880 to 2017">
+  <!-- css, materialize and my own -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/nouislider.css">
+  <!-- non-critical blocking css -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- deferred scripts, materialize and jquery and my own -->
+  <script defer src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script defer src="scripts/nouislider.min.js"></script>
+  <script defer src="scripts/frontend.js"></script>
 
 </head>
 
 <body>
-  <div class="container" style="margin: 2em auto">
+  <header>
+    <img id="logo" src="imgs/logo.png" alt="">
+    <div class="masthead">
+      <h1>Scientific Baby Name Picker</h1>
+      <h2>Use statistics to pick the best name for your baby</h2>
+    </div>
+  </header>
+
+  <section id="intro" class="card">
+    <div class="card-content">
+      <h3 class="theme card-title">This is a database containing demographics of all given names used in the US.</h3>
+      <p>Over the course of 1880-2016, a total of 106695 names were ever used by American people, one of which is going to be used by your child for a lifetime. Can you find the very best one?</p>
+    </div>
+  </section>
+
+  <ul id="filters" class="collapsible collection with-header z-depth-1">
+    <li class="collection-header">
+      <h3 class="theme">Current Filters</h3>
+    </li>
+    <li class="collection-item">
+      <label>
+        <input type="checkbox">
+        <span>Filter</span>
+      </label>
+      <a href="#!" class="secondary-content"><i class="material-icons theme2">delete</i></a>
+      <a href="#!" class="secondary-content"><i class="material-icons theme2">edit</i></a>
+    </li>
+    <li class="collection-item">
+      <label>
+        <input type="checkbox">
+        <span>Filter</span>
+      </label>
+      <a href="#!" class="secondary-content"><i class="material-icons theme2">delete</i></a>
+      <a href="#!" class="secondary-content"><i class="material-icons theme2">edit</i></a>
+    </li>
+    <li class="collection-item">
+      <label>
+        <input type="checkbox">
+        <span>Filter</span>
+      </label>
+      <a href="#!" class="secondary-content"><i class="material-icons theme2">delete</i></a>
+      <a href="#!" class="secondary-content"><i class="material-icons theme2">edit</i></a>
+    </li>
+    <li id="filter-constructor">
+      <div id="add-filter" class="collapsible-header theme greyish"><i class="material-icons">filter_list</i><a class="theme">Add a Filter</a>
+      </div>
+      <div class="collapsible-body" id="filter-console">
+        <ol class="filter-col filter-col__a">
+          <li class="filter-row filter-row__gender">
+            <label for="a-gender">
+              <input class="with-gap" name="filter-type" id="a-gender" type="radio">
+              <span>filter by gender:</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__total">
+            <label for="a-total">
+              <input class="with-gap" name="filter-type" id="a-total" type="radio">
+              <span>filter by total birth:</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__common">
+            <label for="a-common">
+              <input class="with-gap" name="filter-type" id="a-common" type="radio">
+              <span>filter by how common:</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__peak">
+            <label for="a-peak">
+              <input class="with-gap" name="filter-type" id="a-peak" type="radio">
+              <span>filter by peak and trough:</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__popular">
+            <label for="a-popular">
+              <input class="with-gap" name="filter-type" id="a-popular" type="radio">
+              <span>filter top popularity:</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__trending">
+            <label for="a-trending">
+              <input class="with-gap" name="filter-type" id="a-trending" type="radio">
+              <span>filter by trending:</span>
+            </label>
+          </li>
+        </ol>
+        <ol class="filter-col filter-col__b">
+          <li class="filter-row">
+            <label for="b-exclude">
+              <input class="with-gap" name="exclusion" id="b-exclude" type="radio">
+              <span>exclude:</span>
+            </label>
+          </li>
+          <li class="filter-row">
+            <label for="b-include">
+              <input class="with-gap" name="exclusion" id="b-include" type="radio">
+              <span>include only:</span>
+            </label>
+          </li>
+        </ol>
+        <ol class="filter-col filter-col__c">
+          <li class="filter-row filter-row__gender">
+            <label>
+              <input type="checkbox">
+              <span>female names</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__gender">
+            <label>
+              <input type="checkbox">
+              <span>male names</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__gender">
+            <label>
+              <input type="checkbox">
+              <span>unisex names</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__total">
+            <p>names that have</p>
+            <p>been used by</p>
+          </li>
+          <li class="filter-row filter-row__common">names that were</li>
+          <li class="filter-row filter-row__peak">names that had a </li>
+          <li class="filter-row filter-row__popular">
+            <p>top <span id="c-popular--value">{ }</span> most popular names</p>
+            <p class="range-field">
+              <input type="range" id="c-popular__range" min="1" max="1000" value="300">
+            </p>
+          </li>
+          <li class="filter-row filter-row__trending">names that are clearly</li>
+        </ol>
+        <ol class="filter-col filter-col__d">
+          <li class="filter-row filter-row__total">
+            <label for="d-more-than">
+              <input class="with-gap" name="total-birth" id="d-more-than" type="radio">
+              <span>more than</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__total">
+            <label for="d-less-than">
+              <input class="with-gap" name="total-birth" id="d-less-than" type="radio">
+              <span>less than</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__common">
+            <label for="d-more-common">
+              <input class="with-gap" name="how-common" id="d-more-common" type="radio">
+              <span>more common than</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__common">
+            <label for="d-less-common">
+              <input class="with-gap" name="how-common" id="d-less-common" type="radio">
+              <span>less common than</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__peak">
+            <label for="d-peak">
+              <input class="with-gap" name="peak" id="d-peak" type="radio">
+              <span>peak</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__peak">
+            <label for="d-trough">
+              <input class="with-gap" name="peak" id="d-trough" type="radio">
+              <span>trough</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__trending">
+            <label for="d-trending-up">
+              <input class="with-gap" name="trending" id="d-trending-up" type="radio">
+              <span>trending up</span>
+            </label>
+          </li>
+          <li class="filter-row filter-row__trending">
+            <label for="d-trending-down">
+              <input class="with-gap" name="trending" id="d-trending-down" type="radio">
+              <span>trending down</span>
+            </label>
+          </li>
+        </ol>
+        <ol class="filter-col filter-col__e">
+          <li class="filter-row filter-row__total">a total of { } people</li>
+          <li class="filter-row filter-row__common">{ } per high school</li>
+          <li class="filter-row filter-row__peak">in year range { } - { }</li>
+          <li class="filter-row filter-row__trending">in the last 10 years</li>
+        </ol>
+        <ol class="filter-col filter-col__f">
+          <li id="year-div" class="filter-row filter-row__total filter-row__common filter-row__peak filter-row__popular filter-row">
+            <div style="text-align: center;">
+              <p>in between</p>
+              <p><span id="start-year"></span>-<span id="end-year"></span></p>
+            </div>
+            <div>
+              <div id="year-slider"></div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </li>
+  </ul>
+
+
+
+  <section style="margin: 2em auto">
+    <form id="test-query">
+      <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
+    </form>
+    <br>
     <p>This demo can now take pure SQL queries. For instance, try: </p>
     <ul>
       <li>SELECT name, `1990` FROM name_by_year WHERE `1990` > 1000 AND gender = 'F' ORDER BY `1990` DESC</li>
@@ -38,66 +240,11 @@
         < 1970 AND peak_year> 1930</li>
       <li>SELECT name, sum FROM name_by_year WHERE sum > 999999 ORDER BY sum DESC</li>
     </ul>
-    <form id="test-query">
-      <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
-    </form>
-    <p></p>
-  </div>
-
-  <div class="container" id="filter">
-    <button class="btn btn-warning" type="button">Add a filter</button>
-    <hr>
-    <div class="row">
-      <div class="col filter-col filter-col filter-col--a">
-        <p class="filter-row filter-row--gender"><input name="filter-type" id="a-gender" type="radio">filter by gender:</p>
-        <p class="filter-row filter-row--total"><input name="filter-type" type="radio">filter by total birth:</p>
-        <p class="filter-row filter-row--common"><input name="filter-type" type="radio">filter by how common:</p>
-        <p class="filter-row filter-row--peak"><input name="filter-type" type="radio">filter by peak and trough:</p>
-        <p class="filter-row filter-row--popular"><input name="filter-type" type="radio">filter top popularity:</p>
-        <p class="filter-row filter-row--trending"><input name="filter-type" type="radio">filter by trending:</p>
-      </div>
-      <div class="col filter-col filter-col--b">
-        <p class="filter-row"><input type="radio">exclude:</p>
-        <p class="filter-row"><input type="radio">include only:</p>
-      </div>
-      <div class="col filter-col filter-col--c  ">
-        <p class="filter-row filter-row--gender"><input type="checkbox">female names</p>
-        <p class="filter-row filter-row--gender"><input type="checkbox">male names</p>
-        <p class="filter-row filter-row--gender"><input type="checkbox">unisex names</p>
-        <p class="filter-row filter-row--total">names that were used by</p>
-        <p class="filter-row filter-row--common">names that were</p>
-        <p class="filter-row filter-row--peak">names that had a </p>
-        <p class="filter-row filter-row--popular">top { } most popular names</p>
-        <p class="filter-row filter-row--trending">names that are clearly</p>
-      </div>
-      <div class="col filter-col filter-col--d">
-        <p class="filter-row filter-row--total"><input type="radio">more than</p>
-        <p class="filter-row filter-row--total"><input type="radio">less than</p>
-        <p class="filter-row filter-row--common"><input type="radio">more common than</p>
-        <p class="filter-row filter-row--common"><input type="radio">less common than</p>
-        <p class="filter-row filter-row--peak"><input type="radio">peak</p>
-        <p class="filter-row filter-row--peak"><input type="radio">trough</p>
-        <p class="filter-row filter-row--popular">in year range { } - { }</p>
-        <p class="filter-row filter-row--trending"><input type="radio">trending up</p>
-        <p class="filter-row filter-row--trending"><input type="radio">trending down</p>
-      </div>
-      <div class="col filter-col filter-col--e">
-        <p class="filter-row filter-row--total">{ }</p>
-        <p class="filter-row filter-row--common">{ }</p>
-        <p class="filter-row filter-row--peak">in year range { } - { }</p>
-        <p class="filter-row filter-row--popular">in year range { } - { }</p>
-        <p class="filter-row filter-row--trending">in the last 10 years</p>
-      </div>
-      <div class="col filter-col filter-col--f">
-        <p class="filter-row filter-row--total">people in total in year range { } - { }</p>
-        <p class="filter-row filter-row--common">per high school in year range { } - { }</p>
-      </div>
-    </div>
-  </div>
+  </section>
 
   <div class="container" id="name-list"></div>
-
-
 </body>
 
 </html>
+
+<!-- https://itunes.apple.com/us/app/%E5%AE%9D%E5%AE%9D%E6%A0%91%E5%AD%95%E8%82%B2-%E5%A6%88%E5%A6%88%E5%A4%87%E5%AD%95%E6%80%80%E5%AD%95%E4%BC%B4%E4%BE%A3%E5%92%8C%E6%AF%8D%E5%A9%B4%E8%82%B2%E5%84%BF%E5%8A%A9%E6%89%8B/id523063187 -->
