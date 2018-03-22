@@ -1,0 +1,21 @@
+header {
+  align-items: center;
+  display: flex;
+  color: DimGray;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+#logo {
+  border-radius: 100%;
+  max-width: 6rem;
+  margin: 0 1rem 0.5rem 0;
+}

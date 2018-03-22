@@ -1,5 +1,11 @@
-initialize();
-function initialize() { // this function get run on page load
+pageInitialize();
+materializeInitialize();
+
+function materializeInitialize() {
+  $('.collapsible').collapsible();
+}
+
+function pageInitialize() { // this function get run on page load
 // temp: enter queries in the query bar to run a query
 $('#test-query').on('submit', (event) => {
   event.preventDefault();
