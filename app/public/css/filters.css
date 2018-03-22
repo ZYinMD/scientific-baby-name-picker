@@ -1,0 +1,83 @@
+/*git rid of double border*/
+#filters {
+  border-bottom: none;
+}
+
+/*manually align with #intro*/
+#filters .collection-header,
+#filters .collection-item
+ {
+  padding-left: 24px;
+}
+
+#filters h3 {
+  font-size: 1.5rem;
+  padding: 0;
+  margin: 0.9rem 0 0.8rem;
+}
+
+/*all text in the filter section*/
+#add-filter a,
+#filters li,
+#filters label span {
+  font-size: 1.2rem;
+  color: DarkSlateGray;
+}
+
+/*"edit" and "delete" icon spacing between one another*/
+.secondary-content {
+  margin: auto 0.5rem;
+}
+
+#add-filter {
+  padding-left: 18px;
+}
+
+.collapsible-body,
+.collapsible-body ol {
+  padding: 0;
+}
+
+#filter-console {
+  display: flex;
+  background-color: white;
+  align-items: center;
+}
+
+.filter-col {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0 1rem 1.4rem;
+}
+
+.filter-row {
+  margin: 0.3rem 0;
+}
+
+/*checkboxes and radios not so far away from content*/
+#filter-console input[type="checkbox"] + span,
+#filter-console input[type="radio"] + span {
+  padding-left: 1.8rem;
+}
+
+#year-div p,
+.filter-col__c .filter-row__total p {
+  margin: 0 auto;
+  line-height: 1.4em;
+}
+
+.filter-col__b label span,
+.filter-col__d label span
+ {
+  margin: 0.47rem auto;
+}
+
+#year-div {
+  display: flex;
+  align-items: center;
+}
+
+#year-slider {
+  height: 12rem;
+  margin-left: 3rem;
+}

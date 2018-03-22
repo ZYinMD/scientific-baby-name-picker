@@ -1,0 +1,42 @@
+@import "header.css";
+@import "intro.css";
+@import "filters.css";
+
+body {
+  max-width: 1200px;
+  margin: auto;
+  background-color: #f1f1f1;
+  font-family: "open sans";
+  color: DarkSlateGray;
+}
+
+ol, ul{
+  list-style: none;
+}
+
+.theme {
+  color: salmon;
+}
+
+.greyish {
+  background-color: #fafafa;
+}
+
+.theme2,
+input[type=range]+.thumb .value,
+#filter-console input:checked + span {
+  color: #00c2c2;
+}
+
+[type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:before, [type="radio"].with-gap:checked+span:after {
+    border-color: #00c2c2;
+}
+
+[type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:after {
+    background-color: #00c2c2;
+}
+
+[type="checkbox"]:checked+span:not(.lever):before {
+  border-right: 2px solid #00c2c2;
+  border-bottom: 2px solid #00c2c2;
+}
