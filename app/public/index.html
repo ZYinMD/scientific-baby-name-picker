@@ -224,24 +224,10 @@
       </div>
     </li>
   </ul>
-  <ul class="collapsible">
-    <li>
-      <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
-  </ul>
 
-  <div class="container" id="name-list"></div>
 
-  <header style="margin: 2em auto">
+
+  <section style="margin: 2em auto">
     <form id="test-query">
       <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
     </form>
@@ -254,8 +240,9 @@
         < 1970 AND peak_year> 1930</li>
       <li>SELECT name, sum FROM name_by_year WHERE sum > 999999 ORDER BY sum DESC</li>
     </ul>
-  </header>
+  </section>
 
+  <div class="container" id="name-list"></div>
 </body>
 
 </html>
