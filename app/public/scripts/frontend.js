@@ -1,9 +1,56 @@
 pageInitialize();
 materializeInitialize();
 
+
+
+
+
+
+var slider = document.getElementById('year-slider');
+noUiSlider.create(slider, {
+ start: [1950, 2016],
+ connect: true,
+ step: 1,
+ direction: 'rtl', // smaller values first
+ orientation: 'vertical', // 'horizontal' or 'vertical'
+ range: {
+   'min': 1880,
+   'max': 2016
+ },
+ format: wNumb({
+   decimals: 0
+ })
+});
+
+
+// var slider = document.getElementById('c-popular__range');
+// var output = document.getElementById("c-popular--value");
+// output.innerHTML = slider.value; // display the default slider value
+// slider.oninput = function() { // update the displayed value on dragging
+//     output.innerHTML = this.value;
+// };
+
+
+var startYear = document.getElementById('start-year');
+var endYear = document.getElementById('end-year');
+slider.noUiSlider.on('update', () => {
+  [startYear.innerHTML, endYear.innerHTML] = slider.noUiSlider.get();
+  });
+
+
+
+
+
+
+
+
+
+
+
 function materializeInitialize() {
   $('.collapsible').collapsible();
 }
+
 
 function pageInitialize() { // this function get run on page load
 // temp: enter queries in the query bar to run a query
@@ -23,16 +70,27 @@ $('#test-query').on('submit', (event) => {
   $('.filter-row').on('click', () => {
     console.log('event.currentTarget', event.currentTarget);
   });
+
   // filter hide/show:
-  $('.filter-row:not(.filter-col--a li)').hide(); //hide everything except first column
-  $('.filter-col--a').on('change', 'input', (event) => { // when any filter is chosen, unhide its row
+  $('.filter-row:not(.filter-col__a li)').hide(); //hide everything except first column
+  $('.filter-col__a').on('change', 'input', (event) => { // when any filter is chosen, unhide its row
     unhide(event.target.parentNode.parentNode.classList[1]);
   });
+
+  // for the one and only html range in the app
+  var slider = document.getElementById('c-popular__range');
+  var output = document.getElementById("c-popular--value");
+  output.innerHTML = slider.value; // display the default slider value
+  slider.oninput = function() { // update the displayed value on dragging
+      output.innerHTML = this.value;
+  };
+
+
 }
 
 function unhide(row) {
-  $('.filter-row:not(.filter-col--a li)').hide(); //hide everything except first column
-  $('.filter-col--b li').show(); //unhide column b
+  $('.filter-row:not(.filter-col__a li)').hide(); //hide everything except first column
+  $('.filter-col__b li').show(); //unhide column b
   $('.' + row).show(); // unhide the selected row
 
 }

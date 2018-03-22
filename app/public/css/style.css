@@ -23,21 +23,20 @@ ol, ul{
 }
 
 .theme2,
+input[type=range]+.thumb .value,
 #filter-console input:checked + span {
-  color: MediumTurquoise;
+  color: #00c2c2;
 }
 
 [type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:before, [type="radio"].with-gap:checked+span:after {
-    border-color: MediumTurquoise;
+    border-color: #00c2c2;
 }
 
 [type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:after {
-    background-color: MediumTurquoise;
+    background-color: #00c2c2;
 }
-
 
 [type="checkbox"]:checked+span:not(.lever):before {
-  border-right: 2px solid MediumTurquoise;
-  border-bottom: 2px solid MediumTurquoise;
+  border-right: 2px solid #00c2c2;
+  border-bottom: 2px solid #00c2c2;
 }
-
