@@ -1,31 +1,53 @@
-#filters h3 {
-  font-size: 1.7rem;
-  padding: 0;
-  margin: 1rem 0;
+#filters {
+  border-bottom: none;
+}
+#filters .collection-header,
+#filters .collection-item
+ {
+  padding-left: 24px;
 }
 
-#filters label span{
-  font-size: 1.3rem;
+#filters h3 {
+  font-size: 1.5rem;
+  padding: 0;
+  margin: 0.9rem 0 0.8rem;
+}
+
+#add-filter a, #filters label span{
+  font-size: 1.2rem;
 }
 
 .secondary-content {
   margin: auto 0.5rem;
 }
 
-.collapsible-body {
-  padding: 0;
+#add-filter {
+  padding-left: 18px;
+  /*border: none; get rid of double border*/
 }
 
+.collapsible-body,
 .collapsible-body ol {
   padding: 0;
 }
 
-#filter-constructor {
+#filter-console {
   display: flex;
+  background-color: white;
   align-items: center;
 }
 
 .filter-col {
   display: flex;
   flex-direction: column;
+  margin: 1rem 0 1rem 1.4rem;
 }
+
+.filter-row {
+  margin: 0.3rem 0;
+}
+
+#filter-console input + span {
+  padding-left: 1.8rem;
+}
+

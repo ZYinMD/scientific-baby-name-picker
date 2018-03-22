@@ -13,8 +13,17 @@ $('#test-query').on('submit', (event) => {
   $.get('/api', {query: query}, populateNames);
 });
 
+  // change text color of selected radio
+  $('#filter-console input').on('change', (event) => {
+    console.log('event.target.parentNode: ', event.target.parentNode);
+    console.log('event.target.parentNode.parentNode: ', event.target.parentNode.parentNode);
+    console.log('event.target.checked: ', event.target.checked);
+  });
 
-  // filter behavior:
+  $('.filter-row').on('click', () => {
+    console.log('event.currentTarget', event.currentTarget);
+  });
+  // filter hide/show:
   $('.filter-row:not(.filter-col--a li)').hide(); //hide everything except first column
   $('.filter-col--a').on('change', 'input', (event) => { // when any filter is chosen, unhide its row
     unhide(event.target.parentNode.parentNode.classList[1]);
