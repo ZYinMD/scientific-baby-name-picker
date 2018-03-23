@@ -1,6 +1,6 @@
 // This file contains settings to connect to the database
 require('dotenv').config();
-
+var production = false;
 if (process.env.JAWSDB_URL) {
   const jawString = process.env.JAWSDB_URL;
   const userStart = jawString.indexOf('//') + 2;
@@ -15,7 +15,7 @@ if (process.env.JAWSDB_URL) {
   const databaseStart = jawString.indexOf('3306/') + 5;
   const databaseFromEnd = databaseStart - jawString.length;
   const database = jawString.slice(databaseFromEnd);
-  const production = {
+  production = {
     host,
     user,
     password,

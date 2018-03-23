@@ -143,6 +143,7 @@ function runSql(queries) { // this function sends a http GET to backend; anti-in
   SELECT SQL_CALC_FOUND_ROWS name AS n, gender AS g FROM name_by_year
   WHERE ${finalQuery}
   ORDER BY sum DESC LIMIT 10;
+  SELECT FOUND_ROWS();
 `
   ;
 
