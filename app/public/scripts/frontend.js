@@ -55,6 +55,9 @@ function applyFilter() {
         }
       }
       filter += filterArray.join(' and ');
+      // I am so smart:
+      filter.includes('Exclude') ?
+      query += queryArray.join(' OR '):
       query += queryArray.join(' AND ');
       break;
 
@@ -172,9 +175,12 @@ function resultsInit() {
 }
 
 function populateNames(res) { // (temp) this function populates the screen the server res
-  $('#result-count').text(res[1]);
+  var count = res[1];
+  if (count < 1000) $('#result-count').text(res[1] + ' names found...');
+  else $('#result-count').text(res[1] + ' names found, displaying the first 1000...');
+  $('#name-list').empty();
   for (let i of res[0]) {
-    $('#name-list').append(`<span class="chip ${i.slice(-1)}">${i.slice(0, -1)}</span>`)
+    $('#name-list').append(`<span class="${i.slice(-1)}">${i.slice(0, -1)}</span>`)
   }
 
 

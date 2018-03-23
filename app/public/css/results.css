@@ -1,3 +1,9 @@
+#results h3 {
+  margin: 0.6rem 0 0.9rem 0.3rem;
+  color: DimGray;
+
+}
+
 #name-list {
   display: flex;
   flex-wrap: wrap;
@@ -6,17 +12,8 @@
 
 #name-list span {
   font-size: 1.2rem;
-  padding: 0 0.7rem;
-  /*margin: 0.5 0.5rem;*/
-  border: 1px solid;
+  margin: 0.25rem 0.5rem;
+  padding: 0;
   background-color: white;
-  line-height: 2.07rem;
 }
 
-#name-list .M {
-  border-color: #00c2c2;
-}
-
-#name-list .F {
-  border-color: salmon;
-}

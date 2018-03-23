@@ -11,10 +11,18 @@ body {
   color: DarkSlateGray;
 }
 
+.collection,
+.card {
+  border-radius: 8px;
+  margin-bottom: 2rem;
+
+}
+
 ol, ul{
   list-style: none;
 }
 
+.F,
 .theme { /*the theme of the app*/
   color: salmon;
 }
@@ -31,6 +39,7 @@ ol, ul{
   background-color: white;
 }
 
+.M,
 .theme2,
 input[type=range]+.thumb .value,
 #filter-console input:checked + span {
