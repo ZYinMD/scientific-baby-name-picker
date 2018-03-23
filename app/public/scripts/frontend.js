@@ -138,7 +138,14 @@ function populateFilter(string) { // this function puts a string onto the filter
 function runSql(queries) { // this function sends a http GET to backend; anti-injection happens there
   var finalQuery = queries.join(') AND (');
   finalQuery = '(' + finalQuery + ')';
-  finalQuery = 'SELECT name AS n, gender AS g FROM name_by_year WHERE ' + finalQuery + ' ORDER BY sum DESC LIMIT 300' ;
+  // finalQuery = 'SELECT name AS n, gender AS g FROM name_by_year WHERE ' + finalQuery + ' ORDER BY sum DESC LIMIT 10' ;
+  finalQuery = `
+  SELECT SQL_CALC_FOUND_ROWS name AS n, gender AS g FROM name_by_year
+  WHERE ${finalQuery}
+  ORDER BY sum DESC LIMIT 10;
+`
+  ;
+
   console.log('finalQuery: ', finalQuery);
   $.get('/api', {
     query: finalQuery
@@ -161,9 +168,10 @@ function unhide(row) { // this function unhides a row in the filter console
 
 function populateNames(res) { // (temp) this function populates the screen the server res
   var display = '';
-  for (let i in res) {
-    display += `result #${i}: ${JSON.stringify(res[i])}\n`;
-  }
+  // for (let i in res) {
+  //   display += `result #${i}: ${JSON.stringify(res[i])}\n`;
+  // }
+  display = JSON.stringify(res, null, 2);
   $('#name-list').empty().append($('<pre>'));
   $('pre').text(display);
 }
