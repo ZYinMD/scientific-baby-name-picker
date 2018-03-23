@@ -14,17 +14,22 @@ ol, ul{
   list-style: none;
 }
 
-.theme {
+.theme { /*the theme of the app*/
   color: salmon;
 }
 
-.greyish {
+.greyish { /*the grey between body background and white*/
   background-color: #fafafa;
+}
+
+.greyed-out {
+  color:Silver;
 }
 
 .white {
   background-color: white;
 }
+
 .theme2,
 input[type=range]+.thumb .value,
 #filter-console input:checked + span {
@@ -43,3 +48,4 @@ input[type=range]+.thumb .value,
   border-right: 2px solid #00c2c2;
   border-bottom: 2px solid #00c2c2;
 }
+

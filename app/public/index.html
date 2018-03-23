@@ -24,7 +24,7 @@
 
 <body>
   <header>
-    <img id="logo" src="imgs/logo.pngg" alt="">
+    <img id="logo" src="imgs/logo.png" alt="">
     <div class="masthead">
       <h1>Scientific Baby Name Picker</h1>
       <h2>Use statistics to pick the best name for your baby</h2>
@@ -42,13 +42,13 @@
     <li class="collection-header">
       <h3 class="theme">Current Filters</h3>
     </li>
-    <li class="collection-item">
+    <li id="mandatory-filter" class="collection-item">
       <label>
-        <input type="checkbox">
-        <span>Filter</span>
+        <input type="checkbox" checked="checked">
+        <span>Exclude names that have been used by less than 500 people between 1880-2016</span>
       </label>
-      <a href="#!" class="secondary-content"><i class="material-icons theme2">delete</i></a>
-      <a href="#!" class="secondary-content"><i class="material-icons theme2">edit</i></a>
+      <a href="#!" class="secondary-content greyed-out"><i class="material-icons">delete</i></a>
+      <a href="#!" class="secondary-content greyed-out"><i class="material-icons">edit</i></a>
     </li>
     <li class="collection-item">
       <label>
@@ -200,7 +200,10 @@
             </li>
           </ol>
           <ol class="filter-col filter-col__e">
-            <li class="filter-row filter-row__total">a total of { } people</li>
+            <li class="filter-row filter-row__total input-field">
+              <p>a total of</p>
+              <p><input placeholder="10000" class="theme2" id="e-total" type="text">people</p>
+            </li>
             <li class="filter-row filter-row__common">{ } per high school</li>
             <li class="filter-row filter-row__trending">in the last 10 years</li>
           </ol>
@@ -221,21 +224,6 @@
 
     </li>
   </ul>
-
-  <section style="margin: 2em auto">
-    <form id="test-query">
-      <input type="search" class="form-control" id="test-query__input" name="query" placeholder="vanilla SQL query" autofocus>
-    </form>
-    <br>
-    <p>This demo can now take pure SQL queries. For instance, try: </p>
-    <ul>
-      <li>SELECT name, `1990` FROM name_by_year WHERE `1990` > 1000 AND gender = 'F' ORDER BY `1990` DESC</li>
-      <li>SELECT name FROM name_by_year WHERE is_unisex = true</li>
-      <li>SELECT name, peak_year FROM name_by_year WHERE peak_year
-        < 1970 AND peak_year> 1930</li>
-      <li>SELECT name, sum FROM name_by_year WHERE sum > 999999 ORDER BY sum DESC</li>
-    </ul>
-  </section>
 
   <div class="container" id="name-list"></div>
 </body>

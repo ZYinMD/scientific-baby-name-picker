@@ -66,6 +66,15 @@
   line-height: 1.4em;
 }
 
+.filter-col__e .filter-row__total input {
+  height: 2.6rem;
+  width: 5rem;
+}
+.filter-col__e .filter-row__total p {
+  line-height: 1.1rem;
+  margin: 0 auto;
+}
+
 .filter-col__b label span,
 .filter-col__d label span
  {
