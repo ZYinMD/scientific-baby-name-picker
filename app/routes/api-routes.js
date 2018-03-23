@@ -5,7 +5,13 @@ module.exports = function(app) {
     console.log(query);
     db.query(query, (error, results, fields) => {
       if (error) throw error;
-      res.json(results);
+      //manually re-construct the results so data transfer is minimized
+      var names = [];
+      for (let i of results[0]) {
+        names.push(i.n + i.g);
+      }
+      var countNoLimit = results[1][0]['FOUND_ROWS()'];
+      res.json([names, countNoLimit]); //return two things, all the names and gender, and the total sql results if it had no LIMIT
     });
   });
 };

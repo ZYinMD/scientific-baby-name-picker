@@ -1,0 +1,22 @@
+#name-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+#name-list span {
+  font-size: 1.2rem;
+  padding: 0 0.7rem;
+  /*margin: 0.5 0.5rem;*/
+  border: 1px solid;
+  background-color: white;
+  line-height: 2.07rem;
+}
+
+#name-list .M {
+  border-color: #00c2c2;
+}
+
+#name-list .F {
+  border-color: salmon;
+}

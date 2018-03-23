@@ -2,7 +2,7 @@ var queries = []; //global variable to store all filters for sql
 filterInit();
 materializeInit();
 slidersInit();
-testQueryInit();
+resultsInit();
 
 
 function filterInit() { // this function get run on page load
@@ -138,11 +138,11 @@ function populateFilter(string) { // this function puts a string onto the filter
 function runSql(queries) { // this function sends a http GET to backend; anti-injection happens there
   var finalQuery = queries.join(') AND (');
   finalQuery = '(' + finalQuery + ')';
-  // finalQuery = 'SELECT name AS n, gender AS g FROM name_by_year WHERE ' + finalQuery + ' ORDER BY sum DESC LIMIT 10' ;
+  // finalQuery = 'SELECT name AS n, gender AS g FROM name_by_year WHERE ' + finalQuery + ' ORDER BY sum DESC LIMIT 1000' ;
   finalQuery = `
   SELECT SQL_CALC_FOUND_ROWS name AS n, gender AS g FROM name_by_year
   WHERE ${finalQuery}
-  ORDER BY sum DESC LIMIT 10;
+  ORDER BY sum DESC LIMIT 1000;
   SELECT FOUND_ROWS();
 `
   ;
@@ -167,14 +167,24 @@ function unhide(row) { // this function unhides a row in the filter console
   $('.' + row).show(); // unhide the selected row
 }
 
+function resultsInit() {
+  runSql(['1+1=2']);
+}
+
 function populateNames(res) { // (temp) this function populates the screen the server res
-  var display = '';
-  // for (let i in res) {
-  //   display += `result #${i}: ${JSON.stringify(res[i])}\n`;
-  // }
-  display = JSON.stringify(res, null, 2);
-  $('#name-list').empty().append($('<pre>'));
-  $('pre').text(display);
+  $('#result-count').text(res[1]);
+  for (let i of res[0]) {
+    $('#name-list').append(`<span class="chip ${i.slice(-1)}">${i.slice(0, -1)}</span>`)
+  }
+
+
+  // var display = '';
+  // // for (let i in res) {
+  // //   display += `result #${i}: ${JSON.stringify(res[i])}\n`;
+  // // }
+  // display = JSON.stringify(res, null, 2);
+  // $('#name-list').empty().append($('<pre>'));
+  // $('pre').text(display);
 }
 
 function slidersInit() {
@@ -212,13 +222,3 @@ function materializeInit() {
   };
 }
 
-function testQueryInit() {
-  // temp: enter queries in the query bar to run a query
-  $('#test-query').on('submit', (event) => {
-    event.preventDefault();
-    var query = ($('#test-query__input').val().trim());
-    $.get('/api', {
-      query: query
-    }, populateNames);
-  });
-}

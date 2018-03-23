@@ -1,6 +1,7 @@
 @import "header.css";
 @import "intro.css";
 @import "filters.css";
+@import "results.css";
 
 body {
   max-width: 1200px;
