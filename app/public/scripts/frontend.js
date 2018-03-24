@@ -4,7 +4,6 @@ materializeInit();
 slidersInit();
 resultsInit();
 
-
 function filterInit() { // this function get run on page load
   // filter hide/show:
   $('.filter-row:not(.filter-col__a li)').hide(); //hide everything except first column
@@ -63,15 +62,15 @@ function applyFilter() {
 
     //when "filter by total birth" was used
     case 'a-total':
-      filter += 'names that have been used by ';
+      filter += 'names that have been used by';
       // more than or less than?
-      switch (whichPicked('d')) {
+      switch (whichPicked('d', 'total')) {
         case 'd-more-than':
-          filter += 'more than';
+          filter += ' more than';
           query += ' >';
           break;
         case 'd-less-than':
-          filter += 'less than';
+          filter += ' less than';
           query += ' <';
           break;
         default:
@@ -86,10 +85,34 @@ function applyFilter() {
       filter += ` between ${startYear}-${endYear}`;
       query = yearRangeToSql(startYear, endYear) + query;
       break;
+
+    //when "filter by how common" was used
     case 'a-common':
-      console.log('which filter: ', filterType);
-      console.log('exclusion: ', whichPicked('b'));
+      filter += 'names that were';
+      switch (whichPicked('d', 'common')) {
+        case 'd-more-common':
+          filter += ' more common than';
+          query += ' >';
+          break;
+        case 'd-less-common':
+          filter += ' less common than';
+          query += ' <';
+          break;
+        default:
+          return;
+      }
+      // how many?
+      aFew = Number($('#e-common').val());
+      if (!aFew || typeof aFew != 'number') return; // manual validation
+      filter += ` ${aFew} per 750 people`;
+      query += ` ${aFew}`;
+      // where this name (1950, 1960) / newbornByYear(1950, 1960) * 750 < aFew
+
+      // year range
+      filter += ` between ${startYear}-${endYear}`;
+      query = `${yearRangeToSql(startYear, endYear)} / ${newBornBetween(startYear, endYear)} * 750 ${query}` ;
       break;
+
     case 'a-peak':
       console.log('which filter: ', filterType);
       console.log('exclusion: ', whichPicked('b'));
@@ -111,11 +134,14 @@ function applyFilter() {
   queries.push(query);
   runSql(queries);
   clearConsole();
+}
 
-  function whichPicked(col) { //takes a letter like 'a' / 'b' / 'c', returns what radio was picked
+function whichPicked(col, row) { // col is a letter like a, b, c, row is a row name like total, common, peak. Returns the id of radio button picked
+  if (row) {
+    for (let i of $(`.filter-col__${col} .filter-row__${row} input`)) if (i.checked) return i.id;
+  } else {
     for (let i of $(`.filter-col__${col} input`)) if (i.checked) return i.id;
   }
-
 }
 
 function yearRangeToSql(startYear, endYear) { // this function turns a year range into a string ready for sql
@@ -124,7 +150,7 @@ function yearRangeToSql(startYear, endYear) { // this function turns a year rang
     res += '`' + i + '` + ';
   }
   res = res.slice(0, -3);
-  return res;
+  return `(${res})`;;
 }
 function populateFilter(string) { // this function puts a string onto the filter list
   var newFilter = `
@@ -141,16 +167,13 @@ function populateFilter(string) { // this function puts a string onto the filter
 function runSql(queries) { // this function sends a http GET to backend; anti-injection happens there
   var finalQuery = queries.join(') AND (');
   finalQuery = '(' + finalQuery + ')';
-  // finalQuery = 'SELECT name AS n, gender AS g FROM name_by_year WHERE ' + finalQuery + ' ORDER BY sum DESC LIMIT 1000' ;
   finalQuery = `
-  SELECT SQL_CALC_FOUND_ROWS name AS n, gender AS g FROM name_by_year
+  SELECT SQL_CALC_FOUND_ROWS name, gender FROM name_by_year
   WHERE ${finalQuery}
   ORDER BY sum DESC LIMIT 1000;
   SELECT FOUND_ROWS();
-`
-  ;
+`;
 
-  console.log('finalQuery: ', finalQuery);
   $.get('/api', {
     query: finalQuery
   }, populateNames);
@@ -180,7 +203,7 @@ function populateNames(res) { // (temp) this function populates the screen the s
   else $('#result-count').text(res[1] + ' names found, displaying the first 1000...');
   $('#name-list').empty();
   for (let i of res[0]) {
-    $('#name-list').append(`<span class="${i.slice(-1)}">${i.slice(0, -1)}</span>`)
+    $('#name-list').append(`<span class="${i.slice(-1)}">${i.slice(0, -1)}</span>`);
   }
 
 
@@ -228,3 +251,10 @@ function materializeInit() {
   };
 }
 
+function newBornBetween(startYear, endYear) { // this function calculate how many babies were born in the US between two years
+  var result = 0;
+  for (var i = startYear; i <= endYear; i++) {
+    result += newbornByYear[i];
+  }
+  return result;
+}

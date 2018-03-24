@@ -17,8 +17,10 @@
   <script defer src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script defer src="scripts/nouislider.min.js"></script>
+  <script defer src="scripts/newborn-by-year.js"></script>
   <script defer src="scripts/frontend.js"></script>
   <link rel="shortcut icon" type="image/png" href="imgs/favicon.png">
+
 
 </head>
 
@@ -34,7 +36,7 @@
   <section id="intro" class="card">
     <div class="card-content">
       <h3 class="theme card-title">This is a database containing demographics of all given names used in the US.</h3>
-      <p>Over the course of 1880-2016, a total of 106695 names were ever used by American people, one of which is going to be used by your child for a lifetime. Can you find the very best one?</p>
+      <p>Over the course of 1880-2016<i class="tooltipped material-icons" data-position="top" data-delay="50" data-tooltip="Our raw data came from SSA's published demographics of 1880-2016">info_outline</i>, a total of 106695 names were ever used by American people, one of which is going to be used by your child for a lifetime. Can you find the very best one?</p>
     </div>
   </section>
 
@@ -131,7 +133,9 @@
               <p>names that have</p>
               <p>been used by</p>
             </li>
-            <li class="filter-row filter-row__common">names that were</li>
+            <li class="filter-row filter-row__common">
+            <p>names that were</p>
+            </li>
             <li class="filter-row filter-row__peak">names that had a </li>
             <li class="filter-row filter-row__popular">
               <p>top <span class="theme2" id="c-popular--value">{ }</span> most popular names</p>
@@ -196,7 +200,11 @@
               <p>a total of</p>
               <p><input placeholder="10000" class="theme2" id="e-total" type="text">people</p>
             </li>
-            <li class="filter-row filter-row__common">{ } per high school</li>
+            <li class="filter-row filter-row__common">
+              <p><input placeholder="3" class="theme2" id="e-common" type="text">per <i class="tooltipped material-icons" data-position="top" data-delay="50" data-tooltip="750 people is the average size of American high schools">info_outline</i></p>
+              <p>750 people</p>
+
+            </li>
             <li class="filter-row filter-row__trending">in the last 10 years</li>
           </ol>
           <ol class="filter-col filter-col__f">

@@ -8,3 +8,9 @@
   line-height: 2rem;
   margin-left: 0.25rem
 }
+
+#intro i {
+  font-size: 1.3rem;
+  position: relative;
+  top: 4px;
+}

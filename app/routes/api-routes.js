@@ -8,7 +8,7 @@ module.exports = function(app) {
       //manually re-construct the results so data transfer is minimized
       var names = [];
       for (let i of results[0]) {
-        names.push(i.n + i.g);
+        names.push(i.name + i.gender);
       }
       var countNoLimit = results[1][0]['FOUND_ROWS()'];
       res.json([names, countNoLimit]); //return two things, all the names and gender, and the total sql results if it had no LIMIT

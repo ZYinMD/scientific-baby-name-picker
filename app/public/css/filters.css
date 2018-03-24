@@ -59,18 +59,36 @@
 }
 
 #year-div p,
-.filter-col__c .filter-row__total p {
+.filter-col__c p {
   margin: 0 auto;
   line-height: 1.4em;
 }
 
-.filter-col__e .filter-row__total input {
+/*per 10000 people*/
+#e-total {
   height: 2.6rem;
   width: 5rem;
 }
+
 .filter-col__e .filter-row__total p {
   line-height: 1.1rem;
   margin: 0 auto;
+}
+
+/*per high school*/
+#e-common {
+  height: 2rem;
+  width: 3rem;
+}
+
+.filter-col__e .filter-row__common p {
+  line-height: 1rem;
+  margin: 0 auto;
+}
+
+.filter-col__e .filter-row__common p > i {
+  position: relative;
+  top: 0.5rem;
 }
 
 .filter-col__b label span,
