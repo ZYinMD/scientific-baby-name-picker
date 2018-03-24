@@ -4,16 +4,14 @@
 }
 
 /*manually align with #intro*/
-#filters .collection-header,
-#filters .collection-item
- {
-  padding-left: 24px;
+#filters .collection-item {
+  padding-left: 1.9rem;
 }
 
 #filters h3 {
   font-size: 1.5rem;
   padding: 0;
-  margin: 0.9rem 0 0.8rem;
+  margin: 1.1rem 0.4rem 0.8rem;
 }
 
 /*all text in the filter section*/
@@ -26,11 +24,11 @@
 
 /*"edit" and "delete" icon spacing between one another*/
 .secondary-content {
-  margin: auto 0.5rem;
+  margin: auto 0.6rem;
 }
 
 #add-filter {
-  padding-left: 18px;
+  padding-left: 1.3rem;
 }
 
 .collapsible-body,
@@ -47,7 +45,7 @@
 .filter-col {
   display: flex;
   flex-direction: column;
-  margin: 1rem 0 1rem 1.4rem;
+  margin: 1rem 0 1rem 1.5rem;
 }
 
 .filter-row {
@@ -61,19 +59,49 @@
 }
 
 #year-div p,
-.filter-col__c .filter-row__total p {
+.filter-col__c p {
   margin: 0 auto;
   line-height: 1.4em;
 }
 
-.filter-col__e .filter-row__total input {
+/*per 10000 people*/
+#e-total {
   height: 2.6rem;
   width: 5rem;
 }
+
 .filter-col__e .filter-row__total p {
   line-height: 1.1rem;
   margin: 0 auto;
 }
+
+/*per high school*/
+#e-common {
+  height: 2rem;
+  width: 3rem;
+}
+
+.filter-col__e .filter-row__common p {
+  line-height: 1rem;
+  margin: 0 auto;
+}
+
+.filter-col__e .filter-row__common p > i {
+  position: relative;
+  top: 0.5rem;
+}
+
+/*trending percent*/
+#e-trending {
+  height: 1.4rem;
+  width: 2.5rem;
+}
+
+.filter-col__e .filter-row__trending p {
+  line-height: 1rem;
+  margin: 0.8rem 0 0 0;
+}
+
 
 .filter-col__b label span,
 .filter-col__d label span
