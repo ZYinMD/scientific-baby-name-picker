@@ -8,6 +8,7 @@ resultsInit();
 // var elem = document.querySelector('.modal');
 // var instance = M.Modal.init(elem);
 $('.collapsible').collapsible();
+$('.tooltipped').tooltip();
 
 
 $(document).ready(function(){
