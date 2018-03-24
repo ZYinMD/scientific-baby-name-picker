@@ -1,14 +1,16 @@
-#intro {
-  /*padding-left: 20px
-  ;*/
-}
-
 #intro h3 {
-  margin: 0 0 1.1rem 0;
+  margin: 0.25rem 0 1.1rem 0.2rem;
   font-size: 1.5rem;
 }
 
 #intro p {
   font-size: 1.1rem;
   line-height: 2rem;
+  margin-left: 0.25rem
+}
+
+#intro i {
+  font-size: 1.3rem;
+  position: relative;
+  top: 4px;
 }

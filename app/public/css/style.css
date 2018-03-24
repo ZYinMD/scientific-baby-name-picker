@@ -1,19 +1,29 @@
 @import "header.css";
 @import "intro.css";
 @import "filters.css";
+@import "results.css";
+@import "modal.css";
 
 body {
   max-width: 1200px;
   margin: auto;
   background-color: #f1f1f1;
-  font-family: "open sans";
+  font-family: "open sans", "sans-serif";
   color: DarkSlateGray;
+}
+
+.collection,
+.card {
+  border-radius: 8px;
+  margin-bottom: 2rem;
+
 }
 
 ol, ul{
   list-style: none;
 }
 
+.F,
 .theme { /*the theme of the app*/
   color: salmon;
 }
@@ -30,6 +40,7 @@ ol, ul{
   background-color: white;
 }
 
+.M,
 .theme2,
 input[type=range]+.thumb .value,
 #filter-console input:checked + span {

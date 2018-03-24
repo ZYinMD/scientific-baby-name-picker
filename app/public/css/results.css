@@ -1,0 +1,19 @@
+#results h3 {
+  margin: 0.6rem 0 0.9rem 0.3rem;
+  color: DimGray;
+
+}
+
+#name-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#name-list span {
+  font-size: 1.2rem;
+  margin: 0.25rem 0.5rem;
+  padding: 0;
+  background-color: white;
+  cursor: pointer
+}
+
