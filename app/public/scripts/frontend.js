@@ -114,8 +114,21 @@ function applyFilter() {
       break;
 
     case 'a-peak':
-      console.log('which filter: ', filterType);
-      console.log('exclusion: ', whichPicked('b'));
+      filter += 'names that had a';
+      switch (whichPicked('d', 'peak')) {
+        case 'd-peak':
+          filter = `${filter}names that had a peak between ${startYear} and ${endYear}`;
+          query = `peak_year BETWEEN ${startYear} AND ${endYear}`;
+          break;
+        case 'd-trough':
+          break; //trough isn't done yet.
+          filter = `${filter}names that had a trough between ${startYear} and ${endYear}`;
+          query = `trough_year BETWEEN ${startYear} AND ${endYear}`;
+          break;
+        default:
+          console.log('error');
+          return;
+      }
       break;
     case 'a-popular':
       console.log('which filter: ', filterType);
@@ -150,7 +163,7 @@ function yearRangeToSql(startYear, endYear) { // this function turns a year rang
     res += '`' + i + '` + ';
   }
   res = res.slice(0, -3);
-  return `(${res})`;;
+  return `(${res})`;
 }
 function populateFilter(string) { // this function puts a string onto the filter list
   var newFilter = `
