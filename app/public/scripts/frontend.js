@@ -3,6 +3,8 @@ filterInit();
 materializeInit();
 slidersInit();
 resultsInit();
+var elem = document.querySelector('.modal');
+var instance = M.Modal.init(elem);
 
 function filterInit() { // this function get run on page load
   // filter hide/show:
@@ -12,8 +14,6 @@ function filterInit() { // this function get run on page load
   });
   $('#filter-apply a').on('click', applyFilter);
 }
-
-
 
 function applyFilter() {
   $('.collapsible').collapsible('close', 0);
@@ -27,7 +27,6 @@ function applyFilter() {
   // year range?
   var startYear = $('#start-year').text();
   var endYear = $('#end-year').text();
-
   switch (whichPicked('a')) {
     //when "filter by gender" was used
     case 'a-gender':
@@ -56,11 +55,10 @@ function applyFilter() {
       filter += filterArray.join(' and ');
       // I am so smart:
       filter.includes('Exclude') ?
-      query += queryArray.join(' OR '):
-      query += queryArray.join(' AND ');
+        query += queryArray.join(' OR ') :
+        query += queryArray.join(' AND ');
       break;
-
-    //when "filter by total birth" was used
+      //when "filter by total birth" was used
     case 'a-total':
       filter += 'names that have been used by';
       // more than or less than?
@@ -85,8 +83,7 @@ function applyFilter() {
       filter += ` between ${startYear}-${endYear}`;
       query = yearRangeToSql(startYear, endYear) + query;
       break;
-
-    //when "filter by how common" was used
+      //when "filter by how common" was used
     case 'a-common':
       filter += 'names that were';
       switch (whichPicked('d', 'common')) {
@@ -107,12 +104,10 @@ function applyFilter() {
       filter += ` ${aFew} per 750 people`;
       query += ` ${aFew}`;
       // where this name (1950, 1960) / newbornByYear(1950, 1960) * 750 < aFew
-
       // year range
       filter += ` between ${startYear}-${endYear}`;
-      query = `${yearRangeToSql(startYear, endYear)} / ${newBornBetween(startYear, endYear)} * 750 ${query}` ;
+      query = `${yearRangeToSql(startYear, endYear)} / ${newBornBetween(startYear, endYear)} * 750 ${query}`;
       break;
-
     case 'a-peak':
       filter += 'names that had a';
       switch (whichPicked('d', 'peak')) {
@@ -131,8 +126,6 @@ function applyFilter() {
       }
       break;
     case 'a-popular':
-      console.log('which filter: ', filterType);
-      console.log('exclusion: ', whichPicked('b'));
       break;
     case 'a-trending':
       console.log('which filter: ', filterType);
@@ -141,7 +134,6 @@ function applyFilter() {
     default:
       return;
   }
-
   if (filter.includes('Exclude')) query = `!(${query})`; // reverse the query to !query
   populateFilter(filter);
   queries.push(query);
@@ -151,9 +143,11 @@ function applyFilter() {
 
 function whichPicked(col, row) { // col is a letter like a, b, c, row is a row name like total, common, peak. Returns the id of radio button picked
   if (row) {
-    for (let i of $(`.filter-col__${col} .filter-row__${row} input`)) if (i.checked) return i.id;
+    for (let i of $(`.filter-col__${col} .filter-row__${row} input`))
+      if (i.checked) return i.id;
   } else {
-    for (let i of $(`.filter-col__${col} input`)) if (i.checked) return i.id;
+    for (let i of $(`.filter-col__${col} input`))
+      if (i.checked) return i.id;
   }
 }
 
@@ -165,6 +159,7 @@ function yearRangeToSql(startYear, endYear) { // this function turns a year rang
   res = res.slice(0, -3);
   return `(${res})`;
 }
+
 function populateFilter(string) { // this function puts a string onto the filter list
   var newFilter = `
     <label>
@@ -186,11 +181,9 @@ function runSql(queries) { // this function sends a http GET to backend; anti-in
   ORDER BY sum DESC LIMIT 1000;
   SELECT FOUND_ROWS();
 `;
-
   $.get('/api', {
     query: finalQuery
   }, populateNames);
-
 }
 
 function clearConsole() { // after a new filter is successfully added, clear the console
@@ -208,6 +201,68 @@ function unhide(row) { // this function unhides a row in the filter console
 
 function resultsInit() {
   runSql(['1+1=2']);
+  $('#name-list').on('click', 'span', () => {
+    let name = event.target.innerText;
+    let gender = event.target.classList[0];
+    populateModal(name, gender);
+  });
+}
+
+function populateModal(name, gender) {
+  $.get('/api/name', {
+    name: name,
+    gender: gender
+  }, res => {
+    var color = (res.gender == 'F') ? 'salmon' : '#00c2c2';
+    $('#modal-title').html(`${res.name} <span> (per high school)</span>`);
+    delete res.name;
+    delete res.peak_year;
+    delete res.sum;
+    delete res.gender;
+    delete res.is_unisex;
+    delete res.id;
+    for (let i in res) {
+      res[i] = res[i] / newbornByYear[i] * 750; // change to per high school
+    }
+    var years = Object.keys(res);
+    var counts = Object.values(res);
+    chartjsInit(years, counts, color);
+  });
+
+  function chartjsInit(labels, data, color) {
+    var ctx = document.getElementById("chart");
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: color,
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        legend: {
+          display: false,
+        },
+        scales: {
+          yAxes: [{
+            gridLines: {
+              display: false
+            }
+          }],
+          xAxes: [{
+            gridLines: {
+              display: false
+            },
+            scaleLabel: {
+              display: false
+            }
+          }]
+        }
+      }
+    });
+  }
 }
 
 function populateNames(res) { // (temp) this function populates the screen the server res
@@ -216,10 +271,10 @@ function populateNames(res) { // (temp) this function populates the screen the s
   else $('#result-count').text(res[1] + ' names found, displaying the first 1000...');
   $('#name-list').empty();
   for (let i of res[0]) {
-    $('#name-list').append(`<span class="${i.slice(-1)}">${i.slice(0, -1)}</span>`);
+    let name = i.slice(0, -1);
+    let gender = i.slice(-1);
+    $('#name-list').append(`<span class="${gender} modal-trigger" href="#modal">${name}</span>`);
   }
-
-
   // var display = '';
   // // for (let i in res) {
   // //   display += `result #${i}: ${JSON.stringify(res[i])}\n`;

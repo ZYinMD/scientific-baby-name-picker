@@ -14,4 +14,12 @@ module.exports = function(app) {
       res.json([names, countNoLimit]); //return two things, all the names and gender, and the total sql results if it had no LIMIT
     });
   });
+  app.get('/api/name', (req, res) => {
+    console.log('req.query: ', req.query);
+    var query = `SELECT * FROM name_by_year WHERE name = '${req.query.name}' AND gender = '${req.query.gender}'`;
+    db.query(query, (error, result, fields) => {
+      if (error) throw error;
+      res.json(result[0]);
+    });
+  });
 };

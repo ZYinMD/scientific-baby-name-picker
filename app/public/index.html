@@ -15,9 +15,10 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <!-- deferred scripts, materialize and jquery and my own -->
   <script defer src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/js/materialize.min.js"></script>
   <script defer src="scripts/nouislider.min.js"></script>
   <script defer src="scripts/newborn-by-year.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script defer src="scripts/frontend.js"></script>
   <link rel="shortcut icon" type="image/png" href="imgs/favicon.png">
 
@@ -234,8 +235,18 @@
     </div>
   </section>
 
+  <div id="modal" class="modal bottom-sheet">
+    <div class="modal-content">
+      <h4 id="modal-title"></h4>
+      <div class="chart-container" style="position: relative; height:30vh; width:97vw">
+          <canvas id="chart"></canvas>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 </html>
+
 
 <!-- https://itunes.apple.com/us/app/%E5%AE%9D%E5%AE%9D%E6%A0%91%E5%AD%95%E8%82%B2-%E5%A6%88%E5%A6%88%E5%A4%87%E5%AD%95%E6%80%80%E5%AD%95%E4%BC%B4%E4%BE%A3%E5%92%8C%E6%AF%8D%E5%A9%B4%E8%82%B2%E5%84%BF%E5%8A%A9%E6%89%8B/id523063187 -->

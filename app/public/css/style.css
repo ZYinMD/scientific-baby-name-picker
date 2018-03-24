@@ -2,6 +2,7 @@
 @import "intro.css";
 @import "filters.css";
 @import "results.css";
+@import "modal.css";
 
 body {
   max-width: 1200px;
