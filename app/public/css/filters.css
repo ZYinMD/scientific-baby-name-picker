@@ -91,6 +91,18 @@
   top: 0.5rem;
 }
 
+/*trending percent*/
+#e-trending {
+  height: 1.4rem;
+  width: 2.5rem;
+}
+
+.filter-col__e .filter-row__trending p {
+  line-height: 1rem;
+  margin: 0.8rem 0 0 0;
+}
+
+
 .filter-col__b label span,
 .filter-col__d label span
  {

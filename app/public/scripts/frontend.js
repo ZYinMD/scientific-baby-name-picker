@@ -1,10 +1,18 @@
 var queries = []; //global variable to store all filters for sql
+// var elem = document.querySelector('.collapsible');
+// var instance = M.Collapsible.init(elem);
 filterInit();
 materializeInit();
 slidersInit();
 resultsInit();
-var elem = document.querySelector('.modal');
-var instance = M.Modal.init(elem);
+// var elem = document.querySelector('.modal');
+// var instance = M.Modal.init(elem);
+$('.collapsible').collapsible();
+
+
+$(document).ready(function(){
+  $('.modal').modal();
+});
 
 function filterInit() { // this function get run on page load
   // filter hide/show:
@@ -16,7 +24,9 @@ function filterInit() { // this function get run on page load
 }
 
 function applyFilter() {
-  $('.collapsible').collapsible('close', 0);
+  for (let i = 0; i < 10; i++) { //stupidest thing ever. It can only collapse the current one in the list, but I keep prepending
+    $('.collapsible').collapsible('close', i);
+  }
   var filter = '';
   var query = '';
   // get over with include / exclude first
@@ -116,20 +126,33 @@ function applyFilter() {
           query = `peak_year BETWEEN ${startYear} AND ${endYear}`;
           break;
         case 'd-trough':
-          break; //trough isn't done yet.
+          return; //trough isn't done yet.
           filter = `${filter}names that had a trough between ${startYear} and ${endYear}`;
           query = `trough_year BETWEEN ${startYear} AND ${endYear}`;
           break;
         default:
-          console.log('error');
           return;
       }
       break;
     case 'a-popular':
-      break;
+      return; //popular is not done yet
     case 'a-trending':
-      console.log('which filter: ', filterType);
-      console.log('exclusion: ', whichPicked('b'));
+      var trend;
+      var percent = Number($('#e-trending').val());
+      if (!percent || typeof percent != 'number') return; // manual validation
+      switch (whichPicked('d', 'trending')) {
+        case 'd-trending-up':
+          filter += `names that are trending up by at least ${percent}% every year between ${startYear}-${endYear}`;
+          trend = 'up';
+          break;
+        case 'd-trending-down':
+          filter += `names that are trending down by at least ${percent}% every year between ${startYear}-${endYear}`;
+          trend = 'down';
+          break;
+        default:
+          return;
+      }
+      query = trendingToSql(Number(startYear), Number(endYear), trend, percent);
       break;
     default:
       return;
@@ -160,6 +183,16 @@ function yearRangeToSql(startYear, endYear) { // this function turns a year rang
   return `(${res})`;
 }
 
+function trendingToSql(startYear, endYear, trend, percent) { // this function converts year into sql for trending
+  var res = '';
+  var portion;
+  portion = (trend == 'up') ? 1 + percent / 100 : 1 - percent / 100;
+  operator = (trend == 'up') ? '>' : '<';
+  for (let i = startYear; i < endYear; i++) {
+    res += '`' + (i + 1) + '`' + operator + '`' + i + '` * ' + portion + ' AND '
+  }
+  return res.slice(0, -5) //remove the last ' AND '
+}
 function populateFilter(string) { // this function puts a string onto the filter list
   var newFilter = `
     <label>
@@ -234,9 +267,9 @@ function populateModal(name, gender) {
     var myChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: labels,
+        labels,
         datasets: [{
-          data: data,
+          data,
           backgroundColor: color,
         }]
       },
@@ -275,13 +308,6 @@ function populateNames(res) { // (temp) this function populates the screen the s
     let gender = i.slice(-1);
     $('#name-list').append(`<span class="${gender} modal-trigger" href="#modal">${name}</span>`);
   }
-  // var display = '';
-  // // for (let i in res) {
-  // //   display += `result #${i}: ${JSON.stringify(res[i])}\n`;
-  // // }
-  // display = JSON.stringify(res, null, 2);
-  // $('#name-list').empty().append($('<pre>'));
-  // $('pre').text(display);
 }
 
 function slidersInit() {

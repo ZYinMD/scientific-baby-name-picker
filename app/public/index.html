@@ -144,7 +144,7 @@
                 <input type="range" id="c-popular__range" min="1" max="1000" value="300">
               </p>
             </li>
-            <li class="filter-row filter-row__trending">names that are clearly</li>
+            <li class="filter-row filter-row__trending">names that are</li>
           </ol>
           <ol class="filter-col filter-col__d">
             <li class="filter-row filter-row__total">
@@ -204,12 +204,14 @@
             <li class="filter-row filter-row__common">
               <p><input placeholder="3" class="theme2" id="e-common" type="text">per <i class="tooltipped material-icons" data-position="top" data-delay="50" data-tooltip="750 people is the average size of American high schools">info_outline</i></p>
               <p>750 people</p>
-
             </li>
-            <li class="filter-row filter-row__trending">in the last 10 years</li>
+            <li class="filter-row filter-row__trending input-field">
+              <p>by at least</p>
+              <p><input placeholder="10" class="theme2" id="e-trending" type="Number"> % each year</p>
+            </li>
           </ol>
           <ol class="filter-col filter-col__f">
-            <li id="year-div" class="filter-row filter-row__total filter-row__common filter-row__peak filter-row__popular filter-row">
+            <li id="year-div" class="filter-row filter-row__total filter-row__trending filter-row__common filter-row__peak filter-row__popular filter-row">
               <div style="text-align: center;">
                 <p>in between</p>
                 <p class="theme2"><span id="start-year"></span>-<span id="end-year"></span></p>
