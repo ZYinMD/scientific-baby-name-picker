@@ -120,7 +120,6 @@ function applyFilter() {
       query = `${yearRangeToSql(startYear, endYear)} / ${newBornBetween(startYear, endYear)} * 750 ${query}`;
       break;
     case 'a-peak':
-      filter += 'names that had a';
       switch (whichPicked('d', 'peak')) {
         case 'd-peak':
           filter = `${filter}names that had a peak between ${startYear} and ${endYear}`;
