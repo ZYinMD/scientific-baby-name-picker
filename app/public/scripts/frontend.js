@@ -5,8 +5,12 @@ filterInit(); // hide and show of filter rows
 materializeInit(); // materialize animations: collapsible, tooltip, etc
 slidersInit(); // nonUiSlider.js
 function filterInit() { // hide and show of filter rows and columns
-  $('#filters').on('change', '.togglable-filter', apiCall);
-  // filter hide/show:
+  $('#filters').on('change', '.togglable-filter', apiCall); // uncheck to temporarily disable a filter
+  $('#filters').on('click', '.delete-button', (event) => { // press a button to delete a filter
+    event.target.parentNode.parentNode.remove();
+    apiCall();
+  });
+  // filter constructor console init:
   $('.filter-row:not(.filter-col__a li)').hide(); //hide everything except first column
   $('.filter-col__a').on('change', 'input', (event) => { // when any filter is chosen, unhide its row
     unhide(event.target.parentNode.parentNode.classList[1]);
@@ -189,8 +193,8 @@ function populateFilter(filter, data) { // this function puts a sentence onto th
       <input class="togglable-filter" type="checkbox" checked="checked">
       <span data-conditions='${JSON.stringify(data)}'>${filter}</span>
     </label>
-    <a href="#!" class="secondary-content"><i class="material-icons theme2">delete</i></a>
-    <a href="#!" class="secondary-content"><i class="material-icons theme2">edit</i></a>
+    <a href="#!" class="secondary-content"><i class="material-icons delete-button theme2">delete</i></a>
+    <a href="#!" class="secondary-content"><i class="material-icons edit-button theme2">edit</i></a>
   `;
   $('<li class="collection-item"></div>').append(newFilter).insertBefore('#filter-constructor');
 }
