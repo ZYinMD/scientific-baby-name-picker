@@ -5,6 +5,7 @@ filterInit(); // hide and show of filter rows
 materializeInit(); // materialize animations: collapsible, tooltip, etc
 slidersInit(); // nonUiSlider.js
 function filterInit() { // hide and show of filter rows and columns
+  $('#filters').on('change', '.togglable-filter', apiCall);
   // filter hide/show:
   $('.filter-row:not(.filter-col__a li)').hide(); //hide everything except first column
   $('.filter-col__a').on('change', 'input', (event) => { // when any filter is chosen, unhide its row
@@ -58,10 +59,6 @@ function applyFilter() { // this function gets run when the apply filter button 
         }
       }
       filter += gendersChecked.join(' and ');
-      /*      // I am so smart:
-            filter.includes('Exclude') ?
-              query += gendersQuery.join(' OR ') :
-              query += gendersQuery.join(' AND ');*/
       break;
       //when "filter by total birth" was used
     case 'a-total':
@@ -84,12 +81,11 @@ function applyFilter() { // this function gets run when the apply filter button 
       let total = Number($('#e-total').val());
       if (!total || typeof total != 'number') return; //manual validation
       filter += ` ${total} people`;
-      /*query += ` ${total}`;*/
       data.howMany = total;
       // year range
       filter += ` between ${startYear}-${endYear}`;
-      /*query = yearRangeToSql(startYear, endYear) + query;*/
       break;
+
       //when "filter by how common" was used
     case 'a-common':
       data.a = 'common';
@@ -190,7 +186,7 @@ function trendingToSql(startYear, endYear, trend, percent) { // this function co
 function populateFilter(filter, data) { // this function puts a sentence onto the filter list
   var newFilter = `
     <label>
-      <input type="checkbox" checked="checked">
+      <input class="togglable-filter" type="checkbox" checked="checked">
       <span data-conditions='${JSON.stringify(data)}'>${filter}</span>
     </label>
     <a href="#!" class="secondary-content"><i class="material-icons theme2">delete</i></a>
@@ -203,6 +199,7 @@ function apiCall() { // this function sends a http GET to backend; anti-injectio
   var query = {};
   query.conditions = [];
   for (let i of $('[data-conditions]')) {
+    if (i.parentNode.firstElementChild.checked == false) continue;
     i = JSON.parse(i.dataset.conditions);
     if (i.a == 'popular') {
       query.pool = i;
