@@ -1,9 +1,9 @@
 var queries = []; // global variable to store all filters for sql
+var newbornByYear = 1;
 resultsInit(); // default first query
 filterInit(); // hide and show of filter rows
 materializeInit(); // materialize animations: collapsible, tooltip, etc
 slidersInit(); // nonUiSlider.js
-
 function filterInit() { // hide and show of filter rows and columns
   // filter hide/show:
   $('.filter-row:not(.filter-col__a li)').hide(); //hide everything except first column
@@ -19,32 +19,38 @@ function applyFilter() { // this function gets run when the apply filter button 
   }
   var filter = '';
   var query = '';
+  var data = {};
   // get over with include / exclude first
-  if (whichPicked('b') == 'b-exclude') filter += 'Exclude ';
-  else if (whichPicked('b') == 'b-include') filter += 'Include only ';
-  else return; // validation: if nothing picked, do nothing
+  if (whichPicked('b') == 'b-exclude') {
+    filter += 'Exclude ';
+    data.b = 'exclude';
+  } else if (whichPicked('b') == 'b-include') {
+    filter += 'Include only ';
+    data.b = 'include';
+  } else return; // validation: if nothing picked, do nothing
   // get over with year range
-  var startYear = $('#start-year').text();
-  var endYear = $('#end-year').text();
+  var startYear = data.startYear = Number($('#start-year').text());
+  var endYear = data.endYear = Number($('#end-year').text());
   switch (whichPicked('a')) { // switch what kind of filter was picked in column a
     //when "filter by gender" was used
     case 'a-gender':
+      data.a = 'gender';
       let gendersChecked = [];
-      let gendersQuery = [];
+      data.gendersChecked = [];
       for (let i of $('.filter-col__c input')) { // all three checkboxes
         if (i.checked) {
           switch (i.nextElementSibling.innerText) {
             case 'girl names':
               gendersChecked.push('girl names');
-              gendersQuery.push("gender = 'F'");
+              data.gendersChecked.push('F');
               break;
             case 'boy names':
               gendersChecked.push('boy names');
-              gendersQuery.push("gender = 'M'");
+              data.gendersChecked.push('M');
               break;
             case 'unisex names':
               gendersChecked.push('unisex names');
-              gendersQuery.push("is_unisex = 1");
+              data.gendersChecked.push('U');
               break;
             default:
               return;
@@ -52,23 +58,24 @@ function applyFilter() { // this function gets run when the apply filter button 
         }
       }
       filter += gendersChecked.join(' and ');
-      // I am so smart:
-      filter.includes('Exclude') ?
-        query += gendersQuery.join(' OR ') :
-        query += gendersQuery.join(' AND ');
+      /*      // I am so smart:
+            filter.includes('Exclude') ?
+              query += gendersQuery.join(' OR ') :
+              query += gendersQuery.join(' AND ');*/
       break;
       //when "filter by total birth" was used
     case 'a-total':
+      data.a = 'total';
       filter += 'names that have been used by';
       // more than or less than?
       switch (whichPicked('d', 'total')) {
         case 'd-more-than':
           filter += ' more than';
-          query += ' >';
+          data.operator = '>';
           break;
         case 'd-less-than':
           filter += ' less than';
-          query += ' <';
+          data.operator = '<';
           break;
         default:
           return;
@@ -77,22 +84,24 @@ function applyFilter() { // this function gets run when the apply filter button 
       let total = Number($('#e-total').val());
       if (!total || typeof total != 'number') return; //manual validation
       filter += ` ${total} people`;
-      query += ` ${total}`;
+      /*query += ` ${total}`;*/
+      data.howMany = total;
       // year range
       filter += ` between ${startYear}-${endYear}`;
-      query = yearRangeToSql(startYear, endYear) + query;
+      /*query = yearRangeToSql(startYear, endYear) + query;*/
       break;
       //when "filter by how common" was used
     case 'a-common':
+      data.a = 'common';
       filter += 'names that were';
       switch (whichPicked('d', 'common')) {
         case 'd-more-common':
           filter += ' more common than';
-          query += ' >';
+          data.operator = '>';
           break;
         case 'd-less-common':
           filter += ' less common than';
-          query += ' <';
+          data.operator = '<';
           break;
         default:
           return;
@@ -101,22 +110,24 @@ function applyFilter() { // this function gets run when the apply filter button 
       aFew = Number($('#e-common').val());
       if (!aFew || typeof aFew != 'number') return; // manual validation
       filter += ` ${aFew} per 750 people`;
-      query += ` ${aFew}`;
+      /*query += ` ${aFew}`;*/
+      data.howMany = aFew;
       // where this name (1950, 1960) / newbornByYear(1950, 1960) * 750 < aFew
       // year range
       filter += ` between ${startYear}-${endYear}`;
-      query = `${yearRangeToSql(startYear, endYear)} / ${newBornBetween(startYear, endYear)} * 750 ${query}`;
+      /*query = `${yearRangeToSql(startYear, endYear)} / ${newBornBetween(startYear, endYear)} * 750 ${query}`;*/
       break;
     case 'a-peak':
+      data.a = 'peak';
       switch (whichPicked('d', 'peak')) {
         case 'd-peak':
           filter = `${filter}names that had a peak between ${startYear} and ${endYear}`;
-          query = `peak_year BETWEEN ${startYear} AND ${endYear}`;
+          /*query = `peak_year BETWEEN ${startYear} AND ${endYear}`;*/
           break;
         case 'd-trough':
           return; //trough isn't done yet.
           filter = `${filter}names that had a trough between ${startYear} and ${endYear}`;
-          query = `trough_year BETWEEN ${startYear} AND ${endYear}`;
+          /*query = `trough_year BETWEEN ${startYear} AND ${endYear}`;*/
           break;
         default:
           return;
@@ -125,6 +136,7 @@ function applyFilter() { // this function gets run when the apply filter button 
     case 'a-popular':
       return; //popular is not done yet
     case 'a-trending':
+      data.a = 'trending';
       var trend;
       var percent = Number($('#e-trending').val());
       if (!percent || typeof percent != 'number') return; // manual validation
@@ -140,15 +152,17 @@ function applyFilter() { // this function gets run when the apply filter button 
         default:
           return;
       }
-      query = trendingToSql(Number(startYear), Number(endYear), trend, percent);
+      /*query = trendingToSql(Number(startYear), Number(endYear), trend, percent);*/
+      data.trend = trend;
+      data.percent = percent;
       break;
     default:
       return;
   }
-  if (filter.includes('Exclude')) query = `!(${query})`; // reverse the query to !query
-  populateFilter(filter);
-  queries.push(query);
-  runSql(queries);
+  /*if (filter.includes('Exclude')) query = `!(${query})`; // reverse the query to !query*/
+  populateFilter(filter, data);
+  /*queries.push(query);*/
+  apiCall();
   clearConsole();
 }
 
@@ -162,15 +176,6 @@ function whichPicked(col, row) { // col is a letter like a, b, c, row is a row n
   }
 }
 
-function yearRangeToSql(startYear, endYear) { // this function turns a year range into a string ready for sql
-  var res = '';
-  for (var i = startYear; i <= endYear; i++) {
-    res += '`' + i + '` + ';
-  }
-  res = res.slice(0, -3);
-  return `(${res})`;
-}
-
 function trendingToSql(startYear, endYear, trend, percent) { // this function converts year into sql for trending
   var res = '';
   var portion;
@@ -181,11 +186,12 @@ function trendingToSql(startYear, endYear, trend, percent) { // this function co
   }
   return res.slice(0, -5); //remove the last ' AND '
 }
-function populateFilter(string) { // this function puts a sentence onto the filter list
+
+function populateFilter(filter, data) { // this function puts a sentence onto the filter list
   var newFilter = `
     <label>
       <input type="checkbox" checked="checked">
-      <span>${string}</span>
+      <span data-conditions='${JSON.stringify(data)}'>${filter}</span>
     </label>
     <a href="#!" class="secondary-content"><i class="material-icons theme2">delete</i></a>
     <a href="#!" class="secondary-content"><i class="material-icons theme2">edit</i></a>
@@ -193,17 +199,18 @@ function populateFilter(string) { // this function puts a sentence onto the filt
   $('<li class="collection-item"></div>').append(newFilter).insertBefore('#filter-constructor');
 }
 
-function runSql(queries) { // this function sends a http GET to backend; anti-injection happens there
-  var finalQuery = queries.join(') AND (');
-  finalQuery = `
-  SELECT SQL_CALC_FOUND_ROWS name, gender FROM name_by_year
-  WHERE (${finalQuery})
-  ORDER BY sum DESC LIMIT 1000;
-  SELECT FOUND_ROWS();
-`;
-  $.get('/api', {
-    query: finalQuery
-  }, populateNames);
+function apiCall() { // this function sends a http GET to backend; anti-injection happens there
+  var query = {};
+  query.conditions = [];
+  for (let i of $('[data-conditions]')) {
+    i = JSON.parse(i.dataset.conditions);
+    if (i.a == 'popular') {
+      query.pool = i;
+    } else {
+      query.conditions.push(i);
+    }
+  }
+  $.get('/api', query, populateNames);
 }
 
 function clearConsole() { // after a new filter is successfully added, clear the console
@@ -221,11 +228,16 @@ function unhide(row) { // this function unhides a row in the filter console. Tak
 }
 
 function resultsInit() {
-  runSql(['1+1=2']); // equal to select * from table
+   apiCall();
+  //   conditions: ['1+1=2']
+  // }); // equal to select * from table
   $('#name-list').on('click', 'span', () => { // when a name is clicked, show a bottom modal to display its detail and chart
     let name = event.target.innerText;
     let gender = event.target.classList[0];
     populateModal(name, gender);
+  });
+  $.get('/api/newbornByYear', res => {
+    newbornByYear = res;
   });
 }
 
@@ -307,7 +319,7 @@ function slidersInit() {
   var output = document.getElementById("c-popular--value");
   output.innerHTML = range.value; // display the default range value
   range.oninput = function() { // update the displayed value on dragging
-  output.innerHTML = this.value;
+    output.innerHTML = this.value;
   };
   // the year range slider, using noUiSlider
   var slider = document.getElementById('year-slider');

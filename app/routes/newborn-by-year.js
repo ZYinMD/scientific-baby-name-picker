@@ -1,4 +1,4 @@
-var newbornByYear = {
+module.exports = {
   "1880": 201483,
   "1881": 192696,
   "1882": 221533,
