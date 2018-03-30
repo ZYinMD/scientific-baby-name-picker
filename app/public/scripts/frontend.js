@@ -1,7 +1,8 @@
 var queries = []; // global variable to store all filters for sql
-var newbornByYear = 1;
+var newbornByYear;
 resultsInit(); // default first query
 filterInit(); // hide and show of filter rows
+searchInit(); //the search bar on upper right
 materializeInit(); // materialize animations: collapsible, tooltip, etc
 slidersInit(); // nonUiSlider.js
 function filterInit() { // hide and show of filter rows and columns
@@ -243,10 +244,16 @@ function resultsInit() {
 }
 
 function populateModal(name, gender) {
+  if (!gender) gender = null; //if gender was not provided (this happens when user uses the search bar)
+  $('#chart').remove();
   $.get('/api/name', {
     name,
     gender
   }, res => {
+    if (res.name == 'Name not found') {
+      $('#modal-title').text(`Name "${name}" not found.`);
+      return;
+    }
     var color = (res.gender == 'F') ? 'salmon' : '#00c2c2';
     $('#modal-title').html(`${res.name} <span> (per high school)</span>`);
     delete res.name;
@@ -265,7 +272,6 @@ function populateModal(name, gender) {
 
   function chartjsInit(labels, data, color) {
     // remove and re-add the canvas area every time before generating a new chart
-    $('#chart').remove();
     $('.chart-container').append('<canvas id="chart"></canvas>');
     var ctx = document.getElementById("chart");
     var myChart = new Chart(ctx, {
@@ -357,4 +363,15 @@ function newBornBetween(startYear, endYear) { // this function calculate how man
     result += newbornByYear[i];
   }
   return result;
+}
+
+function searchInit() {
+  $('#search').on('submit', (event) => {
+    console.log('submit!');
+    event.preventDefault();
+    var name = $('#search input').val().trim();
+    $('#modal').modal('open');
+    $('#search input').val('');
+    populateModal(name);
+  });
 }

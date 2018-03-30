@@ -19,9 +19,9 @@ function returnFilterResults(req, res) { //this function processes the req and r
   var finalQuery = queries.join(') AND (');
   finalQuery =
     `SELECT SQL_CALC_FOUND_ROWS name, gender FROM name_by_year
-  WHERE (${finalQuery})
-  ORDER BY sum DESC LIMIT 1000;
-  SELECT FOUND_ROWS();`;
+WHERE (${finalQuery})
+ORDER BY sum DESC LIMIT 1000;
+SELECT FOUND_ROWS();`;
   console.log('finalQuery: ', finalQuery);
   /*if (req.query.pool) {}*/
   queryDB(finalQuery).then( // use the query string to query the MySql database
@@ -86,10 +86,21 @@ function queryDB(query) { // this function queries the MySql db and returns a pr
 }
 
 function returnNameInfo(req, res) { // this function queries the MySql db for a single name and returns all its fields
-  console.log('req.query: ', req.query);
+  var query = req.query.gender ?
+    `SELECT * FROM name_by_year WHERE name = '${req.query.name}' AND gender = '${req.query.gender}'` :
+    `SELECT * FROM name_by_year WHERE name = '${req.query.name}' ORDER BY sum DESC LIMIT 1`;
   //use npm mysql to escape in this function, no manual validation
-  db.query('SELECT * FROM name_by_year WHERE name = ? AND gender = ?', [req.query.name, req.query.gender], (error, result, fields) => {
+    console.log('query: ', query);
+
+  db.query(query, (error, result, fields) => {
     if (error) throw error;
+    if (!result[0]) {
+      res.json({name: 'Name not found'});
+      return;
+    }
+    console.log('result: ', result);
+    console.log('result[0]: ', result[0]);
+    console.log('query: ', query);
     res.json(result[0]);
   });
 }
