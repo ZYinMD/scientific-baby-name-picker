@@ -3,7 +3,14 @@ filterInit(); // hide and show of filter rows
 searchInit(); //the search bar on upper right
 materializeInit(); // materialize animations: collapsible, tooltip, etc
 slidersInit(); // nonUiSlider.js
-favoriteInit(); //some one time settings
+favoriteInit(); // some one time settings
+appInit(); // other settings
+
+function appInit() {
+  $('#logo').on('click', () => {
+    location.reload();
+  });
+}
 
 function filterInit() { // hide and show of filter rows and columns
   $('#filters').on('change', '.togglable-filter', apiCall); // uncheck to temporarily disable a filter
