@@ -104,7 +104,33 @@ function applyFilter() { // this function gets run when the apply filter button 
       // year range
       filter += ` between ${startYear}-${endYear}`;
       break;
-      //when "filter by how common" was used
+
+    // when "filter by birth per year is used"
+    case 'a-peryear':
+      data.a = 'peryear';
+      filter += 'names that had';
+      // more than or less than?
+      switch (whichPicked('d', 'total')) {
+        case 'd-more-than':
+          filter += ' more than';
+          data.operator = '>';
+          break;
+        case 'd-less-than':
+          filter += ' less than';
+          data.operator = '<';
+          break;
+        default:
+          return filterIncomplete();
+      }
+      // how many?
+      let peryear = Number($('#e-peryear').val());
+      if (!peryear || typeof peryear != 'number') return filterIncomplete(); //manual validation
+      filter += ` ${peryear} new births per year on average`;
+      data.howMany = peryear;
+      // year range
+      filter += ` between ${startYear}-${endYear}`;
+      break;
+    //when "filter by how common" was used
     case 'a-common':
       data.a = 'common';
       filter += 'names that were';

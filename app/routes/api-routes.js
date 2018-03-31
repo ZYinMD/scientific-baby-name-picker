@@ -9,7 +9,7 @@ module.exports = function(app) {
 };
 
 function returnFilterResults(req, res) { //this function processes the req and res of an http GET
-  var queries = [];
+  var queries = []; // this holds all filters, each filter is a WHERE clause
   for (let i of req.query.conditions) {
     i.startYear = Number(i.startYear) || null;
     i.endYear = Number(i.endYear) || null;
@@ -25,7 +25,7 @@ SELECT FOUND_ROWS();`;
   console.log('finalQuery: ', finalQuery);
   /*if (req.query.pool) {}*/
   queryDB(finalQuery).then( // use the query string to query the MySql database
-    (results) => {
+    results => {
       //manually re-construct the results so data transfer is minimized
       var names = [];
       for (let i of results[0]) {
