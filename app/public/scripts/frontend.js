@@ -27,6 +27,11 @@ function filterInit() { // hide and show of filter rows and columns
 }
 
 function applyFilter() { // this function gets run when the apply filter button is clicked
+  var flagFilterComplete = false;
+  var filterIncomplete = function () {
+    M.toast({html: "You didn't finish constructing the filter"})
+  };
+
   for (let i = 0; i < 10; i++) { //stupidest thing ever. Materialized can only collapse the number n item in the list for me
     $('.collapsible').collapsible('close', i);
   }
@@ -40,7 +45,7 @@ function applyFilter() { // this function gets run when the apply filter button 
   } else if (whichPicked('b') == 'b-include') {
     filter += 'Include only ';
     data.b = 'include';
-  } else return; // validation: if nothing picked, do nothing
+  } else return filterIncomplete(); // validation: if nothing picked, do nothing
   // get over with year range
   var startYear = data.startYear = Number($('#start-year').text());
   var endYear = data.endYear = Number($('#end-year').text());
@@ -52,6 +57,7 @@ function applyFilter() { // this function gets run when the apply filter button 
       data.gendersChecked = [];
       for (let i of $('.filter-col__c input')) { // all three checkboxes
         if (i.checked) {
+          flagFilterComplete = true;
           switch (i.nextElementSibling.innerText) {
             case 'girl names':
               gendersChecked.push('girl names');
@@ -66,10 +72,11 @@ function applyFilter() { // this function gets run when the apply filter button 
               data.gendersChecked.push('U');
               break;
             default:
-              return;
+              return console.log('Something went wrong');
           }
         }
       }
+      if (!flagFilterComplete) return filterIncomplete();
       filter += gendersChecked.join(' and ');
       break;
       //when "filter by total birth" was used
@@ -87,11 +94,11 @@ function applyFilter() { // this function gets run when the apply filter button 
           data.operator = '<';
           break;
         default:
-          return;
+          return filterIncomplete();
       }
       // how many?
       let total = Number($('#e-total').val());
-      if (!total || typeof total != 'number') return; //manual validation
+      if (!total || typeof total != 'number') return filterIncomplete(); //manual validation
       filter += ` ${total} people`;
       data.howMany = total;
       // year range
@@ -111,11 +118,11 @@ function applyFilter() { // this function gets run when the apply filter button 
           data.operator = '<';
           break;
         default:
-          return;
+          return filterIncomplete();
       }
       // how many?
       aFew = Number($('#e-common').val());
-      if (!aFew || typeof aFew != 'number') return; // manual validation
+      if (!aFew || typeof aFew != 'number') return filterIncomplete(); // manual validation
       filter += ` ${aFew} per 750 people`;
       data.howMany = aFew;
       // year range
@@ -132,7 +139,7 @@ function applyFilter() { // this function gets run when the apply filter button 
           filter = `${filter}names that had a trough between ${startYear} and ${endYear}`;
           break;
         default:
-          return;
+          return filterIncomplete();
       }
       break;
     case 'a-popular':
@@ -141,7 +148,7 @@ function applyFilter() { // this function gets run when the apply filter button 
       data.a = 'trending';
       var trend;
       var percent = Number($('#e-trending').val());
-      if (!percent || typeof percent != 'number') return; // manual validation
+      if (!percent || typeof percent != 'number') return filterIncomplete(); // manual validation
       switch (whichPicked('d', 'trending')) {
         case 'd-trending-up':
           filter += `names that are trending up by at least ${percent}% every year between ${startYear}-${endYear}`;
@@ -152,13 +159,13 @@ function applyFilter() { // this function gets run when the apply filter button 
           trend = 'down';
           break;
         default:
-          return;
+          return filterIncomplete();
       }
       data.trend = trend;
       data.percent = percent;
       break;
     default:
-      return;
+      return filterIncomplete();
   }
   populateFilter(filter, data);
   apiCall();
@@ -229,7 +236,7 @@ function unhide(row) { // this function unhides a row in the filter console. Tak
 }
 
 function resultsInit() {
-  apiCall();
+  apiCall(); // call with the initial one filter, which is the default filter
   $('#name-list').on('click', 'span', () => { // when a name is clicked, show a bottom modal to display its detail and chart
     let name = event.target.innerText;
     let gender = event.target.classList[0];
@@ -350,7 +357,7 @@ function chartjsInit(labels, data, color) {
   });
 }
 
-function populateNames(res) { // this function populates the screen the server res
+function populateNames(res) { // this function populates the screen with the server res
   var count = res[1];
   if (count < 1000) $('#result-count').text(res[1] + ' names found...');
   else $('#result-count').text(res[1] + ' names found, displaying the first 1000...');
