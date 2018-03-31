@@ -277,12 +277,16 @@ function favoriteInit() {
     localStorage.setItem('favNames', '{}');
   }
   $('#modal-title').on('click', '#heart', toggleFav);
-  $('#header__favorites').on('click', displayFavs)
+  $('#header__favorites').on('click', displayFavs);
 }
 
-function displayFavs() {
+function displayFavs() { // this function retrieves favorites from localStorage and displays it
   console.log('favs!');
+  var favList = JSON.parse(localStorage.getItem('favNames'));
+  var names = Object.keys(favList);
+  populateNames([names, names.length]);
 }
+
 function toggleFav(event) { // this function toggles the red / grey heart, and also change the corresponding status in localStorage
   $(this).toggleClass('favorite');
   var favList = JSON.parse(localStorage.getItem('favNames'));
@@ -291,7 +295,7 @@ function toggleFav(event) { // this function toggles the red / grey heart, and a
     $('#heart i').text('favorite');
     favList[key] = 1; // add this name into favList
   } else {
-    $('#heart i').text('favorite_border')
+    $('#heart i').text('favorite_border');
     delete favList[key]; // delete this name into favList
   }
   localStorage.setItem('favNames', JSON.stringify(favList));
