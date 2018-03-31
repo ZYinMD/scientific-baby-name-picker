@@ -11,15 +11,14 @@ module.exports = function(app) {
 function returnFilterResults(req, res) { //this function processes the req and res of an http GET
   var finalQuery = prepareQuery(req);
   queryDB(finalQuery).then(results => {
-      //manually re-construct the results so data transfer is minimized
-      var names = [];
-      for (let i of results[0]) {
-        names.push(i.name + i.gender);
-      }
-      var countNoLimit = results[1][0]['FOUND_ROWS()']; // this is how many results it would have returned without limit
-      res.json([names, countNoLimit]); //return two things, all the names and gender, and the total sql results if it had no LIMIT
+    //manually re-construct the results so data transfer is minimized
+    var names = [];
+    for (let i of results[0]) {
+      names.push(i.name + i.gender);
     }
-  ).catch(error => {
+    var countNoLimit = results[1][0]['FOUND_ROWS()']; // this is how many results it would have returned without limit
+    res.json([names, countNoLimit]); //return two things, all the names and gender, and the total sql results if it had no LIMIT
+  }).catch(error => {
     throw error;
   });
 }
@@ -36,9 +35,9 @@ function prepareQuery(req) { // this function takes the req from front end, and 
   var finalQuery = conditions.join(') AND (');
   finalQuery =
     `SELECT SQL_CALC_FOUND_ROWS name, gender FROM name_by_year
-  WHERE (${finalQuery})
-  ORDER BY sum DESC LIMIT 1000;
-  SELECT FOUND_ROWS();`;
+WHERE (${finalQuery})
+ORDER BY sum DESC LIMIT 1000;
+SELECT FOUND_ROWS();`;
   console.log('finalQuery: ', finalQuery);
   return finalQuery;
 }
@@ -60,6 +59,10 @@ function conditionToSql(conditions) {
     case 'total':
       // e.g. WHERE `1991` + `1992` + `1993` < 2000
       query = `${yearRangeToSql(conditions.startYear, conditions.endYear)} ${conditions.operator} ${conditions.howMany}`;
+      break;
+    case 'peryear':
+      // e.g. WHERE (`1991` + `1992` + `1993`) / 3 < 200
+      query = `${yearRangeToSql(conditions.startYear, conditions.endYear)} / ${conditions.endYear - conditions.startYear + 1} ${conditions.operator} ${conditions.howMany}`;
       break;
     case 'common':
       // e.g. WHERE (`1991` + `1992` + `1993`) / (SUM(`1991`) + SUM(`1992`) + SUM(`1993`)) * 750 < 3;
