@@ -1,10 +1,10 @@
-var queries = []; // global variable to store all filters for sql
-var newbornByYear;
 resultsInit(); // default first query
 filterInit(); // hide and show of filter rows
 searchInit(); //the search bar on upper right
 materializeInit(); // materialize animations: collapsible, tooltip, etc
 slidersInit(); // nonUiSlider.js
+favoriteInit(); //some one time settings
+
 function filterInit() { // hide and show of filter rows and columns
   $('#filters').on('change', '.togglable-filter', apiCall); // uncheck to temporarily disable a filter
   $('#filters').on('click', '.delete-button', (event) => { // press a button to delete a filter
@@ -90,7 +90,6 @@ function applyFilter() { // this function gets run when the apply filter button 
       // year range
       filter += ` between ${startYear}-${endYear}`;
       break;
-
       //when "filter by how common" was used
     case 'a-common':
       data.a = 'common';
@@ -111,24 +110,19 @@ function applyFilter() { // this function gets run when the apply filter button 
       aFew = Number($('#e-common').val());
       if (!aFew || typeof aFew != 'number') return; // manual validation
       filter += ` ${aFew} per 750 people`;
-      /*query += ` ${aFew}`;*/
       data.howMany = aFew;
-      // where this name (1950, 1960) / newbornByYear(1950, 1960) * 750 < aFew
       // year range
       filter += ` between ${startYear}-${endYear}`;
-      /*query = `${yearRangeToSql(startYear, endYear)} / ${newBornBetween(startYear, endYear)} * 750 ${query}`;*/
       break;
     case 'a-peak':
       data.a = 'peak';
       switch (whichPicked('d', 'peak')) {
         case 'd-peak':
           filter = `${filter}names that had a peak between ${startYear} and ${endYear}`;
-          /*query = `peak_year BETWEEN ${startYear} AND ${endYear}`;*/
           break;
         case 'd-trough':
           return; //trough isn't done yet.
           filter = `${filter}names that had a trough between ${startYear} and ${endYear}`;
-          /*query = `trough_year BETWEEN ${startYear} AND ${endYear}`;*/
           break;
         default:
           return;
@@ -153,16 +147,13 @@ function applyFilter() { // this function gets run when the apply filter button 
         default:
           return;
       }
-      /*query = trendingToSql(Number(startYear), Number(endYear), trend, percent);*/
       data.trend = trend;
       data.percent = percent;
       break;
     default:
       return;
   }
-  /*if (filter.includes('Exclude')) query = `!(${query})`; // reverse the query to !query*/
   populateFilter(filter, data);
-  /*queries.push(query);*/
   apiCall();
   clearConsole();
 }
@@ -230,16 +221,14 @@ function unhide(row) { // this function unhides a row in the filter console. Tak
 }
 
 function resultsInit() {
-   apiCall();
-  //   conditions: ['1+1=2']
-  // }); // equal to select * from table
+  apiCall();
   $('#name-list').on('click', 'span', () => { // when a name is clicked, show a bottom modal to display its detail and chart
     let name = event.target.innerText;
     let gender = event.target.classList[0];
     populateModal(name, gender);
   });
   $.get('/api/newbornByYear', res => {
-    newbornByYear = res;
+    newbornByYear = res; // this is a global variable declared without "var"
   });
 }
 
@@ -254,8 +243,8 @@ function populateModal(name, gender) {
       $('#modal-title').text(`Name "${name}" not found.`);
       return;
     }
+    displayName(res.name, res.gender); // show name as modal title, and attach a heart
     var color = (res.gender == 'F') ? 'salmon' : '#00c2c2';
-    $('#modal-title').html(`${res.name} <span> (per high school)</span>`);
     delete res.name;
     delete res.peak_year;
     delete res.sum;
@@ -269,43 +258,82 @@ function populateModal(name, gender) {
     var counts = Object.values(res);
     chartjsInit(years, counts, color); // draw the chart
   });
+}
 
-  function chartjsInit(labels, data, color) {
-    // remove and re-add the canvas area every time before generating a new chart
-    $('.chart-container').append('<canvas id="chart"></canvas>');
-    var ctx = document.getElementById("chart");
-    var myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [{
-          data,
-          backgroundColor: color,
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        legend: {
-          display: false,
-        },
-        scales: {
-          yAxes: [{
-            gridLines: {
-              display: false
-            }
-          }],
-          xAxes: [{
-            gridLines: {
-              display: false
-            },
-            scaleLabel: {
-              display: false
-            }
-          }]
-        }
-      }
-    });
+function displayName(name, gender) { // this function displays a name as well as the heart in the modal title
+  $('#modal-title').html(`
+    <span id="heart" data-name=${name} data-gender=${gender}>
+      <i class="material-icons">favorite_border</i>
+    </span>${name}<span>(per high school)</span>
+    `);
+  if (isFavorite(name, gender)) {
+    $('#heart').toggleClass('favorite', true);
+    $('#heart i').text('favorite');
   }
+}
+
+function favoriteInit() {
+  if (!localStorage.getItem('favNames')) { //if localStorage for favs doesn't exist yet, create it
+    localStorage.setItem('favNames', '{}');
+  }
+  $('#modal-title').on('click', '#heart', toggleFav);
+}
+
+function toggleFav(event) { // this function toggles the red / grey heart, and also change the corresponding status in localStorage
+  $(this).toggleClass('favorite');
+  var favList = JSON.parse(localStorage.getItem('favNames'));
+  var key = $(this)[0].dataset.name + $(this)[0].dataset.gender; // use name concatenated with one letter gender as key
+  if ($(this)[0].classList[0] == 'favorite') { // if has the class of favorite, then the heart is now red
+    $('#heart i').text('favorite');
+    favList[key] = 1; // add this name into favList
+  } else {
+    $('#heart i').text('favorite_border')
+    delete favList[key]; // delete this name into favList
+  }
+  localStorage.setItem('favNames', JSON.stringify(favList));
+}
+
+function isFavorite(name, gender) { // this function checks if a name is already in favorite
+  console.log("inside isFavorite");
+  var favList = JSON.parse(localStorage.getItem('favNames'));
+  return favList[name + gender] ? true : false;
+}
+
+function chartjsInit(labels, data, color) {
+  // remove and re-add the canvas area every time before generating a new chart
+  $('.chart-container').append('<canvas id="chart"></canvas>');
+  var ctx = document.getElementById("chart");
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: color,
+      }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      legend: {
+        display: false,
+      },
+      scales: {
+        yAxes: [{
+          gridLines: {
+            display: false
+          }
+        }],
+        xAxes: [{
+          gridLines: {
+            display: false
+          },
+          scaleLabel: {
+            display: false
+          }
+        }]
+      }
+    }
+  });
 }
 
 function populateNames(res) { // this function populates the screen the server res

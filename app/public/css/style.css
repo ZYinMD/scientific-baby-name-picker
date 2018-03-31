@@ -23,6 +23,7 @@ ol, ul{
   list-style: none;
 }
 
+#heart.favorite,
 .F,
 .theme { /*the theme of the app*/
   color: salmon;
