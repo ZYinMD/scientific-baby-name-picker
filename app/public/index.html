@@ -75,6 +75,12 @@
                 <span>filter by total birth:</span>
               </label>
             </li>
+            <li class="filter-row filter-row__peryear">
+              <label for="a-peryear">
+                <input class="with-gap" name="filter-type" id="a-peryear" type="radio">
+                <span>filter by birth per year:</span>
+              </label>
+            </li>
             <li class="filter-row filter-row__common">
               <label for="a-common">
                 <input class="with-gap" name="filter-type" id="a-common" type="radio">
@@ -137,6 +143,9 @@
               <p>names that have</p>
               <p>been used by</p>
             </li>
+            <li class="filter-row filter-row__peryear">
+              <p>names that had</p>
+            </li>
             <li class="filter-row filter-row__common">
             <p>names that were</p>
             </li>
@@ -150,27 +159,27 @@
             <li class="filter-row filter-row__trending">names that are</li>
           </ol>
           <ol class="filter-col filter-col__d">
-            <li class="filter-row filter-row__total">
+            <li class="filter-row filter-row__total filter-row__peryear">
               <label for="d-more-than">
-                <input class="with-gap" name="total-birth" id="d-more-than" type="radio">
+                <input class="with-gap" id="d-more-than" name="d-than" type="radio">
                 <span>more than</span>
               </label>
             </li>
-            <li class="filter-row filter-row__total">
+            <li class="filter-row filter-row__total filter-row__peryear">
               <label for="d-less-than">
-                <input class="with-gap" name="total-birth" id="d-less-than" type="radio">
+                <input class="with-gap" id="d-less-than" name="d-than" type="radio">
                 <span>less than</span>
               </label>
             </li>
             <li class="filter-row filter-row__common">
               <label for="d-more-common">
-                <input class="with-gap" name="how-common" id="d-more-common" type="radio">
+                <input class="with-gap" name="d-common" id="d-more-common" type="radio">
                 <span>more common than</span>
               </label>
             </li>
             <li class="filter-row filter-row__common">
               <label for="d-less-common">
-                <input class="with-gap" name="how-common" id="d-less-common" type="radio">
+                <input class="with-gap" name="d-common" id="d-less-common" type="radio">
                 <span>less common than</span>
               </label>
             </li>
@@ -202,10 +211,14 @@
           <ol class="filter-col filter-col__e">
             <li class="filter-row filter-row__total input-field">
               <p>a total of</p>
-              <p><input placeholder="10000" class="theme2" id="e-total" type="text">people</p>
+              <p><input placeholder="10000" class="theme2" id="e-total" type="text"> people</p>
+            </li>
+            <li class="filter-row filter-row__peryear input-field">
+              <p><input placeholder="1000" class="theme2" id="e-peryear" type="text"> new births</p>
+              <p>per year on average</p>
             </li>
             <li class="filter-row filter-row__common">
-              <p><input placeholder="3" class="theme2" id="e-common" type="text">per <i class="tooltipped material-icons" data-position="top" data-delay="50" data-tooltip="750 people is the average size of American high schools">info_outline</i></p>
+              <p><input placeholder="3" class="theme2" id="e-common" type="text"> per <i class="tooltipped material-icons" data-position="top" data-delay="50" data-tooltip="750 people is the average size of American high schools">info_outline</i></p>
               <p>750 people</p>
             </li>
             <li class="filter-row filter-row__trending input-field">
@@ -214,7 +227,7 @@
             </li>
           </ol>
           <ol class="filter-col filter-col__f">
-            <li id="year-div" class="filter-row filter-row__total filter-row__trending filter-row__common filter-row__peak filter-row__popular filter-row">
+            <li id="year-div" class="filter-row filter-row__total filter-row__peryear filter-row__trending filter-row__common filter-row__peak filter-row__popular filter-row">
               <div style="text-align: center;">
                 <p>in between</p>
                 <p class="theme2"><span id="start-year"></span>-<span id="end-year"></span></p>
