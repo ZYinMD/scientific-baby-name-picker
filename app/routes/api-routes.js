@@ -9,23 +9,8 @@ module.exports = function(app) {
 };
 
 function returnFilterResults(req, res) { //this function processes the req and res of an http GET
-  var queries = []; // this holds all filters, each filter is a WHERE clause
-  for (let i of req.query.conditions) {
-    i.startYear = Number(i.startYear) || null;
-    i.endYear = Number(i.endYear) || null;
-    i.howMany = Number(i.howMany) || null;
-    queries.push(conditionToSql(i));
-  }
-  var finalQuery = queries.join(') AND (');
-  finalQuery =
-    `SELECT SQL_CALC_FOUND_ROWS name, gender FROM name_by_year
-WHERE (${finalQuery})
-ORDER BY sum DESC LIMIT 1000;
-SELECT FOUND_ROWS();`;
-  console.log('finalQuery: ', finalQuery);
-  /*if (req.query.pool) {}*/
-  queryDB(finalQuery).then( // use the query string to query the MySql database
-    results => {
+  var finalQuery = prepareQuery(req);
+  queryDB(finalQuery).then(results => {
       //manually re-construct the results so data transfer is minimized
       var names = [];
       for (let i of results[0]) {
@@ -37,6 +22,25 @@ SELECT FOUND_ROWS();`;
   ).catch(error => {
     throw error;
   });
+}
+
+function prepareQuery(req) { // this function takes the req from front end, and prepare a query for the db
+  /*if (req.query.pool) {}*/
+  var conditions = []; // this holds all filters, each filter is a WHERE clause
+  for (let i of req.query.conditions) { //req.query is the data object sent by $.ajax() or $.get()
+    i.startYear = Number(i.startYear) || null;
+    i.endYear = Number(i.endYear) || null;
+    i.howMany = Number(i.howMany) || null;
+    conditions.push(conditionToSql(i));
+  }
+  var finalQuery = conditions.join(') AND (');
+  finalQuery =
+    `SELECT SQL_CALC_FOUND_ROWS name, gender FROM name_by_year
+  WHERE (${finalQuery})
+  ORDER BY sum DESC LIMIT 1000;
+  SELECT FOUND_ROWS();`;
+  console.log('finalQuery: ', finalQuery);
+  return finalQuery;
 }
 
 function conditionToSql(conditions) {
@@ -90,12 +94,13 @@ function returnNameInfo(req, res) { // this function queries the MySql db for a 
     `SELECT * FROM name_by_year WHERE name = '${req.query.name}' AND gender = '${req.query.gender}'` :
     `SELECT * FROM name_by_year WHERE name = '${req.query.name}' ORDER BY sum DESC LIMIT 1`;
   //use npm mysql to escape in this function, no manual validation
-    console.log('query: ', query);
-
+  console.log('query: ', query);
   db.query(query, (error, result, fields) => {
     if (error) throw error;
     if (!result[0]) {
-      res.json({name: 'Name not found'});
+      res.json({
+        name: 'Name not found'
+      });
       return;
     }
     console.log('result: ', result);
