@@ -398,6 +398,7 @@ function searchInit() {
     console.log('submit!');
     event.preventDefault();
     var name = $('#search input').val().trim();
+    if (name == '') return;
     $('#modal').modal('open');
     $('#search input').val('');
     populateModal(name);

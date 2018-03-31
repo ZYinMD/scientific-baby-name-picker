@@ -24,6 +24,7 @@ ol, ul{
 }
 
 #heart.favorite,
+.header__link,
 .F,
 .theme { /*the theme of the app*/
   color: salmon;

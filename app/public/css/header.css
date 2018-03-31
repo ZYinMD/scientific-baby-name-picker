@@ -2,23 +2,25 @@ header {
   align-items: center;
   display: flex;
   color: DimGray;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 header h1 {
-  padding: 0.5rem 0 0.3rem 0;
+  padding: 0 0 0.3rem 0;
   margin: 0;
   font-size: 2rem;
 }
 
 header h2 {
-  margin: 0;
   font-size: 1.25rem;
+  margin: 0;
 }
 
 #logo {
   border-radius: 100%;
   max-width: 6rem;
-  margin: 1.3rem 1rem 0.8rem 0;
+  margin-right: 0.8rem;
 }
 
 .masthead {
@@ -29,7 +31,8 @@ header h2 {
   display: flex;
   height: 5rem;
   align-items: center;
-  border-radius: 0.5rem;
+  justify-content: flex-end;
+  margin-right: -2rem; /*I don't know why the <form> has a original width that's very big, and can't be modified in any other good ways*/
 }
 
 #search input {
@@ -56,9 +59,9 @@ header h2 {
 #search button {
   cursor: pointer;
   position: relative;  /*move the magnifying glass into the search box*/
+  top: 0.25rem;
   right: 2rem;
   border: none;
-  color: inherit;
   background-color: inherit;
   cursor: pointer;
   font-size: 1.7rem;
@@ -66,4 +69,10 @@ header h2 {
 
 #search button:active {
   z-index: 2; /*when being clicked, the input will lose focus and become 1 again, so button needs to be higher*/
+}
+
+.header__link {
+  margin-left: 2.2rem;
+  padding-top: 0.7rem;
+  font-size: 1.15rem;
 }
