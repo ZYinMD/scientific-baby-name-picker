@@ -277,8 +277,12 @@ function favoriteInit() {
     localStorage.setItem('favNames', '{}');
   }
   $('#modal-title').on('click', '#heart', toggleFav);
+  $('#header__favorites').on('click', displayFavs)
 }
 
+function displayFavs() {
+  console.log('favs!');
+}
 function toggleFav(event) { // this function toggles the red / grey heart, and also change the corresponding status in localStorage
   $(this).toggleClass('favorite');
   var favList = JSON.parse(localStorage.getItem('favNames'));
@@ -395,7 +399,6 @@ function newBornBetween(startYear, endYear) { // this function calculate how man
 
 function searchInit() {
   $('#search').on('submit', (event) => {
-    console.log('submit!');
     event.preventDefault();
     var name = $('#search input').val().trim();
     if (name == '') return;

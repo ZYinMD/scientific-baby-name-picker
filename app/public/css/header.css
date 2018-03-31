@@ -32,7 +32,7 @@ header h2 {
   height: 5rem;
   align-items: center;
   justify-content: flex-end;
-  margin-right: -2rem; /*I don't know why the <form> has a original width that's very big, and can't be modified in any other good ways*/
+  margin-right: -4rem; I don't know why the <form> has a original width that's very big, and can't be modified in any other good ways
 }
 
 #search input {
@@ -43,6 +43,7 @@ header h2 {
   color: transparent;
   background-color: inherit;
   position: relative;
+  top: 0.25rem;
   z-index: 1;  /*above the magnifying glass when not on focus so when magnifying glass is clicked, input is actually clicked*/
   cursor: pointer;
   transition: width 0.16s;
@@ -60,7 +61,7 @@ header h2 {
   cursor: pointer;
   position: relative;  /*move the magnifying glass into the search box*/
   top: 0.25rem;
-  right: 2rem;
+  right: 2.2rem;
   border: none;
   background-color: inherit;
   cursor: pointer;
@@ -72,7 +73,8 @@ header h2 {
 }
 
 .header__link {
-  margin-left: 2.2rem;
+  margin-right: 2.2rem;
   padding-top: 0.7rem;
   font-size: 1.15rem;
+  cursor: pointer;
 }
