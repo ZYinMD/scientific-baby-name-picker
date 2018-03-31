@@ -147,12 +147,10 @@ function applyFilter() { // this function gets run when the apply filter button 
           return filterIncomplete();
       }
       // how many?
-      aFew = Number($('#e-common').val());
+      let aFew = Number($('#e-common').val());
       if (!aFew || typeof aFew != 'number') return filterIncomplete(); // manual validation
-      filter += ` ${aFew} per 750 people`;
       data.howMany = aFew;
-      // year range
-      filter += ` between ${startYear}-${endYear}`;
+      filter += ` ${aFew} per 750 people between ${startYear}-${endYear}`;
       break;
     case 'a-peak':
       data.a = 'peak';
@@ -169,7 +167,13 @@ function applyFilter() { // this function gets run when the apply filter button 
       }
       break;
     case 'a-popular':
-      return; //popular is not done yet
+      // filter: Exclude the most popular 300 names between 1950-2016;
+      data.a = 'popular';
+      // how many?
+      let top = Number($('#c-popular--value').text());
+      data.howMany = top;
+      filter += `the most popular ${top} names between ${startYear}-${endYear}`;
+      break;
     case 'a-trending':
       data.a = 'trending';
       var trend;
