@@ -186,9 +186,10 @@ function populateFilter(filter, data) { // this function puts a sentence onto th
       <span data-conditions='${JSON.stringify(data)}'>${filter}</span>
     </label>
     <a href="#!" class="secondary-content"><i class="material-icons delete-button theme2">delete</i></a>
-    <a href="#!" class="secondary-content"><i class="material-icons edit-button theme2">edit</i></a>
+    <a href="#!" class="secondary-content"><i class="material-icons edit-button theme2 tooltipped" data-tooltip="Sorry, this is a make-believe button for now.\n To edit a filter, just delete and redo it.">edit</i></a>
   `;
   $('<li class="collection-item"></div>').append(newFilter).insertBefore('#filter-constructor');
+  $('.tooltipped').tooltip(); // to make sure the newly added tooltip works
 }
 
 function apiCall() { // this function sends a http GET to backend; anti-injection happens there
@@ -281,7 +282,6 @@ function favoriteInit() {
 }
 
 function displayFavs() { // this function retrieves favorites from localStorage and displays it
-  console.log('favs!');
   var favList = JSON.parse(localStorage.getItem('favNames'));
   var names = Object.keys(favList);
   populateNames([names, names.length]);
@@ -302,7 +302,6 @@ function toggleFav(event) { // this function toggles the red / grey heart, and a
 }
 
 function isFavorite(name, gender) { // this function checks if a name is already in favorite
-  console.log("inside isFavorite");
   var favList = JSON.parse(localStorage.getItem('favNames'));
   return favList[name + gender] ? true : false;
 }
