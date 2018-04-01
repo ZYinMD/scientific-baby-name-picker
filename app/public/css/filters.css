@@ -143,6 +143,7 @@
   cursor: pointer;
 }
 
-input[disabled="disabled"] + span {
+/*input[disabled="disabled"] + span {
   color: silver !important;
 }
+*/

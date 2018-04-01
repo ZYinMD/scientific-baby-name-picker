@@ -1,14 +1,18 @@
+appInit();
 resultsInit(); // default first query
 filterInit(); // hide and show of filter rows
 searchInit(); //the search bar on upper right
 materializeInit(); // materialize animations: collapsible, tooltip, etc
 slidersInit(); // nonUiSlider.js
-favoriteInit(); // some one time settings
-appInit(); // other settings
+favoriteInit(); // functionality of favorite
+
 function appInit() {
   $('#logo').on('click', () => {
     location.reload();
   });
+  if (localStorage.previousFilters) {
+    $('#filters').html(localStorage.getItem('previousFilters')); // restore the filters created last time
+  }
 }
 
 function filterInit() { // hide and show of filter rows and columns
@@ -30,7 +34,7 @@ function applyFilter() { // this function gets run when the apply filter button 
   var filterIncomplete = function() {
     M.toast({
       html: "You didn't finish constructing the filter"
-    })
+    });
   };
   for (let i = 0; i < 10; i++) { //stupidest thing ever. Materialized can only collapse the number n item in the list for me
     $('.collapsible').collapsible('close', i);
@@ -235,7 +239,7 @@ function populateFilter(filter, data) { // this function puts a sentence onto th
   $('.tooltipped').tooltip(); // to make sure the newly added tooltip works
 }
 
-function apiCall() { // this function sends a http GET to backend; anti-injection happens there
+function apiCall() { // this function collects all current filters and sends an http GET to backend
   var query = {};
   query.fromClauses = [];
   query.whereClauses = [];
@@ -247,6 +251,10 @@ function apiCall() { // this function sends a http GET to backend; anti-injectio
       query.whereClauses.push(i);
   }
   $.get('/api', query, populateNames);
+  // store current filter list so it'd still be preserved on next refresh
+  setTimeout(() => {
+    localStorage.setItem('previousFilters', $('#filters').html());
+  }, 1000);
 }
 
 function clearConsole() { // after a new filter is successfully added, clear the console
