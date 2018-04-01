@@ -142,3 +142,7 @@
   font-size: 1.5rem;
   cursor: pointer;
 }
+
+input[disabled="disabled"] + span {
+  color: silver !important;
+}
