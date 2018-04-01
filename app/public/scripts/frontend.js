@@ -5,7 +5,6 @@ materializeInit(); // materialize animations: collapsible, tooltip, etc
 slidersInit(); // nonUiSlider.js
 favoriteInit(); // some one time settings
 appInit(); // other settings
-
 function appInit() {
   $('#logo').on('click', () => {
     location.reload();
@@ -28,10 +27,11 @@ function filterInit() { // hide and show of filter rows and columns
 
 function applyFilter() { // this function gets run when the apply filter button is clicked
   var flagFilterComplete = false;
-  var filterIncomplete = function () {
-    M.toast({html: "You didn't finish constructing the filter"})
+  var filterIncomplete = function() {
+    M.toast({
+      html: "You didn't finish constructing the filter"
+    })
   };
-
   for (let i = 0; i < 10; i++) { //stupidest thing ever. Materialized can only collapse the number n item in the list for me
     $('.collapsible').collapsible('close', i);
   }
@@ -104,8 +104,7 @@ function applyFilter() { // this function gets run when the apply filter button 
       // year range
       filter += ` between ${startYear}-${endYear}`;
       break;
-
-    // when "filter by birth per year is used"
+      // when "filter by birth per year is used"
     case 'a-peryear':
       data.a = 'peryear';
       filter += 'names that had';
@@ -130,7 +129,7 @@ function applyFilter() { // this function gets run when the apply filter button 
       // year range
       filter += ` between ${startYear}-${endYear}`;
       break;
-    //when "filter by how common" was used
+      //when "filter by how common" was used
     case 'a-common':
       data.a = 'common';
       filter += 'names that were';
@@ -212,7 +211,7 @@ function whichPicked(col, row) { // col is a letter like a, b, c, row is a row n
   }
 }
 
-function trendingToSql(startYear, endYear, trend, percent) { // this function converts year into sql for trending
+function trendingToSql(startYear, endYear, trend, percent) { // this function converts year into sql for the trending filter
   var res = '';
   var portion;
   portion = (trend == 'up') ? 1 + percent / 100 : 1 - percent / 100;
@@ -238,15 +237,14 @@ function populateFilter(filter, data) { // this function puts a sentence onto th
 
 function apiCall() { // this function sends a http GET to backend; anti-injection happens there
   var query = {};
-  query.conditions = [];
+  query.fromClauses = [];
+  query.whereClauses = [];
   for (let i of $('[data-conditions]')) {
-    if (i.parentNode.firstElementChild.checked == false) continue;
+    if (i.parentNode.firstElementChild.checked == false) continue; // if the checkbox is not checked, the filter is disabled
     i = JSON.parse(i.dataset.conditions);
-    if (i.a == 'popular') {
-      query.pool = i;
-    } else {
-      query.conditions.push(i);
-    }
+    i.a == 'popular' ?
+      query.fromClauses.push(i) :
+      query.whereClauses.push(i);
   }
   $.get('/api', query, populateNames);
 }
