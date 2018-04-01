@@ -122,7 +122,6 @@ function returnNameInfo(req, res) { // this function queries the MySql db for a 
     `SELECT * FROM name_by_year WHERE name = '${req.query.name}' AND gender = '${req.query.gender}'` :
     `SELECT * FROM name_by_year WHERE name = '${req.query.name}' ORDER BY sum DESC LIMIT 1`;
   //use npm mysql to escape in this function, no manual validation
-  console.log('query: ', query);
   db.query(query, (error, result, fields) => {
     if (error) throw error;
     if (!result[0]) {
@@ -131,9 +130,6 @@ function returnNameInfo(req, res) { // this function queries the MySql db for a 
       });
       return;
     }
-    console.log('result: ', result);
-    console.log('result[0]: ', result[0]);
-    console.log('query: ', query);
     res.json(result[0]);
   });
 }
