@@ -17,21 +17,24 @@
   <script defer src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/js/materialize.min.js"></script>
   <script defer src="scripts/nouislider.min.js"></script>
-  <script defer src="scripts/newborn-by-year.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script defer src="scripts/frontend.js"></script>
   <link rel="shortcut icon" type="image/png" href="imgs/favicon.png">
-
-
 </head>
 
 <body>
   <header>
-    <img id="logo" src="imgs/logo.png" alt="">
+    <img id="logo" src="imgs/logo.png">
     <div class="masthead">
       <h1>Scientific Baby Name Picker</h1>
       <h2>Use statistics to pick the best name for your baby</h2>
     </div>
+    <a class="header__link" id="header__favorites" title="Favorited Names">Favorites</a>
+    <a class="header__link" id="header__about" title="About this app">About</a>
+    <form id="search">
+      <input type="search" name="name-search" class="browser-default">
+      <button class="header__link" type="submit"><i class="material-icons">search</i></button>
+    </form>
   </header>
 
   <section id="intro" class="card">
@@ -48,7 +51,7 @@
     <li id="mandatory-filter" class="collection-item">
       <label>
         <input type="checkbox" checked="checked" disabled="disabled">
-        <span>Exclude names that have been used by less than 500 people between 1880-2016</span>
+        <span data-conditions='{"b":"exclude","startYear":1880,"endYear":2016,"a":"total","operator":"<","howMany":500}'>Exclude names that have been used by less than 500 people between 1880-2016</span><span class="theme2"> (default filter)</span>
       </label>
       <a href="#!" class="secondary-content greyed-out"><i class="material-icons">delete</i></a>
       <a href="#!" class="secondary-content greyed-out"><i class="material-icons">edit</i></a>
@@ -70,6 +73,12 @@
               <label for="a-total">
                 <input class="with-gap" name="filter-type" id="a-total" type="radio">
                 <span>filter by total birth:</span>
+              </label>
+            </li>
+            <li class="filter-row filter-row__peryear">
+              <label for="a-peryear">
+                <input class="with-gap" name="filter-type" id="a-peryear" type="radio">
+                <span>filter by birth per year:</span>
               </label>
             </li>
             <li class="filter-row filter-row__common">
@@ -134,6 +143,9 @@
               <p>names that have</p>
               <p>been used by</p>
             </li>
+            <li class="filter-row filter-row__peryear">
+              <p>names that had</p>
+            </li>
             <li class="filter-row filter-row__common">
             <p>names that were</p>
             </li>
@@ -147,27 +159,27 @@
             <li class="filter-row filter-row__trending">names that are</li>
           </ol>
           <ol class="filter-col filter-col__d">
-            <li class="filter-row filter-row__total">
+            <li class="filter-row filter-row__total filter-row__peryear">
               <label for="d-more-than">
-                <input class="with-gap" name="total-birth" id="d-more-than" type="radio">
+                <input class="with-gap" id="d-more-than" name="d-than" type="radio">
                 <span>more than</span>
               </label>
             </li>
-            <li class="filter-row filter-row__total">
+            <li class="filter-row filter-row__total filter-row__peryear">
               <label for="d-less-than">
-                <input class="with-gap" name="total-birth" id="d-less-than" type="radio">
+                <input class="with-gap" id="d-less-than" name="d-than" type="radio">
                 <span>less than</span>
               </label>
             </li>
             <li class="filter-row filter-row__common">
               <label for="d-more-common">
-                <input class="with-gap" name="how-common" id="d-more-common" type="radio">
+                <input class="with-gap" name="d-common" id="d-more-common" type="radio">
                 <span>more common than</span>
               </label>
             </li>
             <li class="filter-row filter-row__common">
               <label for="d-less-common">
-                <input class="with-gap" name="how-common" id="d-less-common" type="radio">
+                <input class="with-gap" name="d-common" id="d-less-common" type="radio">
                 <span>less common than</span>
               </label>
             </li>
@@ -178,9 +190,9 @@
               </label>
             </li>
             <li class="filter-row filter-row__peak">
-              <label for="d-trough">
-                <input class="with-gap" name="peak" id="d-trough" type="radio">
-                <span>trough</span>
+              <label for="d-trough" class="tooltipped" data-tooltip="Trough is disabled for now">
+                <input class="with-gap" name="peak" id="d-trough" type="radio" disabled="disabled">
+                <span style="color: silver">trough</span>
               </label>
             </li>
             <li class="filter-row filter-row__trending">
@@ -199,10 +211,14 @@
           <ol class="filter-col filter-col__e">
             <li class="filter-row filter-row__total input-field">
               <p>a total of</p>
-              <p><input placeholder="10000" class="theme2" id="e-total" type="text">people</p>
+              <p><input placeholder="10000" class="theme2" id="e-total" type="text"> people</p>
+            </li>
+            <li class="filter-row filter-row__peryear input-field">
+              <p><input placeholder="1000" class="theme2" id="e-peryear" type="text"> new births</p>
+              <p>per year on average</p>
             </li>
             <li class="filter-row filter-row__common">
-              <p><input placeholder="3" class="theme2" id="e-common" type="text">per <i class="tooltipped material-icons" data-position="top" data-delay="50" data-tooltip="750 people is the average size of American high schools">info_outline</i></p>
+              <p><input placeholder="3" class="theme2" id="e-common" type="text"> per <i class="tooltipped material-icons" data-position="top" data-delay="50" data-tooltip="750 people is the average size of American high schools">info_outline</i></p>
               <p>750 people</p>
             </li>
             <li class="filter-row filter-row__trending input-field">
@@ -211,7 +227,7 @@
             </li>
           </ol>
           <ol class="filter-col filter-col__f">
-            <li id="year-div" class="filter-row filter-row__total filter-row__trending filter-row__common filter-row__peak filter-row__popular filter-row">
+            <li id="year-div" class="filter-row filter-row__total filter-row__peryear filter-row__trending filter-row__common filter-row__peak filter-row__popular filter-row">
               <div style="text-align: center;">
                 <p>in between</p>
                 <p class="theme2"><span id="start-year"></span>-<span id="end-year"></span></p>

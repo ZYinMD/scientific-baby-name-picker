@@ -1,8 +1,23 @@
 #modal {
   text-align: center;
 }
-#modal h4 span{
-  color:grey;
-  font-size: 65%;
 
+#modal h4 {
+  font-size: 1.9rem;
+  display: flex;
+  justify-content: center;
 }
+#modal h4 span{
+  font-size: 1.3rem;
+  margin-left: 0.65rem;
+}
+
+#heart {
+  font-size: 1.6rem;
+  cursor: pointer;
+  margin-right: 0.8rem;
+  position: relative;
+  top: 0.3rem;
+  color: silver;
+}
+

@@ -1,4 +1,6 @@
-var newbornByYear = {
+// This file is hard-coded total new born of each year.
+// It was needed because rare names that were used less than 500 times total from 1880 to 2016 were not included in the database. So SUM() would provide the same total
+module.exports = {
   "1880": 201483,
   "1881": 192696,
   "1882": 221533,

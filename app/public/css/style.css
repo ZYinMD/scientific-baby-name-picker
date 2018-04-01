@@ -23,6 +23,8 @@ ol, ul{
   list-style: none;
 }
 
+#heart.favorite,
+.header__link,
 .F,
 .theme { /*the theme of the app*/
   color: salmon;
@@ -44,7 +46,7 @@ ol, ul{
 .theme2,
 input[type=range]+.thumb .value,
 #filter-console input:checked + span {
-  color: #00c2c2;
+  color: #00c2c2 !important;
 }
 
 [type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:before, [type="radio"].with-gap:checked+span:after {
