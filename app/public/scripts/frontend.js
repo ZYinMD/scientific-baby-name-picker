@@ -335,6 +335,8 @@ function displayFavs() { // this function retrieves favorites from localStorage 
   var favList = JSON.parse(localStorage.getItem('favNames'));
   var names = Object.keys(favList);
   populateNames([names, names.length]);
+  // $('#results h3').append('<span class="theme" onClick="apiCall()">       BACK</span>');
+  $('#back-from-fav').show().html(`<p onClick="apiCall()">BACK</p>`); // unhide it
 }
 
 function toggleFav(event) { // this function toggles the red / grey heart, and also change the corresponding status in localStorage
@@ -395,7 +397,8 @@ function chartjsInit(labels, data, color) {
 
 function populateNames(res) { // this function populates the screen with the server res
   var count = res[1];
-  if (count < 1000) $('#result-count').text(res[1] + ' names found...');
+  if (count == 1) $('#result-count').text(res[1] + ' name found...');
+  else if (count < 1000) $('#result-count').text(res[1] + ' names found...');
   else $('#result-count').text(res[1] + ' names found, displaying the first 1000...');
   $('#name-list').empty();
   for (let i of res[0]) {
@@ -403,6 +406,7 @@ function populateNames(res) { // this function populates the screen with the ser
     let gender = i.slice(-1);
     $('#name-list').append(`<span class="${gender} modal-trigger" href="#modal">${name}</span>`);
   }
+  $('#back-from-fav').hide(); //this is the "BACK" button when showing favorites, normally hidden
 }
 
 function slidersInit() {

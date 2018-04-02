@@ -17,3 +17,7 @@
   cursor: pointer
 }
 
+#back-from-fav p {
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
