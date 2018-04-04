@@ -1,10 +1,10 @@
 appInit();
-resultsInit(); // default first query
-filterInit(); // hide and show of filter rows
-searchInit(); //the search bar on upper right
 materializeInit(); // materialize animations: collapsible, tooltip, etc
 slidersInit(); // nonUiSlider.js
+resultsInit(); // default first query
+searchInit(); //the search bar on upper right
 favoriteInit(); // functionality of favorite
+filterInit(); // hide and show of filter rows
 
 function appInit() {
   $('#logo').on('click', () => {
@@ -13,6 +13,7 @@ function appInit() {
   if (localStorage.previousFilters) {
     $('#filters').html(localStorage.getItem('previousFilters')); // restore the filters created last time
   }
+  $('#year-slider').empty(); // after restoring previous filters, empty the slider, otherwise there'd be a bug
 }
 
 function filterInit() { // hide and show of filter rows and columns
