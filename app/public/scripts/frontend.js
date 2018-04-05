@@ -301,7 +301,7 @@ function populateModal(name, gender) {
     delete res.peak_year;
     delete res.sum;
     delete res.gender;
-    delete res.is_unisex;
+    delete res.domGender;
     delete res.id;
     for (let i in res) {
       res[i] = res[i] / newbornByYear[i] * 750; // change to per high school

@@ -74,7 +74,7 @@ function whereToSql(where) { // this function converts data from front end to My
       var gendersChecked = where.gendersChecked.map(g => {
         if (g == 'F') return "gender = 'F'";
         if (g == 'M') return "gender = 'M'";
-        if (g == 'U') return "is_unisex = 1";
+        if (g == 'U') return "domGender = 'U'";
       });
       // I am so smart:
       query = where.b == 'exclude' ?

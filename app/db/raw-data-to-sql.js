@@ -3,7 +3,7 @@ This file converts the raw data into a .sql dump to be imported into MySql
 */
 
 // settings:
-const dataInput = './mock-data/'; // takes a folder
+const dataInput = './raw-data/'; // takes a folder
 const fileOutput = './feature-test.sql'; //takes a file name
 const dbName = 'baby_name_picker'; // what do you call your database
 const tableName = 'name_by_year'; // what do you call your table
@@ -19,7 +19,7 @@ console.timeEnd('Time taken to read all data'); //timer ends, log out the time t
 
 console.time('Time taken to manipulate data'); //start a timer to reform data
   reformData(); //decorate the data a little bit
-  isUnisex(); //set whether a name is unisex
+  sex(); //set whether a name is unisex
   sort(); //re-order the data so that similar names will appear from common to uncommon
   findSimilar(); // find similar names
 console.timeEnd('Time taken to manipulate data'); //timer ends, log out the time taken
@@ -87,18 +87,22 @@ function reformData() { //this function adds a few properties to every name
   }
 }
 
-function isUnisex() { //this function determines if a name is unisex
+function sex() { //this function decides if a name is predominantly a female or male or unisex name
   for (let nameGender in dataStorage) {
-    dataStorage[nameGender].is_unisex = 0; //first all names to be not unisex
+    dataStorage[nameGender].domGender = 'F'; //first assume it's usually a female name
     if (dataStorage[nameGender].gender == 'M') { // if current iteration is a male name
       let femaleName = dataStorage[nameGender].name + ';F';
-      if (dataStorage[femaleName]) { //if the female counterpart exists
-        let femaleSum = dataStorage[femaleName].sum;
-        let maleSum = dataStorage[nameGender].sum;
-        if (femaleSum < maleSum * 5 && femaleSum > maleSum / 5) { //if the female counterpart is in the range of male / 5 and male * 5, then yes
-          dataStorage[nameGender].is_unisex = 1;
-          dataStorage[femaleName].is_unisex = 1;
-        }
+      if (!dataStorage[femaleName]) { //if the female counterpart doesn't exist
+        dataStorage[nameGender].domGender = 'M';
+        continue;
+      }
+      let femaleSum = dataStorage[femaleName].sum;
+      let maleSum = dataStorage[nameGender].sum;
+      if (maleSum > femaleSum) {
+        dataStorage[nameGender].domGender = dataStorage[femaleName].domGender = 'M';
+      }
+      if (femaleSum < maleSum * 5 && femaleSum > maleSum / 5) { //if the female counterpart is in the range of male / 5 and male * 5, then yes
+        dataStorage[nameGender].domGender = dataStorage[femaleName].domGender = 'U';
       }
     }
   }
@@ -118,8 +122,9 @@ function findSimilar() {
   for (let i in dataStorage) {
     dataStorage[i].similar = '';
     for (let j in dataStorage) {
-      if (dataStorage[j].gender != dataStorage[i].gender) continue;
-      if (i == j) continue; // skip itself
+      if (dataStorage[j].domGender != dataStorage[i].gender) continue; // if not the same gender, don't bother
+      if (dataStorage[i].name == dataStorage[j].name) continue; // skip itself
+      if (dataStorage[i].name.length = 2) continue; // skip if name too short
       if (dataStorage[j].short.startsWith(dataStorage[i].short) || dataStorage[i].short.startsWith(dataStorage[j].short)) {
         dataStorage[i].similar += dataStorage[j].name + ',';
       }
@@ -139,9 +144,10 @@ CREATE TABLE \`${tableName}\` (
   \`id\` int(7) unsigned NOT NULL AUTO_INCREMENT,
   \`name\` varchar(16) NOT NULL,
   \`gender\` char(1) NOT NULL,
-  \`is_unisex\` tinyint(4) NOT NULL,
+  \`domGender\` char(1) NOT NULL,
   \`sum\` int(9) unsigned NOT NULL,
-  \`peak_year\` int(4) unsigned NOT NULL,`;
+  \`peak_year\` int(4) unsigned NOT NULL,
+  \`similar\` varchar(8191) NOT NULL,`;
 
   for (let i of years) {
     sqlString += `\n  \`${i}\` int(7) unsigned NOT NULL,`;
@@ -154,7 +160,7 @@ CREATE TABLE \`${tableName}\` (
 `;
 
   for (let nameGender in dataStorage) {
-    let line = `(${(primaryKey++)},'${nameGender.split(';').join("','")}',${dataStorage[nameGender].is_unisex},${dataStorage[nameGender].sum},${dataStorage[nameGender].peak_year},`; // start constructing a line in csv
+    let line = `(${(primaryKey++)},'${nameGender.split(';').join("','")}','${dataStorage[nameGender].domGender}',${dataStorage[nameGender].sum},${dataStorage[nameGender].peak_year},'${dataStorage[nameGender].similar}',`; // start constructing a line in csv
     for (let year of years) {
       if (dataStorage[nameGender][year]) {
         line += dataStorage[nameGender][year] + ',';
@@ -196,23 +202,22 @@ function truncate(name) { // this function takes a name and return its truncated
 }
 
 function prune(name) { // takes an array, removes double letters, for instance aaron => aron, except ee and oo, and also turns ph into f, ck into k
-  for (var i = 2; i < name.length; i++) {
+  for (var i = 1; i < name.length; i++) {
     if (name[i] == 'e' || name[i] == 'o') continue; // don't remove ee or oo
     if (name[i] == name[i - 1]) name[i - 1] = '#';
     if (name[i] == 'h' && name[i - 1] == 'p') {
       name[i - 1] = '#';
       name[i] = 'f';
     }
-    if (name[i] == 'k' && name[i - 1] == 'c') {
-      name[i - 1] = '#';
+    if (name[i] == 'c' && !'ehi'.includes(name[i + 1])) { // other than ce, ch, ci, turn all c into k
       name[i] = 'k';
     }
   }
-  return name.filter(i => i != '#');
+  return name.filter(i => i != '#'); // filter out all #s
 }
 
 function removeVowel(name) { // takes an array, remove vowels from end while length longer than 3
-  while (['a', 'e', 'i', 'o', 'u'].includes(name[name.length - 1]) && name.length > 3) {
+  while (['a', 'e', 'i', 'o', 'u'].includes(name[name.length - 1]) && name.length > 4) {
     name.pop();
   }
   return name;
