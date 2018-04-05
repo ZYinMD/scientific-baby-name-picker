@@ -118,19 +118,14 @@ function sort() { // this function sort the dataStorge by sum descending, so tha
   dataStorage = newStorage;
 }
 
-function findSimilar() {
+function findSimilar() { // this function finds all similar names of each name, store them in .similar
   for (let i in dataStorage) {
-    dataStorage[i].similar = '';
+    dataStorage[i].similar = [];
     for (let j in dataStorage) {
-      if (dataStorage[j].domGender != dataStorage[i].gender) continue; // if not the same gender, don't bother
-      if (dataStorage[i].name == dataStorage[j].name) continue; // skip itself
-      if (dataStorage[i].name.length = 2) continue; // skip if name too short
       if (dataStorage[j].short.startsWith(dataStorage[i].short) || dataStorage[i].short.startsWith(dataStorage[j].short)) {
-        dataStorage[i].similar += dataStorage[j].name + ',';
+        dataStorage[i].similar.push(dataStorage[j].name + dataStorage[j].gender);
+        if (dataStorage[i].similar.length >= 20) break; // no need for too many, since it's ranked by popularity
       }
-    }
-    if (dataStorage[i].similar.slice(-1) == ',') { // trim the last comma
-      dataStorage[i].similar = dataStorage[i].similar.slice(0, -1);
     }
   }
 }
@@ -147,7 +142,7 @@ CREATE TABLE \`${tableName}\` (
   \`domGender\` char(1) NOT NULL,
   \`sum\` int(9) unsigned NOT NULL,
   \`peak_year\` int(4) unsigned NOT NULL,
-  \`similar\` varchar(8191) NOT NULL,`;
+  \`similar\` varchar(255) NOT NULL,`;
 
   for (let i of years) {
     sqlString += `\n  \`${i}\` int(7) unsigned NOT NULL,`;
@@ -160,7 +155,7 @@ CREATE TABLE \`${tableName}\` (
 `;
 
   for (let nameGender in dataStorage) {
-    let line = `(${(primaryKey++)},'${nameGender.split(';').join("','")}','${dataStorage[nameGender].domGender}',${dataStorage[nameGender].sum},${dataStorage[nameGender].peak_year},'${dataStorage[nameGender].similar}',`; // start constructing a line in csv
+    let line = `(${(primaryKey++)},'${nameGender.split(';').join("','")}','${dataStorage[nameGender].domGender}',${dataStorage[nameGender].sum},${dataStorage[nameGender].peak_year},'${dataStorage[nameGender].similar.join(',')}',`; // start constructing a line in csv
     for (let year of years) {
       if (dataStorage[nameGender][year]) {
         line += dataStorage[nameGender][year] + ',';
