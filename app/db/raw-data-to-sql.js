@@ -4,7 +4,7 @@ This file converts the raw data into a .sql dump to be imported into MySql
 
 // settings:
 const dataInput = './raw-data/'; // takes a folder
-const fileOutput = './feature-test.sql'; //takes a file name
+const fileOutput = './db.sql'; //takes a file name
 const dbName = 'baby_name_picker'; // what do you call your database
 const tableName = 'name_by_year'; // what do you call your table
 
@@ -217,4 +217,3 @@ function removeVowel(name) { // takes an array, remove vowels from end while len
   }
   return name;
 }
-fs.writeFileSync('./test.json', JSON.stringify(dataStorage, null, 2));
