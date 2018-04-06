@@ -4,7 +4,7 @@ This file converts the raw data into a .sql dump to be imported into MySql
 
 // settings:
 const dataInput = './raw-data/'; // takes a folder
-const fileOutput = './name_by_year.sql'; //takes a file name
+const fileOutput = './db.sql'; //takes a file name
 const dbName = 'baby_name_picker'; // what do you call your database
 const tableName = 'name_by_year'; // what do you call your table
 
@@ -19,7 +19,9 @@ console.timeEnd('Time taken to read all data'); //timer ends, log out the time t
 
 console.time('Time taken to manipulate data'); //start a timer to reform data
   reformData(); //decorate the data a little bit
-  isUnisex(); //set whether a name is unisex
+  sex(); //set whether a name is unisex
+  sort(); //re-order the data so that similar names will appear from common to uncommon
+  findSimilar(); // find similar names
 console.timeEnd('Time taken to manipulate data'); //timer ends, log out the time taken
 
 console.time('Time taken to output to .sql file'); //start a timer output to .sql file
@@ -77,28 +79,58 @@ function reformData() { //this function adds a few properties to every name
     let avg = sum / arrayOfKeys.length;
     let peak_year = (max > avg * 5) ? maxYear : 0; // if this name didn't have a peak, use 0. I want this column to be integer, so can't use null
     dataStorage[nameGender].peak_year = peak_year; // attach it to the object
+    // attach name and gender to properties for later use
+    dataStorage[nameGender].name = nameGender.slice(0, -2);
+    dataStorage[nameGender].gender = nameGender.slice(-1);
+    // attach a short version of this name for later use:
+    dataStorage[nameGender].short = truncate(dataStorage[nameGender].name);
   }
 }
 
-function isUnisex() { //this function determines if a name is unisex
+function sex() { //this function decides if a name is predominantly a female or male or unisex name
   for (let nameGender in dataStorage) {
-    //determine if this name is a unisex name:
-    dataStorage[nameGender].is_unisex = 0; //first all names to be not unisex
-    let gender = nameGender.slice(-1);
-    if (gender == 'M') { // if current iteration is a male name
-      let femaleName = nameGender.slice(0, -2) + ';F';
-      if (dataStorage[femaleName]) { //if the female counterpart exists
-        let femaleSum = dataStorage[femaleName].sum;
-        let maleSum = dataStorage[nameGender].sum;
-        if (femaleSum < maleSum * 5 && femaleSum > maleSum / 5) { //if the female counterpart is in the range of male / 5 and male * 5, then yes
-          dataStorage[nameGender].is_unisex = 1;
-          dataStorage[femaleName].is_unisex = 1;
-        }
+    dataStorage[nameGender].domGender = 'F'; //first assume it's usually a female name
+    if (dataStorage[nameGender].gender == 'M') { // if current iteration is a male name
+      let femaleName = dataStorage[nameGender].name + ';F';
+      if (!dataStorage[femaleName]) { //if the female counterpart doesn't exist
+        dataStorage[nameGender].domGender = 'M';
+        continue;
+      }
+      let femaleSum = dataStorage[femaleName].sum;
+      let maleSum = dataStorage[nameGender].sum;
+      if (maleSum > femaleSum) {
+        dataStorage[nameGender].domGender = dataStorage[femaleName].domGender = 'M';
+      }
+      if (femaleSum < maleSum * 5 && femaleSum > maleSum / 5) { //if the female counterpart is in the range of male / 5 and male * 5, then yes
+        dataStorage[nameGender].domGender = dataStorage[femaleName].domGender = 'U';
       }
     }
   }
 }
 
+function sort() { // this function sort the dataStorge by sum descending, so that similar names with be ranked by sum too
+  var keys = Object.keys(dataStorage);
+  keys.sort((a, b) => dataStorage[b].sum - dataStorage[a].sum);
+  var newStorage = {};
+  for (let i of keys) {
+    newStorage[i] = dataStorage[i];
+  }
+  dataStorage = newStorage;
+}
+
+function findSimilar() { // this function finds all similar names of each name, store them in .similar
+  for (let i in dataStorage) {
+    dataStorage[i].similar = [];
+    for (let j in dataStorage) {
+      if (dataStorage[j].sum < 1000) break; // no need for uncommon variations
+      if (dataStorage[j].name.length == 2) continue; // I don't need 2 letter names in the variations
+      if (dataStorage[j].short.startsWith(dataStorage[i].short) || dataStorage[i].short.startsWith(dataStorage[j].short)) {
+        dataStorage[i].similar.push(dataStorage[j].name + dataStorage[j].gender);
+        if (dataStorage[i].similar.length >= 20) break; // no need for too many since it's ranked by popularity
+      }
+    }
+  }
+}
 //this function writes into .sql from dataStorage:
 function writeToSql() {
   var sqlString = `
@@ -109,9 +141,10 @@ CREATE TABLE \`${tableName}\` (
   \`id\` int(7) unsigned NOT NULL AUTO_INCREMENT,
   \`name\` varchar(16) NOT NULL,
   \`gender\` char(1) NOT NULL,
-  \`is_unisex\` tinyint(4) NOT NULL,
+  \`domGender\` char(1) NOT NULL,
   \`sum\` int(9) unsigned NOT NULL,
-  \`peak_year\` int(4) unsigned NOT NULL,`;
+  \`peak_year\` int(4) unsigned NOT NULL,
+  \`similar\` varchar(255) NOT NULL,`;
 
   for (let i of years) {
     sqlString += `\n  \`${i}\` int(7) unsigned NOT NULL,`;
@@ -124,7 +157,7 @@ CREATE TABLE \`${tableName}\` (
 `;
 
   for (let nameGender in dataStorage) {
-    let line = `(${(primaryKey++)},'${nameGender.split(';').join("','")}',${dataStorage[nameGender].is_unisex},${dataStorage[nameGender].sum},${dataStorage[nameGender].peak_year},`; // start constructing a line in csv
+    let line = `(${(primaryKey++)},'${nameGender.split(';').join("','")}','${dataStorage[nameGender].domGender}',${dataStorage[nameGender].sum},${dataStorage[nameGender].peak_year},'${dataStorage[nameGender].similar.join(',')}',`; // start constructing a line in csv
     for (let year of years) {
       if (dataStorage[nameGender][year]) {
         line += dataStorage[nameGender][year] + ',';
@@ -148,7 +181,41 @@ CREATE TABLE \`${tableName}\` (
   sqlString = sqlString.slice(0, -1) + ';\n';
 
   fs.writeFileSync(fileOutput, sqlString);
-  setTimeout(() => {
+  setTimeout(() => { // set time out so it logs after the console.time
     console.log(`\nOutput to ${fileOutput} successful.`);
   }, 0);
+}
+
+function truncate(name) { // this function takes a name and return its truncated version
+  name = name.split('');
+  // the following don't include the initial, since it's capital
+  name = name.map(i => i == 'v' ? 'f' : i); // replace all letter v with letter f
+  name = name.map(i => i == 'y' ? 'i' : i); // replace all letter y with letter i
+  name = name.map(i => i == 'z' ? 's' : i); // replace all letter y with letter i
+  name = prune(name); // turn double letters into single except ee and oo, change ph to f, ck to k
+  name = removeVowel(name);
+  name[0] = name[0].toUpperCase();
+  return name.join('');
+}
+
+function prune(name) { // takes an array, removes double letters, for instance aaron => aron, except ee and oo, and also turns ph into f, ck into k
+  for (var i = 1; i < name.length; i++) {
+    if (name[i] == 'e' || name[i] == 'o') continue; // don't remove ee or oo
+    if (name[i] == name[i - 1]) name[i - 1] = '#';
+    if (name[i] == 'h' && name[i - 1] == 'p') {
+      name[i - 1] = '#';
+      name[i] = 'f';
+    }
+    if (name[i] == 'c' && !'ehi'.includes(name[i + 1])) { // other than ce, ch, ci, turn all c into k
+      name[i] = 'k';
+    }
+  }
+  return name.filter(i => i != '#'); // filter out all #s
+}
+
+function removeVowel(name) { // takes an array, remove vowels from end while length longer than 3
+  while (['a', 'e', 'i', 'o', 'u'].includes(name[name.length - 1]) && name.length > 3) {
+    name.pop();
+  }
+  return name;
 }

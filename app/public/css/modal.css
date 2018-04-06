@@ -2,14 +2,34 @@
   text-align: center;
 }
 
-#modal h4 {
+#modal-title {
   font-size: 1.9rem;
   display: flex;
   justify-content: center;
+  margin-bottom: 1rem;
+  padding-right: 3em;
 }
+
 #modal h4 span{
   font-size: 1.3rem;
   margin-left: 0.65rem;
+}
+
+#variations {
+  font-size: 1.1rem;
+  margin-top: 0;
+}
+
+#variations span {
+  margin-left: 0.8rem;
+}
+
+#variations span:not(.self) {
+  cursor: pointer;
+}
+
+.self {
+  text-decoration: overline;
 }
 
 #heart {
