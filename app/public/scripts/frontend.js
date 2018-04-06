@@ -323,9 +323,9 @@ function displayName(name, gender, variations) { // this function displays a nam
   $('#modal-title').html(`
     <span id="heart" data-name=${name} data-gender=${gender}>
       <i class="material-icons">favorite_border</i>
-    </span>${name}<span>(per high school)</span>
+    </span>${name}
     `);
-  $('#variations').text('Variations (common first):  ');
+  $('#variations').text('Variations (common first) :  ');
   for (let i of variations.split(',')) {
     if (i == name+gender) {
       $('#variations').append(`<span class="${gender} variant self">${name}</span>`); // if it's itself

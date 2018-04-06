@@ -6,7 +6,8 @@
   font-size: 1.9rem;
   display: flex;
   justify-content: center;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
+  padding-right: 3em;
 }
 
 #modal h4 span{
