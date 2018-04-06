@@ -279,6 +279,12 @@ function resultsInit() {
     let gender = event.target.classList[0];
     populateModal(name, gender);
   });
+  $('#variations').on('click', 'span:not(.self)', () => { // when a variant of a name is clicked, do the same
+    var name = event.target.innerText;
+    var gender = event.target.classList[0];
+    populateModal(name, gender);
+  });
+
   $.get('/api/newbornByYear', res => {
     newbornByYear = res; // this is a global variable declared without "var"
   });
@@ -295,7 +301,7 @@ function populateModal(name, gender) {
       $('#modal-title').text(`Name "${name}" not found.`);
       return;
     }
-    displayName(res.name, res.gender); // show name as modal title, and attach a heart
+    displayName(res.name, res.gender, res.similar); // show name as modal title, and attach a heart
     var color = (res.gender == 'F') ? 'salmon' : '#00c2c2';
     delete res.name;
     delete res.peak_year;
@@ -303,6 +309,7 @@ function populateModal(name, gender) {
     delete res.gender;
     delete res.domGender;
     delete res.id;
+    delete res.similar;
     for (let i in res) {
       res[i] = res[i] / newbornByYear[i] * 750; // change to per high school
     }
@@ -312,12 +319,21 @@ function populateModal(name, gender) {
   });
 }
 
-function displayName(name, gender) { // this function displays a name as well as the heart in the modal title
+function displayName(name, gender, variations) { // this function displays a name as well as the heart in the modal title
   $('#modal-title').html(`
     <span id="heart" data-name=${name} data-gender=${gender}>
       <i class="material-icons">favorite_border</i>
     </span>${name}<span>(per high school)</span>
     `);
+  $('#variations').text('Variations (common first):  ');
+  for (let i of variations.split(',')) {
+    if (i == name+gender) {
+      $('#variations').append(`<span class="${gender} variant self">${name}</span>`); // if it's itself
+    } else {
+      $('#variations').append(`<span class="${i.slice(-1)} variant">${i.slice(0, -1)}</span>`);
+    }
+
+  }
   if (isFavorite(name, gender)) {
     $('#heart').toggleClass('favorite', true);
     $('#heart i').text('favorite');
@@ -336,7 +352,6 @@ function displayFavs() { // this function retrieves favorites from localStorage 
   var favList = JSON.parse(localStorage.getItem('favNames'));
   var names = Object.keys(favList);
   populateNames([names, names.length]);
-  // $('#results h3').append('<span class="theme" onClick="apiCall()">       BACK</span>');
   $('#back-from-fav').show().html(`<p onClick="apiCall()">BACK</p>`); // unhide it
 }
 
@@ -386,6 +401,9 @@ function chartjsInit(labels, data, color) {
         xAxes: [{
           gridLines: {
             display: false
+          },
+          ticks: {
+            maxTicksLimit: 30
           },
           scaleLabel: {
             display: false

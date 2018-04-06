@@ -122,9 +122,11 @@ function findSimilar() { // this function finds all similar names of each name, 
   for (let i in dataStorage) {
     dataStorage[i].similar = [];
     for (let j in dataStorage) {
+      if (dataStorage[j].sum < 1000) break; // no need for uncommon variations
+      if (dataStorage[j].name.length == 2) continue; // I don't need 2 letter names in the variations
       if (dataStorage[j].short.startsWith(dataStorage[i].short) || dataStorage[i].short.startsWith(dataStorage[j].short)) {
         dataStorage[i].similar.push(dataStorage[j].name + dataStorage[j].gender);
-        if (dataStorage[i].similar.length >= 20) break; // no need for too many, since it's ranked by popularity
+        if (dataStorage[i].similar.length >= 20) break; // no need for too many since it's ranked by popularity
       }
     }
   }
@@ -212,7 +214,7 @@ function prune(name) { // takes an array, removes double letters, for instance a
 }
 
 function removeVowel(name) { // takes an array, remove vowels from end while length longer than 3
-  while (['a', 'e', 'i', 'o', 'u'].includes(name[name.length - 1]) && name.length > 4) {
+  while (['a', 'e', 'i', 'o', 'u'].includes(name[name.length - 1]) && name.length > 3) {
     name.pop();
   }
   return name;
