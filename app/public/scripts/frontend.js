@@ -396,6 +396,14 @@ function chartjsInit(labels, data, color) {
         yAxes: [{
           gridLines: {
             display: false
+          },
+          pointLabels: {
+            display: true
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Per High School',
+            fontSize: 12
           }
         }],
         xAxes: [{
@@ -404,10 +412,8 @@ function chartjsInit(labels, data, color) {
           },
           ticks: {
             maxTicksLimit: 30
-          },
-          scaleLabel: {
-            display: false
           }
+
         }]
       }
     }
