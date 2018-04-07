@@ -42,7 +42,7 @@ function prepareQuery(req) { // this function takes the req from front end, and 
     `SELECT SQL_CALC_FOUND_ROWS name, gender
 FROM ${finalFromClause}
 WHERE (${finalWhereClause})
-ORDER BY sum DESC LIMIT 1000;
+ORDER BY sum DESC LIMIT 2000;
 SELECT FOUND_ROWS();`;
   // console.log('finalQuery: \n', finalQuery);
   return finalQuery;

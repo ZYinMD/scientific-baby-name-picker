@@ -9,7 +9,7 @@ const dbName = 'baby_name_picker'; // what do you call your database
 const tableName = 'name_by_year'; // what do you call your table
 
 const fs = require('fs');
-var dataStorage = {}; // this'll be where all the data are stored before seeding to sequelizeModel
+var db = {}; // this'll be where all the data are stored before seeding to sequelizeModel
 var namesTally = 0; // for terminal output purposes, unimportant.
 var primaryKey = 1; // starting point of primary key in the table
 
@@ -29,7 +29,7 @@ console.time('Time taken to output to .sql file'); //start a timer output to .sq
 console.timeEnd('Time taken to output to .sql file'); //timer ends, log out the time taken
 
 
-function readData() { // this function reads raw data from txt files, and put all the data into the dataStorage object.
+function readData() { // this function reads raw data from txt files, and put all the data into the db object.
   var fileList = fs.readdirSync(dataInput); //read all files in the folder
   var totalYears = fileList.length;
   console.log(`\n${totalYears} files found...\nstart reading files...`);
@@ -41,7 +41,7 @@ function readData() { // this function reads raw data from txt files, and put al
     let thisYearsContent = fs.readFileSync(dataInput + i, 'UTF-8'); //async was tried, but not faster. Maybe the file reading is single threaded, at least in Windows.
     processThisYear(year, thisYearsContent);
   }
-  var totalNames = Object.keys(dataStorage).length;
+  var totalNames = Object.keys(db).length;
   console.log(`\nOn average, ${Math.round(namesTally / totalYears)} names were used each year, while ${totalNames} name were ever used over the ${totalYears} years.\n`);
 }
 
@@ -56,82 +56,88 @@ function processThisYear(year, thisYearsContent) { // this function processes a 
 
 function processThisLine(year, name, gender, population) { // this function processes a line in a txt file
   var key = name + ';' + gender;
-  if (!dataStorage[key]) dataStorage[key] = {}; // if this name hasn't appeared yet, create it
-  dataStorage[key][year] = Number(population);
+  if (!db[key]) db[key] = {}; // if this name hasn't appeared yet, create it
+  db[key][year] = Number(population);
 }
 
 function reformData() { //this function adds a few properties to every name
-  for (let nameGender in dataStorage) {
+  for (let nameGender in db) {
     //first, if a name was used by less than 500 people ever, delete it:
-    let arrayOfKeys = Object.keys(dataStorage[nameGender]); // an array of years chronologically
-    let arrayOfValues = Object.values(dataStorage[nameGender]); //an array of population of each year chronologically, will use many times
+    let arrayOfKeys = Object.keys(db[nameGender]); // an array of years chronologically
+    let arrayOfValues = Object.values(db[nameGender]); //an array of population of each year chronologically, will use many times
     let sum = arrayOfValues.reduce((accumulator, i) => accumulator + i); //calculate the sum of this name of all time
     if (sum < 500) {
-      delete dataStorage[nameGender];
+      delete db[nameGender];
       continue;
     }
-    dataStorage[nameGender].sum = sum;
+    db[nameGender].sum = sum;
     //calculate which year had the max population:
     let max = Math.max(...arrayOfValues); // this is the max population among all the years
-    dataStorage[nameGender].max = max; // attach it to the object
+    db[nameGender].max = max; // attach it to the object
     maxYear = arrayOfKeys[arrayOfValues.indexOf(max)]; // this is the year where max population occurred
     //determine if this name had a peak, if max > avg * 5, then yes:
     let avg = sum / arrayOfKeys.length;
     let peak_year = (max > avg * 5) ? maxYear : 0; // if this name didn't have a peak, use 0. I want this column to be integer, so can't use null
-    dataStorage[nameGender].peak_year = peak_year; // attach it to the object
+    db[nameGender].peak_year = peak_year; // attach it to the object
     // attach name and gender to properties for later use
-    dataStorage[nameGender].name = nameGender.slice(0, -2);
-    dataStorage[nameGender].gender = nameGender.slice(-1);
+    db[nameGender].name = nameGender.slice(0, -2);
+    db[nameGender].gender = nameGender.slice(-1);
     // attach a short version of this name for later use:
-    dataStorage[nameGender].short = truncate(dataStorage[nameGender].name);
+    db[nameGender].short = truncate(db[nameGender].name);
   }
 }
 
-function sex() { //this function decides if a name is predominantly a female or male or unisex name
-  for (let nameGender in dataStorage) {
-    dataStorage[nameGender].domGender = 'F'; //first assume it's usually a female name
-    if (dataStorage[nameGender].gender == 'M') { // if current iteration is a male name
-      let femaleName = dataStorage[nameGender].name + ';F';
-      if (!dataStorage[femaleName]) { //if the female counterpart doesn't exist
-        dataStorage[nameGender].domGender = 'M';
-        continue;
-      }
-      let femaleSum = dataStorage[femaleName].sum;
-      let maleSum = dataStorage[nameGender].sum;
-      if (maleSum > femaleSum) {
-        dataStorage[nameGender].domGender = dataStorage[femaleName].domGender = 'M';
-      }
-      if (femaleSum < maleSum * 5 && femaleSum > maleSum / 5) { //if the female counterpart is in the range of male / 5 and male * 5, then yes
-        dataStorage[nameGender].domGender = dataStorage[femaleName].domGender = 'U';
-      }
+function sex() { //this function decides if a name is predominantly a female or male or unisex name, saves the result in .domGender
+  // for most names, the following code will be executed twice, which is redundant, but it's the clearest logic to write, and it's not so slow
+  for (let i in db) {
+    let keyM = db[i].name + ';M';
+    let keyF = db[i].name + ';F';
+    if (!db[keyM]) { // if M doesn't exist, the current's domGender is F
+      db[i].domGender = 'F';
+      continue;
+    }
+    if (!db[keyF]) { // and vice versa
+      db[i].domGender = 'M';
+      continue;
+    }
+    let sumF = db[keyF].sum;
+    let sumM = db[keyM].sum;
+    if (sumF < sumM * 5 && sumF > sumM / 5) { //if the female counterpart is in the range of male / 5 and male * 5, then it's unisex
+      db[keyF].domGender = db[keyM].domGender = 'U';
+      continue;
+    }
+    if (sumM > sumF) {
+      db[keyF].domGender = db[keyM].domGender = 'M';
+    } else {
+      db[keyF].domGender = db[keyM].domGender = 'F';
     }
   }
 }
 
 function sort() { // this function sort the dataStorge by sum descending, so that similar names with be ranked by sum too
-  var keys = Object.keys(dataStorage);
-  keys.sort((a, b) => dataStorage[b].sum - dataStorage[a].sum);
+  var keys = Object.keys(db);
+  keys.sort((a, b) => db[b].sum - db[a].sum);
   var newStorage = {};
   for (let i of keys) {
-    newStorage[i] = dataStorage[i];
+    newStorage[i] = db[i];
   }
-  dataStorage = newStorage;
+  db = newStorage;
 }
 
 function findSimilar() { // this function finds all similar names of each name, store them in .similar
-  for (let i in dataStorage) {
-    dataStorage[i].similar = [];
-    for (let j in dataStorage) {
-      if (dataStorage[j].sum < 1000) break; // no need for uncommon variations
-      if (dataStorage[j].name.length == 2) continue; // I don't need 2 letter names in the variations
-      if (dataStorage[j].short.startsWith(dataStorage[i].short) || dataStorage[i].short.startsWith(dataStorage[j].short)) {
-        dataStorage[i].similar.push(dataStorage[j].name + dataStorage[j].gender);
-        if (dataStorage[i].similar.length >= 20) break; // no need for too many since it's ranked by popularity
+  for (let i in db) {
+    db[i].similar = [];
+    for (let j in db) {
+      if (db[j].sum < 1000) break; // no need for uncommon variations
+      if (db[j].name.length == 2) continue; // I don't need 2 letter names in the variations
+      if (db[j].short.startsWith(db[i].short) || db[i].short.startsWith(db[j].short)) {
+        db[i].similar.push(db[j].name + db[j].gender);
+        if (db[i].similar.length >= 20) break; // no need for too many since it's ranked by popularity
       }
     }
   }
 }
-//this function writes into .sql from dataStorage:
+//this function writes into .sql from db:
 function writeToSql() {
   var sqlString = `
 CREATE DATABASE  IF NOT EXISTS \`${dbName}\`;
@@ -156,11 +162,11 @@ CREATE TABLE \`${tableName}\` (
 );
 `;
 
-  for (let nameGender in dataStorage) {
-    let line = `(${(primaryKey++)},'${nameGender.split(';').join("','")}','${dataStorage[nameGender].domGender}',${dataStorage[nameGender].sum},${dataStorage[nameGender].peak_year},'${dataStorage[nameGender].similar.join(',')}',`; // start constructing a line in csv
+  for (let nameGender in db) {
+    let line = `(${(primaryKey++)},'${nameGender.split(';').join("','")}','${db[nameGender].domGender}',${db[nameGender].sum},${db[nameGender].peak_year},'${db[nameGender].similar.join(',')}',`; // start constructing a line in csv
     for (let year of years) {
-      if (dataStorage[nameGender][year]) {
-        line += dataStorage[nameGender][year] + ',';
+      if (db[nameGender][year]) {
+        line += db[nameGender][year] + ',';
       } else {
         line += '0,';
       }

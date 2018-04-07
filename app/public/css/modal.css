@@ -7,7 +7,13 @@
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
-  padding-right: 3em;
+  padding-right: 2em;
+}
+
+#modal-title a i {
+  color: DarkGray;
+  font-size: 1rem;
+  margin-left: 0.7rem;
 }
 
 #modal h4 span{
