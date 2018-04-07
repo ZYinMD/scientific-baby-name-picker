@@ -323,7 +323,7 @@ function displayName(name, gender, variations) { // this function displays a nam
   $('#modal-title').html(`
     <span id="heart" data-name=${name} data-gender=${gender}>
       <i class="material-icons">favorite_border</i>
-    </span>${name}<a href="https://www.behindthename.com/name/${name}/comments" title="external link to www.behindthename.com" target="_blank"><i class="material-icons">exit_to_app</i></a>
+    </span>${name}<a href="https://www.behindthename.com/name/${name}/comments" target="_blank"><i class="material-icons tooltipped" data-tooltip="external link to www.behindthename.com">exit_to_app</i></a>
     `);
   $('#variations').text('Variations (common first) :  ');
   for (let i of variations.split(',')) {
@@ -338,6 +338,7 @@ function displayName(name, gender, variations) { // this function displays a nam
     $('#heart').toggleClass('favorite', true);
     $('#heart i').text('favorite');
   }
+  $('.tooltipped').tooltip();
 }
 
 function favoriteInit() {
