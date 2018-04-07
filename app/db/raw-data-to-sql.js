@@ -87,23 +87,29 @@ function reformData() { //this function adds a few properties to every name
   }
 }
 
-function sex() { //this function decides if a name is predominantly a female or male or unisex name
-  for (let nameGender in dataStorage) {
-    dataStorage[nameGender].domGender = 'F'; //first assume it's usually a female name
-    if (dataStorage[nameGender].gender == 'M') { // if current iteration is a male name
-      let femaleName = dataStorage[nameGender].name + ';F';
-      if (!dataStorage[femaleName]) { //if the female counterpart doesn't exist
-        dataStorage[nameGender].domGender = 'M';
-        continue;
-      }
-      let femaleSum = dataStorage[femaleName].sum;
-      let maleSum = dataStorage[nameGender].sum;
-      if (maleSum > femaleSum) {
-        dataStorage[nameGender].domGender = dataStorage[femaleName].domGender = 'M';
-      }
-      if (femaleSum < maleSum * 5 && femaleSum > maleSum / 5) { //if the female counterpart is in the range of male / 5 and male * 5, then yes
-        dataStorage[nameGender].domGender = dataStorage[femaleName].domGender = 'U';
-      }
+function sex() { //this function decides if a name is predominantly a female or male or unisex name, saves the result in .domGender
+  // for most names, the following code will be executed twice, which is redundant, but it's the clearest logic to write, and it's not so slow
+  for (let i in dataStorage) {
+    let keyM = dataStorage[i].name + ';M';
+    let keyF = dataStorage[i].name + ';F';
+    if (!dataStorage[keyM]) { // if M doesn't exist, the current's domGender is F
+      dataStorage[i].domGender = 'F';
+      continue;
+    }
+    if (!dataStorage[keyF]) { // and vice versa
+      dataStorage[i].domGender = 'M';
+      continue;
+    }
+    let sumF = dataStorage[keyF].sum;
+    let sumM = dataStorage[keyM].sum;
+    if (sumF < sumM * 5 && sumF > sumM / 5) { //if the female counterpart is in the range of male / 5 and male * 5, then it's unisex
+      dataStorage[keyF].domGender = dataStorage[keyM].domGender = 'U';
+      continue;
+    }
+    if (sumM > sumF) {
+      dataStorage[keyF].domGender = dataStorage[keyM].domGender = 'M';
+    } else {
+      dataStorage[keyF].domGender = dataStorage[keyM].domGender = 'F';
     }
   }
 }

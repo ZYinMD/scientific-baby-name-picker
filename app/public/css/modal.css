@@ -10,6 +10,12 @@
   padding-right: 3em;
 }
 
+#modal-title a i {
+  color: MediumSlateBlue ;
+  font-size: 1rem;
+  margin-left: 0.7rem;
+}
+
 #modal h4 span{
   font-size: 1.3rem;
   margin-left: 0.65rem;

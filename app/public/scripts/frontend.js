@@ -274,12 +274,12 @@ function unhide(row) { // this function unhides a row in the filter console. Tak
 
 function resultsInit() {
   apiCall(); // call with the initial one filter, which is the default filter
-  $('#name-list').on('click', 'span', () => { // when a name is clicked, show a bottom modal to display its detail and chart
+  $('#name-list').on('click', 'span', (event) => { // when a name is clicked, show a bottom modal to display its detail and chart
     let name = event.target.innerText;
     let gender = event.target.classList[0];
     populateModal(name, gender);
   });
-  $('#variations').on('click', 'span:not(.self)', () => { // when a variant of a name is clicked, do the same
+  $('#variations').on('click', 'span:not(.self)', (event) => { // when a variant of a name is clicked, do the same
     var name = event.target.innerText;
     var gender = event.target.classList[0];
     populateModal(name, gender);
@@ -323,7 +323,7 @@ function displayName(name, gender, variations) { // this function displays a nam
   $('#modal-title').html(`
     <span id="heart" data-name=${name} data-gender=${gender}>
       <i class="material-icons">favorite_border</i>
-    </span>${name}
+    </span>${name}<a href="https://www.behindthename.com/name/${name}/comments" title="external link to www.behindthename.com" target="_blank"><i class="material-icons">exit_to_app</i></a>
     `);
   $('#variations').text('Variations (common first) :  ');
   for (let i of variations.split(',')) {
