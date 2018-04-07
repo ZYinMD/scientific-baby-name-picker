@@ -1,10 +1,10 @@
 appInit();
-resultsInit(); // default first query
-filterInit(); // hide and show of filter rows
-searchInit(); //the search bar on upper right
 materializeInit(); // materialize animations: collapsible, tooltip, etc
 slidersInit(); // nonUiSlider.js
+resultsInit(); // default first query
+searchInit(); //the search bar on upper right
 favoriteInit(); // functionality of favorite
+filterInit(); // hide and show of filter rows
 
 function appInit() {
   $('#logo').on('click', () => {
@@ -13,6 +13,7 @@ function appInit() {
   if (localStorage.previousFilters) {
     $('#filters').html(localStorage.getItem('previousFilters')); // restore the filters created last time
   }
+  $('#year-slider').empty(); // after restoring previous filters, empty the slider, otherwise there'd be a bug
 }
 
 function filterInit() { // hide and show of filter rows and columns
@@ -273,11 +274,17 @@ function unhide(row) { // this function unhides a row in the filter console. Tak
 
 function resultsInit() {
   apiCall(); // call with the initial one filter, which is the default filter
-  $('#name-list').on('click', 'span', () => { // when a name is clicked, show a bottom modal to display its detail and chart
+  $('#name-list').on('click', 'span', (event) => { // when a name is clicked, show a bottom modal to display its detail and chart
     let name = event.target.innerText;
     let gender = event.target.classList[0];
     populateModal(name, gender);
   });
+  $('#variations').on('click', 'span:not(.self)', (event) => { // when a variant of a name is clicked, do the same
+    var name = event.target.innerText;
+    var gender = event.target.classList[0];
+    populateModal(name, gender);
+  });
+
   $.get('/api/newbornByYear', res => {
     newbornByYear = res; // this is a global variable declared without "var"
   });
@@ -292,16 +299,18 @@ function populateModal(name, gender) {
   }, res => {
     if (res.name == 'Name not found') {
       $('#modal-title').text(`Name "${name}" not found.`);
+      $('#variations').text(''); //empty the variations from last time
       return;
     }
-    displayName(res.name, res.gender); // show name as modal title, and attach a heart
+    displayName(res.name, res.gender, res.similar); // show name as modal title, and attach a heart
     var color = (res.gender == 'F') ? 'salmon' : '#00c2c2';
     delete res.name;
     delete res.peak_year;
     delete res.sum;
     delete res.gender;
-    delete res.is_unisex;
+    delete res.domGender;
     delete res.id;
+    delete res.similar;
     for (let i in res) {
       res[i] = res[i] / newbornByYear[i] * 750; // change to per high school
     }
@@ -311,16 +320,26 @@ function populateModal(name, gender) {
   });
 }
 
-function displayName(name, gender) { // this function displays a name as well as the heart in the modal title
+function displayName(name, gender, variations) { // this function displays a name as well as the heart in the modal title
   $('#modal-title').html(`
     <span id="heart" data-name=${name} data-gender=${gender}>
       <i class="material-icons">favorite_border</i>
-    </span>${name}<span>(per high school)</span>
+    </span>${name}<a href="https://www.behindthename.com/name/${name}/comments" target="_blank"><i class="material-icons tooltipped" data-tooltip="external link to www.behindthename.com">exit_to_app</i></a>
     `);
+  $('#variations').text('Variations (common first) :  ');
+  for (let i of variations.split(',')) {
+    if (i == name+gender) {
+      $('#variations').append(`<span class="${gender} variant self">${name}</span>`); // if it's itself
+    } else {
+      $('#variations').append(`<span class="${i.slice(-1)} variant">${i.slice(0, -1)}</span>`);
+    }
+
+  }
   if (isFavorite(name, gender)) {
     $('#heart').toggleClass('favorite', true);
     $('#heart i').text('favorite');
   }
+  $('.tooltipped').tooltip();
 }
 
 function favoriteInit() {
@@ -335,6 +354,7 @@ function displayFavs() { // this function retrieves favorites from localStorage 
   var favList = JSON.parse(localStorage.getItem('favNames'));
   var names = Object.keys(favList);
   populateNames([names, names.length]);
+  $('#back-from-fav').show().html(`<p onClick="apiCall()">BACK</p>`); // unhide it
 }
 
 function toggleFav(event) { // this function toggles the red / grey heart, and also change the corresponding status in localStorage
@@ -378,15 +398,24 @@ function chartjsInit(labels, data, color) {
         yAxes: [{
           gridLines: {
             display: false
+          },
+          pointLabels: {
+            display: true
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Per High School',
+            fontSize: 12
           }
         }],
         xAxes: [{
           gridLines: {
             display: false
           },
-          scaleLabel: {
-            display: false
+          ticks: {
+            maxTicksLimit: 30
           }
+
         }]
       }
     }
@@ -395,14 +424,16 @@ function chartjsInit(labels, data, color) {
 
 function populateNames(res) { // this function populates the screen with the server res
   var count = res[1];
-  if (count < 1000) $('#result-count').text(res[1] + ' names found...');
-  else $('#result-count').text(res[1] + ' names found, displaying the first 1000...');
+  if (count == 1) $('#result-count').text(res[1] + ' name found...');
+  else if (count <= 2000) $('#result-count').text(res[1] + ' names found:');
+  else $('#result-count').text(res[1] + ' names found, displaying the first 2000:');
   $('#name-list').empty();
   for (let i of res[0]) {
     let name = i.slice(0, -1);
     let gender = i.slice(-1);
     $('#name-list').append(`<span class="${gender} modal-trigger" href="#modal">${name}</span>`);
   }
+  $('#back-from-fav').hide(); //this is the "BACK" button when showing favorites, normally hidden
 }
 
 function slidersInit() {

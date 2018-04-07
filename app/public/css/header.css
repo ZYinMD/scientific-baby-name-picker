@@ -40,7 +40,8 @@ header h2 {
   border: none;
   outline: none;
   width: 2rem;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
   color: transparent; /*so that if user has unsubmitted search input, won't still show when collapsed*/
   background-color: transparent;
   position: relative;
@@ -50,7 +51,8 @@ header h2 {
   transition: width 0.16s;
 }
 
-#search input:focus {
+#search input:focus,
+#search input:active {
   z-index: -1;  /*below the magnifying glass when on focus, so the magnifying glass is click-able, */
   color: DimGray;
   cursor: text;
@@ -79,3 +81,4 @@ header h2 {
   font-size: 1.15rem;
   cursor: pointer;
 }
+

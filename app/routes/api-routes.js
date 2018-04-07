@@ -42,7 +42,7 @@ function prepareQuery(req) { // this function takes the req from front end, and 
     `SELECT SQL_CALC_FOUND_ROWS name, gender
 FROM ${finalFromClause}
 WHERE (${finalWhereClause})
-ORDER BY sum DESC LIMIT 1000;
+ORDER BY sum DESC LIMIT 2000;
 SELECT FOUND_ROWS();`;
   // console.log('finalQuery: \n', finalQuery);
   return finalQuery;
@@ -72,9 +72,9 @@ function whereToSql(where) { // this function converts data from front end to My
   switch (where.a) {
     case 'gender':
       var gendersChecked = where.gendersChecked.map(g => {
-        if (g == 'F') return "gender = 'F'";
-        if (g == 'M') return "gender = 'M'";
-        if (g == 'U') return "is_unisex = 1";
+        if (g == 'F') return "domGender = 'F'";
+        if (g == 'M') return "domGender = 'M'";
+        if (g == 'U') return "domGender = 'U'";
       });
       // I am so smart:
       query = where.b == 'exclude' ?

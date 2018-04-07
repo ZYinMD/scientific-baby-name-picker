@@ -32,7 +32,7 @@
     <a class="header__link" id="header__favorites" title="Favorited Names">Favorites</a>
     <a class="header__link" id="header__about" title="About this app">About</a>
     <form id="search">
-      <input type="search" name="name-search" class="browser-default">
+      <input type="search" class="browser-default">
       <button class="header__link" type="submit"><i class="material-icons">search</i></button>
     </form>
   </header>
@@ -251,11 +251,13 @@
 
       </div>
     </div>
+    <div id="back-from-fav" class="theme card-action"></div>
   </section>
 
   <div id="modal" class="modal bottom-sheet">
     <div class="modal-content">
       <h4 id="modal-title"></h4>
+      <h5 id="variations"></h5>
       <div class="chart-container" style="position: relative; height:30vh; width:97vw">
           <canvas id="chart"></canvas>
       </div>
