@@ -299,6 +299,7 @@ function populateModal(name, gender) {
   }, res => {
     if (res.name == 'Name not found') {
       $('#modal-title').text(`Name "${name}" not found.`);
+      $('#variations').text(''); //empty the variations from last time
       return;
     }
     displayName(res.name, res.gender, res.similar); // show name as modal title, and attach a heart
