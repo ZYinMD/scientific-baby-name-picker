@@ -423,8 +423,8 @@ function chartjsInit(labels, data, color) {
 function populateNames(res) { // this function populates the screen with the server res
   var count = res[1];
   if (count == 1) $('#result-count').text(res[1] + ' name found...');
-  else if (count < 1000) $('#result-count').text(res[1] + ' names found...');
-  else $('#result-count').text(res[1] + ' names found, displaying the first 1000...');
+  else if (count <= 2000) $('#result-count').text(res[1] + ' names found:');
+  else $('#result-count').text(res[1] + ' names found, displaying the first 2000:');
   $('#name-list').empty();
   for (let i of res[0]) {
     let name = i.slice(0, -1);
