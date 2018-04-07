@@ -5,7 +5,6 @@ This file converts the raw data into a .sql dump to be imported into MySql
 // settings:
 const dataInput = './raw-data/'; // takes a folder
 const fileOutput = './db.sql'; //takes a file name
-const dbName = 'baby_name_picker'; // what do you call your database
 const tableName = 'name_by_year'; // what do you call your table
 
 const fs = require('fs');
@@ -139,9 +138,7 @@ function findSimilar() { // this function finds all similar names of each name, 
 }
 //this function writes into .sql from db:
 function writeToSql() {
-  var sqlString = `
-CREATE DATABASE  IF NOT EXISTS \`${dbName}\`;
-USE \`${dbName}\`;
+  var sqlString = `-- when import, select your database first
 DROP TABLE IF EXISTS \`${tableName}\`;
 CREATE TABLE \`${tableName}\` (
   \`id\` int(7) unsigned NOT NULL AUTO_INCREMENT,
