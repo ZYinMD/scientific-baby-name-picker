@@ -42,7 +42,7 @@ function prepareQuery(req) { // this function takes the req from front end, and 
     `SELECT SQL_CALC_FOUND_ROWS name, gender
 FROM ${finalFromClause}
 WHERE (${finalWhereClause})
-ORDER BY name LIMIT 2000;
+ORDER BY sum DESC LIMIT 2000;
 SELECT FOUND_ROWS();`;
   // console.log('finalQuery: \n', finalQuery);
   return finalQuery;
@@ -140,6 +140,9 @@ function yearRangeToSql(startYear, endYear) { // this function turns a year rang
     res += '`' + i + '` + ';
   }
   res = res.slice(0, -3);
+  if (startYear == endYear) {
+    res = '`' + startYear + '`';
+  }
   return `(${res})`;
 }
 
