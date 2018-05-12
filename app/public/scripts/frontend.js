@@ -41,7 +41,6 @@ function applyFilter() { // this function gets run when the apply filter button 
     $('.collapsible').collapsible('close', i);
   }
   var filter = '';
-  var query = '';
   var data = {};
   // get over with include / exclude first
   if (whichPicked('b') == 'b-exclude') {
@@ -56,7 +55,7 @@ function applyFilter() { // this function gets run when the apply filter button 
   var endYear = data.endYear = Number($('#end-year').text());
   switch (whichPicked('a')) { // switch what kind of filter was picked in column a
     //when "filter by gender" was used
-    case 'a-gender':
+    case 'a-gender': {
       data.a = 'gender';
       let gendersChecked = [];
       data.gendersChecked = [];
@@ -85,7 +84,8 @@ function applyFilter() { // this function gets run when the apply filter button 
       filter += gendersChecked.join(' and ');
       break;
       //when "filter by total birth" was used
-    case 'a-total':
+    }
+    case 'a-total': {
       data.a = 'total';
       filter += 'names that have been used by';
       // more than or less than?
@@ -110,7 +110,8 @@ function applyFilter() { // this function gets run when the apply filter button 
       filter += ` between ${startYear}-${endYear}`;
       break;
       // when "filter by birth per year is used"
-    case 'a-peryear':
+    }
+    case 'a-peryear': {
       data.a = 'peryear';
       filter += 'names that had';
       // more than or less than?
@@ -135,7 +136,8 @@ function applyFilter() { // this function gets run when the apply filter button 
       filter += ` between ${startYear}-${endYear}`;
       break;
       //when "filter by how common" was used
-    case 'a-common':
+    }
+    case 'a-common': {
       data.a = 'common';
       filter += 'names that were';
       switch (whichPicked('d', 'common')) {
@@ -156,6 +158,7 @@ function applyFilter() { // this function gets run when the apply filter button 
       data.howMany = aFew;
       filter += ` ${aFew} per 750 people between ${startYear}-${endYear}`;
       break;
+    }
     case 'a-peak':
       data.a = 'peak';
       switch (whichPicked('d', 'peak')) {
@@ -164,13 +167,13 @@ function applyFilter() { // this function gets run when the apply filter button 
           break;
         case 'd-trough':
           return; //trough isn't done yet.
-          filter = `${filter}names that had a trough between ${startYear} and ${endYear}`;
-          break;
+          // filter = `${filter}names that had a trough between ${startYear} and ${endYear}`;
+          // break;
         default:
           return filterIncomplete();
       }
       break;
-    case 'a-popular':
+    case 'a-popular': {
       // filter: Exclude the most popular 300 names between 1950-2016;
       data.a = 'popular';
       // how many?
@@ -178,6 +181,7 @@ function applyFilter() { // this function gets run when the apply filter button 
       data.howMany = top;
       filter += `the most popular ${top} names between ${startYear}-${endYear}`;
       break;
+    }
     case 'a-trending':
       data.a = 'trending';
       var trend;
@@ -214,17 +218,6 @@ function whichPicked(col, row) { // col is a letter like a, b, c, row is a row n
     for (let i of $(`.filter-col__${col} input`))
       if (i.checked) return i.id;
   }
-}
-
-function trendingToSql(startYear, endYear, trend, percent) { // this function converts year into sql for the trending filter
-  var res = '';
-  var portion;
-  portion = (trend == 'up') ? 1 + percent / 100 : 1 - percent / 100;
-  operator = (trend == 'up') ? '>' : '<';
-  for (let i = startYear; i < endYear; i++) {
-    res += '`' + (i + 1) + '`' + operator + '`' + i + '` * ' + portion + ' AND ';
-  }
-  return res.slice(0, -5); //remove the last ' AND '
 }
 
 function populateFilter(filter, data) { // this function puts a sentence onto the filter list
@@ -357,7 +350,7 @@ function displayFavs() { // this function retrieves favorites from localStorage 
   $('#back-from-fav').show().html(`<p onClick="apiCall()">BACK</p>`); // unhide it
 }
 
-function toggleFav(event) { // this function toggles the red / grey heart, and also change the corresponding status in localStorage
+function toggleFav() { // this function toggles the red / grey heart, and also change the corresponding status in localStorage
   $(this).toggleClass('favorite');
   var favList = JSON.parse(localStorage.getItem('favNames'));
   var key = $(this)[0].dataset.name + $(this)[0].dataset.gender; // use name concatenated with one letter gender as key
@@ -474,7 +467,7 @@ function materializeInit() {
 }
 
 function newBornBetween(startYear, endYear) { // this function calculate how many babies were born in the US between two years
-  var result = 0;
+var result = 0;
   for (var i = startYear; i <= endYear; i++) {
     result += newbornByYear[i];
   }
