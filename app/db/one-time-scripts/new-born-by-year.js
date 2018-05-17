@@ -4,9 +4,8 @@ It's only needed when the database needs to me minimized by removing rare names.
 */
 
 // settings: where's the data coming from, which table is it going to
-const dataInput = './raw-data/'; // takes a folder
-const fileOutput = './newborn-by-year.txt'; //takes a file name
-const yearRange = [1880, 2016]; // what year's data did your provide? This should correspond with the value of dataInput
+const dataInput = '../raw-data/'; // takes a folder
+const fileOutput = '../_newborn-by-year.txt'; //takes a file name
 const fs = require('fs');
 var dataObject = {}; // this is where all data is stored
 console.time('Time taken to read all data'); //start a timer to read all data
@@ -17,6 +16,7 @@ fs.writeFileSync(fileOutput, JSON.stringify(dataObject, null, 2));
 
 function readData() { // this function reads raw data from txt files
   var fileList = fs.readdirSync(dataInput); //read all files in the folder
+  fileList = fileList.filter(fileName => fileName.includes('yob')); // exclude files that aren't data
   var totalYears = fileList.length;
   console.log(`\n${totalYears} files found...\nstart reading files...`);
   for (let i of fileList) {

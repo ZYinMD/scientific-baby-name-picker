@@ -1,10 +1,10 @@
 /*
-This file converts the raw data into a .sql dump to be imported into MySql
+This file converts the raw data into a .sql dump to be imported into MySql. It's no longer needed
 */
 
 // settings:
-const dataInput = './raw-data/'; // takes a folder
-const fileOutput = './db.sql'; //takes a file name
+const dataInput = '../raw-data/'; // takes a folder
+const fileOutput = '../db.sql'; //takes a file name
 const tableName = 'name_by_year'; // what you call your table
 
 const fs = require('fs');
