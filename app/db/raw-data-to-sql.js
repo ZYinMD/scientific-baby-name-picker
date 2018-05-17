@@ -29,7 +29,8 @@ console.timeEnd('Time taken to output to .sql file'); //timer ends, log out the 
 
 
 function readData() { // this function reads raw data from txt files, and put all the data into the db object.
-  var fileList = fs.readdirSync(dataInput); //read all files in the folder
+  var fileList = fs.readdirSync(dataInput); // read all files in the folder
+  fileList = fileList.filter(fileName => fileName.includes('yob')); // exclude files that aren't data
   var totalYears = fileList.length;
   console.log(`\n${totalYears} files found...\nstart reading files...`);
   years = []; // a global variable to store all the year names provided by dataInput
