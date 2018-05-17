@@ -133,7 +133,7 @@ function findSimilar() { // this function finds all similar names of each name, 
       if (db[j].name.length == 2) continue; // I don't need 2 letter names in the variations
       if (db[j].short.startsWith(db[i].short) || db[i].short.startsWith(db[j].short)) {
         db[i].similar.push(db[j].name + db[j].gender);
-        if (db[i].similar.length >= 20) break; // no need for too many since it's ranked by popularity
+        if (db[i].similar.length >= 10) break; // no need for too many since it's ranked by popularity
       }
     }
   }
