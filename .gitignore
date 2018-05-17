@@ -1,5 +1,8 @@
 node_modules
+#the wiki repo:
 wiki
 .DS_Store
 .env
 *.psd
+# data files in /db/raw-data:
+yob*.txt

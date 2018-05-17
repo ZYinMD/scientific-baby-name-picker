@@ -1,17 +1,5 @@
-/*!
- * Materialize v1.0.0-alpha.4 (http://materializecss.com)
- * Copyright 2014-2017 Materialize
- * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
- */
+/*This file is included but not used. Not before I learn sass so I can manually tree-shake it.*/
 
-/*! normalize.css v7.0.0 | MIT License | github.com/necolas/normalize.css */
-/* Document
-   ========================================================================== */
-/**
- * 1. Correct the line height in all browsers.
- * 2. Prevent adjustments of font size after orientation changes in
- *    IE on Windows Phone and in iOS.
- */
 html {
   line-height: 1.15;
   /* 1 */

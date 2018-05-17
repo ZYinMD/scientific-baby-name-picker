@@ -174,7 +174,7 @@ function applyFilter() { // this function gets run when the apply filter button 
       }
       break;
     case 'a-popular': {
-      // filter: Exclude the most popular 300 names between 1950-2016;
+      // filter: Exclude the most popular 300 names between 1950-2017;
       data.a = 'popular';
       // how many?
       let top = Number($('#c-popular--value').text());
@@ -440,14 +440,14 @@ function slidersInit() {
   // the year range slider, using noUiSlider
   var slider = document.getElementById('year-slider');
   noUiSlider.create(slider, {
-    start: [1950, 2016],
+    start: [1950, 2017],
     connect: true,
     step: 1,
     direction: 'rtl', // smaller values first
     orientation: 'vertical', // 'horizontal' or 'vertical'
     range: {
       'min': 1880,
-      'max': 2016
+      'max': 2017
     },
     format: wNumb({
       decimals: 0
