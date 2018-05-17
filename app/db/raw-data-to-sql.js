@@ -5,7 +5,7 @@ This file converts the raw data into a .sql dump to be imported into MySql
 // settings:
 const dataInput = './raw-data/'; // takes a folder
 const fileOutput = './db.sql'; //takes a file name
-const tableName = 'name_by_year'; // what do you call your table
+const tableName = 'name_by_year'; // what you call your table
 
 const fs = require('fs');
 var db = {}; // this'll be where all the data are stored before seeding to sequelizeModel
@@ -17,6 +17,7 @@ console.time('Time taken to read all data'); //start a timer to read all data
 console.timeEnd('Time taken to read all data'); //timer ends, log out the time taken
 
 console.time('Time taken to manipulate data'); //start a timer to reform data
+  console.log('Start processing data...');
   reformData(); //decorate the data a little bit
   sex(); //set whether a name is unisex
   sort(); //re-order the data so that similar names will appear from common to uncommon
@@ -42,7 +43,7 @@ function readData() { // this function reads raw data from txt files, and put al
     processThisYear(year, thisYearsContent);
   }
   var totalNames = Object.keys(db).length;
-  console.log(`\nOn average, ${Math.round(namesTally / totalYears)} names were used each year, while ${totalNames} name were ever used over the ${totalYears} years.\n`);
+  console.log(`\nOn average, ${Math.round(namesTally / totalYears)} names were used each year, and ${totalNames} name were ever used over the ${totalYears} years.\n`);
 }
 
 function processThisYear(year, thisYearsContent) { // this function processes a txt file
