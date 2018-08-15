@@ -29,6 +29,7 @@
     "mysql": "^2.15.0"
   },
   "devDependencies": {
+    "babel-eslint": "^8.2.6",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0"
   }
