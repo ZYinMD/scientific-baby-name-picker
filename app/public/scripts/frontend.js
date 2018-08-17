@@ -156,7 +156,7 @@ function applyFilter() { // this function gets run when the apply filter button 
       let aFew = Number($('#e-common').val());
       if (!aFew || typeof aFew != 'number') return filterIncomplete(); // manual validation
       data.howMany = aFew;
-      filter += ` ${aFew} per 750 people between ${startYear}-${endYear}`;
+      filter += ` ${aFew} per high school between ${startYear}-${endYear}`;
       break;
     }
     case 'a-peak':
