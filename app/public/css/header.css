@@ -17,6 +17,14 @@ header h2 {
   margin: 0;
 }
 
+@media (max-width: 800px) {
+  header h1 {
+    font-size: calc(10px + 1.8vw);
+  }
+  header h2 {
+    font-size: calc(6px + 1.8vw);
+  }
+}
 #logo {
   border-radius: 100%;
   max-width: 6rem;

@@ -6,4 +6,6 @@ The goal is to provide a statistical tool to assist parents in picking a baby na
 
 Deployed at [https://scientific-baby-name-picker.herokuapp.com](https://scientific-baby-name-picker.herokuapp.com).
 
-You may find it was done before I knew React, webpack, Sass.
+Demo (5m55s):
+
+[![Youtube Link](https://s19.postimg.cc/4m3ucmcgj/thumbnail_-_Scientific_Baby_Name_Picker_1.png)](https://youtu.be/4IOhs3fdX9U)
