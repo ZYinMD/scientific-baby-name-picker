@@ -90,3 +90,6 @@ header h2 {
   cursor: pointer;
 }
 
+#header__about {
+  cursor: not-allowed;
+}

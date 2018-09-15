@@ -227,7 +227,7 @@ function populateFilter(filter, data) { // this function puts a sentence onto th
       <span data-conditions='${JSON.stringify(data)}'>${filter}</span>
     </label>
     <a href="#!" class="secondary-content"><i class="material-icons delete-button theme2">delete</i></a>
-    <a href="#!" class="secondary-content"><i class="material-icons edit-button theme2 tooltipped" data-tooltip="Sorry, this is a make-believe button for now.\n To edit a filter, just delete and redo it.">edit</i></a>
+    <a href="#!" class="secondary-content"><i class="material-icons edit-button theme2 tooltipped" data-tooltip="Sorry, this is a make-believe button for now.\n To edit a filter, just delete and redo it." data-position="left">edit</i></a>
   `;
   $('<li class="collection-item"></div>').append(newFilter).insertBefore('#filter-constructor');
   $('.tooltipped').tooltip(); // to make sure the newly added tooltip works
